@@ -1,7 +1,6 @@
-.idea/*
-
-*.log
+*/.idea/*
 *.pyc
+*.log
 *.exe
 *.zip
 *.rar
