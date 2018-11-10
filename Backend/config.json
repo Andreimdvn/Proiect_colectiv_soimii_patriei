@@ -1,0 +1,10 @@
+{
+    "flask_port": 16000,
+    "flask_host": "0.0.0.0",
+    "mysql_server": "127.0.0.1",
+    "mysql_port": 0,
+    "mysql_username": "",
+    "mysql_password": "",
+    "mysql_database": ""
+
+}
