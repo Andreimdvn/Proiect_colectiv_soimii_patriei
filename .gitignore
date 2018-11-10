@@ -1,1 +1,8 @@
+.idea/*
+
+*.log
 *.pyc
+*.exe
+*.zip
+*.rar
+*.tar.gz
