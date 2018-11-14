@@ -1,6 +1,7 @@
 import TabMenu from "./components/tab-menu/TabMenu";
 import rootStore from "./store/root-store";
 import HomeRoute from "./components/home";
+import AddJobRoute from "./components/jobs/add-job-form";
 
 import { Provider } from "mobx-react";
 import * as React from "react";
@@ -18,6 +19,7 @@ class App extends React.Component {
               <React.Fragment>
                 <TabMenu viewStore={rootStore.viewStore} />
                 <HomeRoute />
+                <AddJobRoute />
               </React.Fragment>
             </Router>
           </React.Fragment>

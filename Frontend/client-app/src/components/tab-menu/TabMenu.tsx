@@ -52,8 +52,13 @@ class TabMenu extends React.Component<Props, State> {
                 to="/home"
                 onClick={() => this.changeActiveTab(HeaderTabs.home)}
               >
-                {/* <Icon className="icon-home" icon="home" /> */}
                 Home
+              </Link>
+              <Link
+                to="/add"
+                onClick={() => this.changeActiveTab(HeaderTabs.add)}
+              >
+                Add a job
               </Link>
             </li>
           </ul>

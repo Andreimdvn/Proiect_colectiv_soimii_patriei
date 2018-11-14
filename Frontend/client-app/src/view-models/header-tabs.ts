@@ -1,3 +1,4 @@
 export enum HeaderTabs {
-    home
-}  
+  home,
+  add
+}
