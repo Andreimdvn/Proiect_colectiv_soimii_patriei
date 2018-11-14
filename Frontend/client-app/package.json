@@ -1,0 +1,31 @@
+{
+  "name": "client-app",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "classnames": "^2.2.6",
+    "mobx": "^5.6.0",
+    "mobx-react": "^5.3.6",
+    "react": "^16.6.3",
+    "react-dom": "^16.6.3",
+    "react-router": "^4.3.1",
+    "react-router-dom": "^4.3.1",
+    "react-scripts-ts": "3.1.0",
+    "typescript": "^2.9.1"
+  },
+  "scripts": {
+    "start": "react-scripts-ts start",
+    "build": "react-scripts-ts build",
+    "test": "react-scripts-ts test --env=jsdom",
+    "eject": "react-scripts-ts eject"
+  },
+  "devDependencies": {
+    "@types/classnames": "^2.2.6",
+    "@types/jest": "^23.3.9",
+    "@types/node": "^10.12.6",
+    "@types/react": "^16.7.3",
+    "@types/react-dom": "^16.0.9",
+    "@types/react-router": "^4.4.1",
+    "@types/react-router-dom": "^4.3.1"
+  }
+}
