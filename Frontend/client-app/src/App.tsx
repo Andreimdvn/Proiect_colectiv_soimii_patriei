@@ -2,6 +2,7 @@ import TabMenu from "./components/tab-menu/TabMenu";
 import rootStore from "./store/root-store";
 import HomeRoute from "./components/home";
 import AddJobRoute from "./components/jobs/add-job-form";
+import "./App.css";
 
 import { Provider } from "mobx-react";
 import * as React from "react";

@@ -5,6 +5,7 @@ import * as classNames from "classnames";
 
 import { ViewStore } from "src/store/view-store";
 import { HeaderTabs } from "src/view-models/header-tabs";
+import "./tab-menu.css";
 
 interface Props {
   viewStore: ViewStore;
@@ -54,6 +55,12 @@ class TabMenu extends React.Component<Props, State> {
               >
                 Home
               </Link>
+            </li>
+            <li
+              className={classNames({
+                active: this.isActive(HeaderTabs.add)
+              })}
+            >
               <Link
                 to="/add"
                 onClick={() => this.changeActiveTab(HeaderTabs.add)}
