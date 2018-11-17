@@ -5,3 +5,4 @@
 *.zip
 *.rar
 *.tar.gz
+**/config.json
