@@ -12,7 +12,7 @@ ul.tabs {
 
 ul.tabs li {
   line-height: 28px;
-  padding: 12px;
+  padding: 1vh;
   position: relative;
   background: none;
   font-size: 20px;
@@ -41,6 +41,6 @@ ul.tabs li.active a {
   color: white;
 }
 
-a:visited {
+a {
   color: #776274;
 }
