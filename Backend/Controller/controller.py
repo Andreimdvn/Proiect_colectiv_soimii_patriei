@@ -1,3 +1,4 @@
+import Database.orm
 import logging
 import re
 
@@ -18,6 +19,7 @@ register_fields = {
 class Controller:
 
     def __init__(self, db_config):
+        self.orm = Database.orm.ORM(db_config)
         self.repo = RepositoryJobs(db_config)
         self.logger = logging.getLogger()
 
