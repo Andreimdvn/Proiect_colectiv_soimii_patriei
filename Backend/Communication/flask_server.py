@@ -37,9 +37,15 @@ class FlaskServer:
         self.shutdown_server()
 
     def init_requests(self):
-        self.flask_app.add_url_rule("/test", "test_request", self.test_request, methods=["GET", "POST"])
+        self.flask_app.add_url_rule('/test', 'test_request', self.test_request, methods=['GET', 'POST'])
+        self.flask_app.add_url_rule('/api/register', 'register', self.register, methods=['POST'])
 
     def test_request(self):
         self.request_data = request.get_json()
         self.logger.debug("Req data: {}".format(self.request_data))
         return json.dumps("Hello world! Got req: {}".format(self.request_data))
+
+    def register(self):
+        request_data = request.get_json() or {}
+        status, response = self.controller.register(request_data)
+        return json.dumps({'status': status, 'response': response})
