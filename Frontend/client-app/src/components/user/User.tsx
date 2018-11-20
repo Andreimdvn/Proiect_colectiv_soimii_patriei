@@ -3,15 +3,19 @@ import IconButton from "@material-ui/core/IconButton";
 import AccountBox from "@material-ui/icons/AccountBox";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
+import { Redirect } from "react-router";
+import { ReactNode } from "react";
 
 import "./user.css";
 
 interface State {
   open: boolean;
+  redirect: ReactNode;
 }
 
 const initialState: State = {
-  open: false
+  open: false,
+  redirect: undefined
 };
 
 class User extends React.Component<{}, State> {
@@ -28,8 +32,19 @@ class User extends React.Component<{}, State> {
     this.setState({ open: true });
   };
 
+  handleChange = event => {
+    if (event.target.value) {
+      const destinationURL = "/user/" + event.target.value;
+      this.setState({ redirect: <Redirect to={destinationURL} /> }, () => {
+        this.setState({ redirect: undefined });
+      });
+    }
+  };
+
   render() {
-    return (
+    return this.state.redirect ? (
+      this.state.redirect
+    ) : (
       <div className="account-box">
         <IconButton className="account-box-button" onClick={this.handleOpen}>
           <AccountBox className="account-box-icon" fontSize="large" />
@@ -37,14 +52,12 @@ class User extends React.Component<{}, State> {
         <Select
           open={this.state.open}
           onClose={this.handleClose}
-          //   onOpen={this.handleOpen}
-          //   value={this.state.age}
-          //   onChange={this.handleChange}
-          className="accout-box-select"
+          onChange={this.handleChange}
+          className="account-box-select"
         >
-          <MenuItem value={10}>My job offers</MenuItem>
-          <MenuItem value={20}>Edit profile</MenuItem>
-          <MenuItem value={30}>Log out</MenuItem>
+          <MenuItem value="offers">My job offers</MenuItem>
+          <MenuItem value="edit">Edit profile</MenuItem>
+          <MenuItem>Log out</MenuItem>
         </Select>
       </div>
     );

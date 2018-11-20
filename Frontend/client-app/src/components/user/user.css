@@ -1,5 +1,5 @@
 .account-box {
-  float: right;
+  float: left;
 }
 
 .account-box-icon {
@@ -10,24 +10,8 @@
   display: block !important;
 }
 
-.accout-box-select {
+.account-box-select {
   margin-top: 0;
-  /* visibility: hidden; */
   display: none !important;
   float: right;
-}
-
-.MuiMenu-paper-56 {
-  top: 50px !important;
-  right: 15px !important;
-  left: auto !important;
-}
-
-.MuiMenu-paper-56 ul {
-  right: 15px !important;
-  float: right;
-}
-
-.MuiMenu-paper-56 li {
-  margin-left: 20px;
 }

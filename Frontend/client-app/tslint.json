@@ -14,6 +14,7 @@
     "member-access": [false],
     "member-ordering": [false],
     "jsx-no-lambda": [false],
-    "curly": [false]
+    "curly": [false],
+    "no-console": false
   }
 }
