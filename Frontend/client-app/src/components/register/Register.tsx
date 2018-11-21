@@ -5,7 +5,7 @@ import InputLabel from "@material-ui/core/InputLabel/InputLabel";
 import Input from "@material-ui/core/Input/Input";
 import Paper from "@material-ui/core/Paper/Paper";
 import Button from "@material-ui/core/Button/Button";
-import ".\\register.css"
+import "./register.css"
 import TextField from "@material-ui/core/TextField/TextField";
 import Select from "@material-ui/core/Select/Select";
 import MenuItem from "@material-ui/core/MenuItem/MenuItem";
@@ -21,7 +21,7 @@ export class Register extends React.Component {
         lastName: '',
         birth: '',
         phone: '',
-        type: ''
+        type: 'client'
     };
     termsAccepted : boolean;
     constructor(props) {
@@ -40,7 +40,7 @@ export class Register extends React.Component {
         const data = {
             username: this.state.username,
             password: this.state.password,
-            email: this.state.password,
+            email: this.state.email,
             first_name: this.state.firstName,
             last_name: this.state.lastName,
             date_of_birth: this.state.birth,
@@ -53,7 +53,7 @@ export class Register extends React.Component {
 
     handleInputChange = (event)=>{
         event.preventDefault();
-        console.log(event.target.name);
+        console.log(event.target.value);
         this.setState({
             [event.target.name]: event.target.value
         })
@@ -69,7 +69,7 @@ export class Register extends React.Component {
             body: JSON.stringify(data)
         };
 
-        const request = new Request('http://localhost:1600/api/register',options);
+        const request = new Request('http://localhost:16000/api/register',options);
 
         const response = await fetch(request);
         const status = await  response.status;
@@ -116,7 +116,7 @@ export class Register extends React.Component {
                         <Input id="username" name="username" onChange={this.handleInputChange}/>
                     </FormControl>
                     <FormControl required={true} fullWidth={true}>
-                        <InputLabel htmlFor="pasword">Password</InputLabel>
+                        <InputLabel htmlFor="password">Password</InputLabel>
                         <Input type="password" id="password" name="password" onChange={this.handleInputChange}/>
                     </FormControl>
                     <FormControl fullWidth={true}>
