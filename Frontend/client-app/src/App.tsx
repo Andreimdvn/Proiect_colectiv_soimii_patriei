@@ -8,14 +8,19 @@ import { Provider } from "mobx-react";
 import * as React from "react";
 import { Router } from "react-router-dom";
 import { createBrowserHistory } from "history";
+import {Register} from "./components/register/Register";
 
+const logged = false;
 class App extends React.Component {
+
   public render() {
     return (
+
       <div className="App">
-        <header className="App-header">Student Jobs</header>
-        <Provider {...rootStore}>
+          <Provider {...rootStore}>
+          {logged ? (
           <React.Fragment>
+              <header className="App-header">Student Jobs</header>
             <Router history={createBrowserHistory()}>
               <React.Fragment>
                 <TabMenu viewStore={rootStore.viewStore} />
@@ -24,10 +29,14 @@ class App extends React.Component {
               </React.Fragment>
             </Router>
           </React.Fragment>
-        </Provider>
+          ): (
+              <React.Fragment>
+                <Register/>
+              </React.Fragment>
+              )}
+          </Provider>
       </div>
     );
   }
 }
-
 export default App;
