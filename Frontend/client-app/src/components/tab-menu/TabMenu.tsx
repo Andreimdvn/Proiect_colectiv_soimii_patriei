@@ -68,6 +68,18 @@ class TabMenu extends React.Component<Props, State> {
                 Add a job
               </Link>
             </li>
+            <li
+              className={classNames({
+                active: this.isActive(HeaderTabs.clients)
+              })}
+            >
+              <Link
+                to="/clients"
+                onClick={() => this.changeActiveTab(HeaderTabs.clients)}
+              >
+                Other clients
+              </Link>
+            </li>
           </ul>
         </div>
       </div>
