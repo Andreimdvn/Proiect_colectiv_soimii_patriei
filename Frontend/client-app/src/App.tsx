@@ -17,88 +17,89 @@ import { createBrowserHistory } from "history";
 import {Register} from "./components/register/Register";
 import {TabMenuProps} from "./components/tab-menu/TabMenuProps";
 import {HeaderTabs} from "./view-models/header-tabs";
+import {UserTypes} from "./view-models/user-types";
 
 
 interface Props {
-    cookies: Cookies
+  cookies: Cookies
 }
 
 class App extends React.Component<Props> {
-    constructor(props) {
-        super(props);
+  constructor(props) {
+    super(props);
 
-    }
+  }
 
-    public render() {
-      // try to load the cookies
-      const username = this.props.cookies.get("username");
-      const userType = this.props.cookies.get("userType");
-      const logged = username !== undefined && userType !== undefined;
+  public render() {
+    this.props.cookies.set("username", "bob");
+    this.props.cookies.set("userType", UserTypes.PROVIDER);
 
-      // this.props.cookies.set("username", "bob");
-      // this.props.cookies.set("userType", "client");
+    // try to load the cookies
+    const username = this.props.cookies.get("username");
+    const userType = this.props.cookies.get("userType");
+    const logged = username !== undefined && userType !== undefined;
 
-      return (
+    return (
       <div className="App">
-          <Provider {...rootStore}>
+        <Provider {...rootStore}>
+          <React.Fragment>
+            {!logged ? ( // if not logged in, show the register screen
               <React.Fragment>
-                  {!logged ? ( // if not logged in, show the register screen
-                      <React.Fragment>
-                          <Register/>
-                      </React.Fragment>
-                  ) : null}
-
-
-                  {userType === 'client' ? ( // client home page
-                      <React.Fragment>
-                          <Router history={createBrowserHistory()}>
-                              <React.Fragment>
-                                  <User />
-                                  <header className="App-header">Student Jobs</header>
-
-                                  <TabMenu
-                                      viewStore={rootStore.viewStore}
-                                      menuOptions={[
-                                          new TabMenuProps(HeaderTabs.home, "/home", "Home"),
-                                          new TabMenuProps(HeaderTabs.add, "/add", "Add a job"),
-                                          new TabMenuProps(HeaderTabs.clients, "/clients", "Other clients")
-                                      ]}
-                                  />
-                                  <HomeRoute />
-                                  <AddJobRoute />
-                                  <ClientListRoute />
-                                  <EditProfileRoute />
-                                  <UserOffersRoute />
-                              </React.Fragment>
-                          </Router>
-                      </React.Fragment>
-                  ) : null}
-
-
-                  {userType === 'provider' ? (  // provider home page
-                      <React.Fragment>
-                          <Router history={createBrowserHistory()}>
-                              <React.Fragment>
-                                  <User />
-                                  <header className="App-header">Provider screen</header>
-
-                                  <TabMenu
-                                      viewStore={rootStore.viewStore}
-                                      menuOptions={[
-                                          new TabMenuProps(HeaderTabs.home, "/home", "Home"),
-                                          new TabMenuProps(HeaderTabs.browse, "/browse", "Browse"),
-                                      ]}
-                                  />
-                                  <HomeRoute />
-                                  <BrowseRoute />
-                                  <EditProfileRoute />
-                                  <UserOffersRoute />
-                              </React.Fragment>
-                          </Router>
-                      </React.Fragment>
-                  ) : null}
+                <Register/>
               </React.Fragment>
-          </Provider>
+            ) : null}
+
+
+            {userType === UserTypes.CLIENT ? ( // client home page
+              <React.Fragment>
+                <Router history={createBrowserHistory()}>
+                  <React.Fragment>
+                    <User />
+                    <header className="App-header">Student Jobs</header>
+
+                    <TabMenu
+                      viewStore={rootStore.viewStore}
+                      menuOptions={[
+                        new TabMenuProps(HeaderTabs.home, "/home", "Home"),
+                        new TabMenuProps(HeaderTabs.add, "/add", "Add a job"),
+                        new TabMenuProps(HeaderTabs.clients, "/clients", "Other clients")
+                      ]}
+                    />
+                    <HomeRoute.clientHome />
+                    <AddJobRoute />
+                    <ClientListRoute />
+                    <EditProfileRoute />
+                    <UserOffersRoute />
+                  </React.Fragment>
+                </Router>
+              </React.Fragment>
+            ) : null}
+
+
+            {userType === UserTypes.PROVIDER ? (  // provider home page
+              <React.Fragment>
+                <Router history={createBrowserHistory()}>
+                  <React.Fragment>
+                    <User />
+                    <header className="App-header">Provider screen</header>
+
+                    <TabMenu
+                      viewStore={rootStore.viewStore}
+                      menuOptions={[
+                        new TabMenuProps(HeaderTabs.home, "/home", "Home"),
+                        new TabMenuProps(HeaderTabs.browse, "/browse", "Browse"),
+                      ]}
+                    />
+                    <HomeRoute.providerHome />
+                    <BrowseRoute />
+                    <EditProfileRoute />
+                    <UserOffersRoute />
+                  </React.Fragment>
+                </Router>
+              </React.Fragment>
+            ) : null}
+          </React.Fragment>
+        </Provider>
       </div>
     );
   }
