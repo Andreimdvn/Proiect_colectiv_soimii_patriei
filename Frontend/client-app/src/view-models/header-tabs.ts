@@ -1,5 +1,6 @@
 export enum HeaderTabs {
   home,
   add,
-  clients
+  clients,
+  browse
 }

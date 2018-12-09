@@ -6,9 +6,11 @@ import * as classNames from "classnames";
 import { ViewStore } from "src/store/view-store";
 import { HeaderTabs } from "src/view-models/header-tabs";
 import "./tab-menu.css";
+import {TabMenuProps} from "./TabMenuProps";
 
 interface Props {
   viewStore: ViewStore;
+  menuOptions: TabMenuProps[];
 }
 
 interface State {
@@ -44,42 +46,24 @@ class TabMenu extends React.Component<Props, State> {
         {this.handleRedirect()}
         <div className="header-tabs">
           <ul className="tabs">
-            <li
-              className={classNames({
-                active: this.isActive(HeaderTabs.home)
-              })}
-            >
-              <Link
-                to="/home"
-                onClick={() => this.changeActiveTab(HeaderTabs.home)}
-              >
-                Home
-              </Link>
-            </li>
-            <li
-              className={classNames({
-                active: this.isActive(HeaderTabs.add)
-              })}
-            >
-              <Link
-                to="/add"
-                onClick={() => this.changeActiveTab(HeaderTabs.add)}
-              >
-                Add a job
-              </Link>
-            </li>
-            <li
-              className={classNames({
-                active: this.isActive(HeaderTabs.clients)
-              })}
-            >
-              <Link
-                to="/clients"
-                onClick={() => this.changeActiveTab(HeaderTabs.clients)}
-              >
-                Other clients
-              </Link>
-            </li>
+            {this.props.menuOptions.map((option) => {
+              return(
+                <li
+                    className={classNames({
+                        active: this.isActive(option.headerTab)
+                    })}
+                    key={option.text}
+                >
+                    <Link
+                        to={option.link}
+                        onClick={() => this.changeActiveTab(option.headerTab)}
+                        key={option.link}
+                    >
+                        {option.text}
+                    </Link>
+                </li>
+              );
+            })}
           </ul>
         </div>
       </div>
