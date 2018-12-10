@@ -23,6 +23,17 @@ class User(DB):
 
     clients = relationship('Client', back_populates='user')
     providers = relationship('Provider', back_populates='user')
+    active_users = relationship('ActiveLogins', back_populates='user')
+
+
+class ActiveLogins(DB):
+    __tablename__ = 'ActiveLogins'
+
+    id = Column(Integer, autoincrement=True, primary_key=True)
+    id_user = Column(Integer, ForeignKey(User.id), nullable=False)
+    hash = Column(String(100), nullable=False)
+
+    user = relationship('User', back_populates='active_users')
 
 
 class Client(DB):
