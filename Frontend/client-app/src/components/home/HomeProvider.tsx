@@ -9,7 +9,7 @@ import { MuiThemeProvider } from '@material-ui/core/styles';
 import {theme} from "../../themes/main-theme";
 import Typography from "@material-ui/core/Typography/Typography";
 import {HistoryTable} from "../provider/history/HistoryTable";
-import "../register/register.css";
+import "./home-provider.css";
 
 interface Props {
   viewStore: ViewStore;

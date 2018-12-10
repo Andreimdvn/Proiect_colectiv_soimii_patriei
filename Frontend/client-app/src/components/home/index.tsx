@@ -5,7 +5,6 @@ import {HomeProvider} from "./HomeProvider";
 
 export default {
   clientHome() {
-    console.log("client home");
     return (
       <div>
         <Route exact={true} path="/" component={HomeClient} />
@@ -15,7 +14,6 @@ export default {
   },
 
   providerHome() {
-    console.log("provider home");
     return (
       <div>
         <Route exact={true} path="/" component={HomeProvider} />

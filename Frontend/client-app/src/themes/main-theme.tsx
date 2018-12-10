@@ -1,5 +1,5 @@
 import {createMuiTheme} from "@material-ui/core";
-import {grey, indigo, red} from "@material-ui/core/colors";
+import {grey, indigo, red, green, deepPurple, blue} from "@material-ui/core/colors";
 
 export const theme = createMuiTheme({ // material ui color palette: https://material-ui.com/style/color/#color-palette
   palette: {
@@ -8,23 +8,27 @@ export const theme = createMuiTheme({ // material ui color palette: https://mate
       paper: grey[800],
     },
     primary: {
-      main: indigo[800]
+      main: deepPurple[500]
     },
     secondary: {
-      main: indigo[400]
+      main: indigo[600]
     },
     text: {
       primary: grey[100]
     },
     error: {
       main: red.A700
+    },
+    action: {
+      active: deepPurple[100],
+      hover: blue[100],
     }
   },
   typography: {
-    fontFamily: 'verdana'
+    fontFamily: 'verdana',
+    useNextVariants: true
+  },
+  spacing: {
+    unit: 2
   }
-
-  // spacing: {
-  //   unit: 4
-  // }
 });

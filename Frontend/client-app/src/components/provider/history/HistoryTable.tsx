@@ -4,24 +4,17 @@ import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import { withStyles, Theme } from '@material-ui/core/styles';
-import { createStyles, StyledComponentProps } from '@material-ui/core';
+import { withStyles } from '@material-ui/core/styles';
+import { StyledComponentProps } from '@material-ui/core';
 import {JobsTableCell} from "../browse-jobs/JobsTableCell";
-
-const styles = (theme: Theme) => createStyles({
-  table: {
-    minWidth: 700,
-  },
-  row: {
-    backgroundColor: theme.palette.secondary.main,
-  },
-});
+import {Link} from "react-router-dom";
+import {jobTableStyle} from "../job-table-style";
 
 interface Props extends StyledComponentProps{
   jobs:Job[]
 }
 
-export const HistoryTable = withStyles(styles)(
+export const HistoryTable = withStyles(jobTableStyle)(
   class RecommendedJobsTableBase extends React.Component<Props> {
     constructor(props) {
       super(props);
@@ -50,7 +43,7 @@ export const HistoryTable = withStyles(styles)(
                     <JobsTableCell>{job.type}</JobsTableCell>
                     <JobsTableCell>{job.descriptionPreview}</JobsTableCell>
                     <JobsTableCell>{job.reward}</JobsTableCell>
-                    <JobsTableCell>{job.publisher}</JobsTableCell>
+                    <JobsTableCell><Link to={"/user/"+job.publisher} className={classes.link}>{job.publisher}</Link></JobsTableCell>
                     <JobsTableCell>{job.date}</JobsTableCell>
                   </TableRow>
                 );
