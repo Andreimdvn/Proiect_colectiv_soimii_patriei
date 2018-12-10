@@ -1,5 +1,5 @@
 import {createMuiTheme} from "@material-ui/core";
-import {grey, indigo, red, green, deepPurple, blue} from "@material-ui/core/colors";
+import {grey, indigo, red, green, deepPurple, blue, blueGrey} from "@material-ui/core/colors";
 
 export const theme = createMuiTheme({ // material ui color palette: https://material-ui.com/style/color/#color-palette
   palette: {
@@ -8,10 +8,10 @@ export const theme = createMuiTheme({ // material ui color palette: https://mate
       paper: grey[800],
     },
     primary: {
-      main: deepPurple[500]
+      main: "#374969"
     },
     secondary: {
-      main: indigo[600]
+      main: indigo[500]
     },
     text: {
       primary: grey[100]
