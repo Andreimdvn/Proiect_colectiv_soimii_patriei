@@ -6,12 +6,14 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import { withStyles, Theme } from '@material-ui/core/styles';
-import { WithStyles, createStyles } from '@material-ui/core';
+import { createStyles, StyledComponentProps } from '@material-ui/core';
 
 const JobsTableCell = withStyles(theme => ({
   head: {
-    backgroundColor: theme.palette.background,
-    color: theme.palette.text,
+    backgroundColor:theme.palette.primary.main,
+    color: theme.palette.text.primary,
+    fontSize: 16,
+    fontWeight: 'bold'
   },
   body: {
     fontSize: 14,
@@ -19,23 +21,15 @@ const JobsTableCell = withStyles(theme => ({
 }))(TableCell);
 
 const styles = (theme: Theme) => createStyles({
-  root: {
-    width: '100%',
-    marginTop: theme.spacing.unit * 3,
-    overflowX: 'auto',
-  },
   table: {
     minWidth: 700,
-    backgroundColor: theme.palette.background.default
   },
   row: {
-    '&:nth-of-type(odd)': {
-      backgroundColor: theme.palette.background.default,
-    },
+    backgroundColor: theme.palette.secondary.main,
   },
 });
 
-interface Props extends WithStyles<typeof styles>{
+interface Props extends StyledComponentProps{
   jobs:Job[]
 }
 
@@ -64,7 +58,7 @@ export const RecommendedJobsTable = withStyles(styles)(
             <TableBody>
               {this.props.jobs.map(job =>{
                 return (
-                  <TableRow key={job.id}>
+                  <TableRow key={job.id} className={classes.row}>
                     <JobsTableCell>{job.type}</JobsTableCell>
                     <JobsTableCell>{job.descriptionPreview}</JobsTableCell>
                     <JobsTableCell>{job.reward}</JobsTableCell>
