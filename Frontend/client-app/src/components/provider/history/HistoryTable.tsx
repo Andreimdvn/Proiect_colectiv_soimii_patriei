@@ -21,7 +21,7 @@ interface Props extends StyledComponentProps{
   jobs:Job[]
 }
 
-export const RecommendedJobsTable = withStyles(styles)(
+export const HistoryTable = withStyles(styles)(
   class RecommendedJobsTableBase extends React.Component<Props> {
     constructor(props) {
       super(props);
@@ -39,7 +39,7 @@ export const RecommendedJobsTable = withStyles(styles)(
                 <JobsTableCell>Description</JobsTableCell>
                 <JobsTableCell>Reward</JobsTableCell>
                 <JobsTableCell>Publisher</JobsTableCell>
-                <JobsTableCell>Published at</JobsTableCell>
+                <JobsTableCell>Finished at</JobsTableCell>
               </TableRow>
             </TableHead>
 

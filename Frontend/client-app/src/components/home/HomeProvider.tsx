@@ -8,6 +8,8 @@ import Paper from "@material-ui/core/Paper/Paper";
 import { MuiThemeProvider } from '@material-ui/core/styles';
 import {theme} from "../../themes/main-theme";
 import Typography from "@material-ui/core/Typography/Typography";
+import {HistoryTable} from "../provider/history/HistoryTable";
+import "../register/register.css";
 
 interface Props {
   viewStore: ViewStore;
@@ -26,7 +28,7 @@ export class HomeProvider extends React.Component<Props> {
 
         <React.Fragment>
 
-          <Paper>
+          <Paper className={"paper"}>
             <Typography component="h1" variant="h5">
               Recommended for you
             </Typography>
@@ -37,7 +39,15 @@ export class HomeProvider extends React.Component<Props> {
             ]}/>
           </Paper>
 
-          <div>*history*</div>
+          <Paper className={"paper"}>
+            <Typography component="h1" variant="h5">
+              History
+            </Typography>
+            <HistoryTable jobs={[
+              new Job("4", "cleaning", "cleaned house", "xfg45", "dinner", "10-09-2018"),
+              new Job("5", "dog walk", "walked good boie", "xfg45", "5", "13-09-2018"),
+            ]}/>
+          </Paper>
 
         </React.Fragment>
       </MuiThemeProvider>
