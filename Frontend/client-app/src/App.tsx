@@ -2,6 +2,7 @@ import TabMenu from "./components/tab-menu/TabMenu";
 import rootStore from "./store/root-store";
 import HomeRoute from "./components/home";
 import AddJobRoute from "./components/jobs/add-job-form";
+import {Login} from "./components/login/Login";
 import "./App.css";
 
 import { Provider } from "mobx-react";
@@ -9,13 +10,16 @@ import * as React from "react";
 import { Router } from "react-router-dom";
 import { createBrowserHistory } from "history";
 
+const logged = false;
+
 class App extends React.Component {
   public render() {
     return (
       <div className="App">
-        <header className="App-header">Student Jobs</header>
-        <Provider {...rootStore}>
+          <Provider {...rootStore}>
+          {logged ? (
           <React.Fragment>
+              <header className="App-header">Student Jobs</header>
             <Router history={createBrowserHistory()}>
               <React.Fragment>
                 <TabMenu viewStore={rootStore.viewStore} />
@@ -24,7 +28,12 @@ class App extends React.Component {
               </React.Fragment>
             </Router>
           </React.Fragment>
-        </Provider>
+          ): (
+              <React.Fragment>
+                <Login/>
+              </React.Fragment>
+              )}
+          </Provider>
       </div>
     );
   }
