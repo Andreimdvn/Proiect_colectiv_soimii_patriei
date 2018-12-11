@@ -9,7 +9,7 @@ interface Props {
 
 @inject("viewStore")
 @observer
-export class Home extends React.Component<Props> {
+export class HomeClient extends React.Component<Props> {
   constructor(props: Props) {
     super(props);
   }
