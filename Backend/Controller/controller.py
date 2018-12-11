@@ -1,8 +1,11 @@
-import Database.orm
 import logging
 import re
+import time
+
+import emails
 
 from Repository.repo_jobs import RepositoryJobs
+import Database.orm
 
 register_fields = {
     'username': str,
@@ -72,5 +75,38 @@ class Controller:
         if not response:
             status, response = self.repo.register(**sanitized_request)
 
+        if status == 0:
+            self.send_validation_mail(sanitized_request.get('email'), response.get('activation_hash'))
+            response = response.get('response')
+
         self.logger.debug("Register: returning: status: {} response: {}".format(status, response))
         return status, response
+
+    def send_validation_mail(self, email, activation_hash):
+        """
+        Send a validation email (tries 2 times) to a user to notice them to activate the account
+        :param activation_hash: generated hash for activation
+        :param email: the email were the activation link will be sent
+        :return:
+        """
+        url = 'http://0.0.0.0:16000/activation'
+
+        for i in range(2):
+            m = emails.Message(html='<html>To activate your account <a href="%s/%s">click here</a></html>' % (url, activation_hash),
+                               subject='Activate your account!',
+                               mail_from='facultaubb@gmail.com')
+
+            r = m.send(render={'url': url,
+                               'hash': activation_hash},
+                       smtp={'host': 'smtp.gmail.com',
+                             'tls': True,
+                             'user': 'facultaubb@gmail.com',
+                             'password': 'P@rolamea'},
+                       to=email)
+            if r.status_code not in (250,) and i != 1:
+                time.sleep(5)
+            else:
+                break
+
+    def activate(self, key):
+        return self.repo.activate_account(key)
