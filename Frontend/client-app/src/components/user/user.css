@@ -1,0 +1,17 @@
+.account-box {
+  float: left;
+}
+
+.account-box-icon {
+  color: white;
+}
+
+.account-box-button {
+  display: block !important;
+}
+
+.account-box-select {
+  margin-top: 0;
+  display: none !important;
+  float: right;
+}

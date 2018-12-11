@@ -26,7 +26,6 @@ export class Register extends React.Component {
     termsAccepted : boolean;
     constructor(props) {
         super(props);
-
     }
 
     handleTerms = (event) => {
@@ -47,7 +46,6 @@ export class Register extends React.Component {
             phone: this.state.phone,
             account_type: this.state.type
         };
-        console.log(data);
         this.addUser(data);
     };
 
@@ -71,15 +69,16 @@ export class Register extends React.Component {
 
         const request = new Request('http://localhost:16000/api/register',options);
 
-        const response = await fetch(request);
-        const status = await  response.status;
-
-        if(status === 0) {
-            alert("success!");
-        }
-        if(status === 1) {
-            alert("technical problem!");
-        }
+        const response = await fetch(request).then(res => {
+            res.json().then(r => {
+                console.log(r);
+                if (r.status === 0) {
+                    alert(r.response)
+                } else if (r.status === -1) {
+                    alert(r.response)
+                }
+            });
+        })
     };
 
     render(): React.ReactNode {
@@ -106,7 +105,13 @@ export class Register extends React.Component {
                         <Input id="phone" name="phone" onChange={this.handleInputChange}/>
                     </FormControl>
                     <FormControl required={true} fullWidth={true}>
-                        <TextField label="Birthday" type="date" id="birth" name="birth" onChange={this.handleInputChange} InputLabelProps={{
+                        <TextField
+                            label="Birthday"
+                            type="date"
+                            id="birth"
+                            name="birth"
+                            onChange={this.handleInputChange}
+                            InputLabelProps={{
                             shrink: true,
                         }}/>
                     </FormControl>
@@ -133,7 +138,10 @@ export class Register extends React.Component {
                             <MenuItem value="provider">Provider</MenuItem>
                         </Select>
                     </FormControl>
-                    <FormControlLabel control={<Checkbox value="termsAccepted" />} label="I agree with the Terms and Conditions" onChange={this.handleTerms}/>
+                    <FormControlLabel
+                        control={<Checkbox value="termsAccepted" />}
+                        label="I agree with the Terms and Conditions"
+                        onChange={this.handleTerms}/>
                     <br/>
                     <Button
                         className="submitBtn"
