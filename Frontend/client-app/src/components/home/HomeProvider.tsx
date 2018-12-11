@@ -24,13 +24,26 @@ class HomeProviderBase extends React.Component<Props> {
     super(props);
   }
 
-  getUsername() {
-    return this.props.cookies.get("username");
+  getToken() {
+    return this.props.cookies.get("token");
   }
 
   getRecommendedJobs() {
-    const requestUrl = "0.0.0.0:16000/recommended/" + this.getUsername();
-    fetch(requestUrl).then(response => response.json()).then(json =>{
+
+    const jsonCfg = require('src/app_properties.json');
+    const requestUrl = jsonCfg.baseUrl + "/recommended/";
+    const token = this.getToken();
+
+    const promisedResponse = fetch(requestUrl, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: "token=" + token + "&limit=5"
+    });
+
+    promisedResponse.then(response => response.json()).then(json =>{
       console.log(json);
     }).catch(error=> {
       console.log(error);
@@ -44,8 +57,21 @@ class HomeProviderBase extends React.Component<Props> {
   }
 
   getHistory() {
-    const requestUrl = "0.0.0.0:16000/history/" + this.getUsername();
-    fetch(requestUrl).then(response => response.json()).then(json =>{
+    const jsonCfg = require('src/app_properties.json');
+    const requestUrl = jsonCfg.baseUrl + "/history/";
+    const token = this.getToken();
+
+    const promisedResponse = fetch(requestUrl, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: "token=" + token
+    });
+
+
+    promisedResponse.then(response => response.json()).then(json =>{
       console.log(json);
     }).catch(error=> {
       console.log(error);
