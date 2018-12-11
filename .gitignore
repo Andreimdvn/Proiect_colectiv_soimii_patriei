@@ -6,3 +6,5 @@
 *.rar
 *.tar.gz
 **/config.json
+*.orig
+**/package-lock.json

@@ -3,10 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@material-ui/core": "^3.5.1",
+    "@material-ui/icons": "^3.0.1",
     "classnames": "^2.2.6",
     "mobx": "^5.6.0",
     "mobx-react": "^5.3.6",
     "react": "^16.6.3",
+    "react-cookie": "^3.0.8",
     "react-dom": "^16.6.3",
     "react-router": "^4.3.1",
     "react-router-dom": "^4.3.1",
@@ -26,12 +29,8 @@
     "@types/react": "^16.7.3",
     "@types/react-dom": "^16.0.9",
     "@types/react-router": "^4.4.1",
-    "@types/react-router-dom": "^4.3.1"
-  },
-  "browserslist": [
-    ">0.2%",
-    "not dead",
-    "not ie <= 11",
-    "not op_mini all"
-  ]
+    "@types/react-router-dom": "^4.3.1",
+    "css-loader": "^1.0.1",
+    "json-loader": "^0.5.7"
+  }
 }

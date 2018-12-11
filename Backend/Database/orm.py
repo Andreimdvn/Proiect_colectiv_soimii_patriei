@@ -15,7 +15,7 @@ DB = declarative_base()
 class User(DB):
     __tablename__ = 'User'
 
-    id_user = Column(Integer, autoincrement=True, primary_key=True)
+    id = Column(Integer, autoincrement=True, primary_key=True)
     username = Column(String(100), nullable=False, unique=True)
     email = Column(String(100), nullable=False, unique=True)
     password = Column(String(100), nullable=False)
@@ -23,32 +23,43 @@ class User(DB):
 
     clients = relationship('Client', back_populates='user')
     providers = relationship('Provider', back_populates='user')
+    active_users = relationship('ActiveLogins', back_populates='user')
+
+
+class ActiveLogins(DB):
+    __tablename__ = 'ActiveLogins'
+
+    id = Column(Integer, autoincrement=True, primary_key=True)
+    id_user = Column(Integer, ForeignKey(User.id), nullable=False)
+    hash = Column(String(100), nullable=False)
+
+    user = relationship('User', back_populates='active_users')
 
 
 class Client(DB):
     __tablename__ = 'Client'
 
-    id_client = Column(Integer, ForeignKey(User.id_user), nullable=False, primary_key=True)
+    id = Column(Integer, ForeignKey(User.id), nullable=False, primary_key=True)
     first_name = Column(String(100), nullable=False)
     last_name = Column(String(100), nullable=False)
     date_of_birth = Column(Date, nullable=False)
-    phone = Column(Boolean, nullable=False, default=False)
+    phone = Column(String(20), nullable=False, default=False)
 
     user = relationship('User', back_populates='clients')
     reviews = relationship('ClientReview', back_populates='client')
-    recommendations_from = relationship('Recommendation', back_populates='client_from')
-    recommendations_to = relationship('Recommendation', back_populates='client_to')
+    # recommendations_from = relationship('Recommendation', back_populates='client_from')
+    # recommendations_to = relationship('Recommendation', back_populates='client_to')
     jobs = relationship('Job', back_populates='client')
 
 
 class Provider(DB):
     __tablename__ = 'Provider'
 
-    id_provider = Column(Integer, ForeignKey(User.id_user), nullable=False, primary_key=True)
+    id = Column(Integer, ForeignKey(User.id), nullable=False, primary_key=True)
     first_name = Column(String(100), nullable=False)
     last_name = Column(String(100), nullable=False)
     date_of_birth = Column(Date, nullable=False)
-    phone = Column(Boolean, nullable=False, default=False)
+    phone = Column(String(20), nullable=False, default=False)
 
     user = relationship('User', back_populates='providers')
     reviews = relationship('ProviderReview', back_populates='providers')
@@ -60,19 +71,19 @@ class Provider(DB):
 class ProviderReview(DB):
     __tablename__ = 'ProviderReview'
 
-    id_review = Column(Integer, autoincrement=True, primary_key=True)
-    id_provider = Column(Integer, ForeignKey(Provider.id_provider), nullable=False)
+    id = Column(Integer, autoincrement=True, primary_key=True)
+    id_provider = Column(Integer, ForeignKey(Provider.id), nullable=False)
     description = Column(String(100), nullable=False)
     rating = Column(Integer, nullable=False, default=0)
 
-    provider = relationship('Provider', back_populates='reviews')
+    providers = relationship('Provider', back_populates='reviews')
 
 
 class ClientReview(DB):
     __tablename__ = 'ClientReview'
 
-    id_review = Column(Integer, autoincrement=True, primary_key=True)
-    id_client = Column(Integer, ForeignKey(Client.id_client), nullable=False)
+    id = Column(Integer, autoincrement=True, primary_key=True)
+    id_client = Column(Integer, ForeignKey(Client.id), nullable=False)
     description = Column(String(100), nullable=False)
     rating = Column(Integer, nullable=False, default=0)
 
@@ -82,21 +93,21 @@ class ClientReview(DB):
 class Recommendation(DB):
     __tablename__ = 'Recommendation'
 
-    id_recommendation = Column(Integer, autoincrement=True, primary_key=True)
-    id_client_from = Column(Integer, ForeignKey(Client.id_client), nullable=False)
-    id_client_to = Column(Integer, ForeignKey(Client.id_client), nullable=False)
-    id_provider = Column(Integer, ForeignKey(Provider.id_provider), nullable=False)
+    id = Column(Integer, autoincrement=True, primary_key=True)
+    id_client_from = Column(Integer, ForeignKey(Client.id), nullable=False)
+    id_client_to = Column(Integer, ForeignKey(Client.id), nullable=False)
+    id_provider = Column(Integer, ForeignKey(Provider.id), nullable=False)
     message = Column(String(100), nullable=True)
 
-    client_from = relationship('Client', back_populates='recommendations_from')
-    client_to = relationship('Client', back_populates='recommendations_to')
+    # client_from = relationship('Client', back_populates=[id_client_from])
+    # client_to = relationship('Client', foreign_keys=[id_client_to])
     provider = relationship('Provider', back_populates='recommended_provider')
 
 
 class Ability(DB):
     __tablename__ = 'Ability'
 
-    id_ability = Column(Integer, autoincrement=True, primary_key=True)
+    id = Column(Integer, autoincrement=True, primary_key=True)
     ability = Column(String(100), nullable=False)
 
 
@@ -104,8 +115,8 @@ class ProviderAbilities(DB):
     __tablename__ = 'ProviderAbilities'
 
     id = Column(Integer, primary_key=True, autoincrement=True, nullable=False)
-    id_provider = Column(Integer, ForeignKey(Provider.id_provider), nullable=False)
-    id_ability = Column(Integer, ForeignKey(Ability.id_ability), nullable=False)
+    id_provider = Column(Integer, ForeignKey(Provider.id), nullable=False)
+    id_ability = Column(Integer, ForeignKey(Ability.id), nullable=False)
 
     abilities = relationship('Ability')
 
@@ -113,7 +124,7 @@ class ProviderAbilities(DB):
 class JobType(DB):
     __tablename__ = 'JobType'
 
-    id_jobtype = Column(Integer, autoincrement=True, primary_key=True)
+    id = Column(Integer, autoincrement=True, primary_key=True)
     description = Column(String(100), nullable=False)
 
     jobs = relationship('Job', back_populates='job_type')
@@ -122,9 +133,9 @@ class JobType(DB):
 class Job(DB):
     __tablename__ = 'Job'
 
-    id_job = Column(Integer, autoincrement=True, primary_key=True)
-    id_client = Column(Integer, ForeignKey(Client.id_client), nullable=False)
-    type = Column(Integer, ForeignKey(JobType.id_jobtype), nullable=False)
+    id = Column(Integer, autoincrement=True, primary_key=True)
+    id_client = Column(Integer, ForeignKey(Client.id), nullable=False)
+    type = Column(Integer, ForeignKey(JobType.id), nullable=False)
     description = Column(String(100), nullable=False)
     reward = Column(String(100), nullable=False)
     publish_date = Column(DateTime, nullable=False, default=datetime.datetime.utcnow)
@@ -139,8 +150,8 @@ class JobProvider(DB):
     __tablename__ = 'JobProvider'
 
     id = Column(Integer, primary_key=True, nullable=False, autoincrement=True)
-    id_job = Column(Integer, ForeignKey(Job.id_job), nullable=False)
-    id_provider = Column(Integer, ForeignKey(Provider.id_provider), nullable=False)
+    id_job = Column(Integer, ForeignKey(Job.id), nullable=False)
+    id_provider = Column(Integer, ForeignKey(Provider.id), nullable=False)
     assigned_date = Column(DateTime, nullable=False, default=datetime.datetime.utcnow)
 
     job = relationship('Job', back_populates='given_to')
@@ -151,8 +162,8 @@ class JobRequest(DB):
     __tablename__ = 'JobRequest'
 
     id = Column(Integer, primary_key=True, autoincrement=True, nullable=True)
-    id_job = Column(Integer, ForeignKey(Job.id_job), nullable=False)
-    id_provider = Column(Integer, ForeignKey(Provider.id_provider), nullable=False)
+    id_job = Column(Integer, ForeignKey(Job.id), nullable=False)
+    id_provider = Column(Integer, ForeignKey(Provider.id), nullable=False)
     request_date = Column(DateTime, nullable=False, default=datetime.datetime.utcnow)
     response = Column(Boolean, nullable=False, default=False)
 
@@ -220,15 +231,20 @@ class ORM:
             if len(cols) != len(values):
                 raise ValueError('[!] Columns and values are not equal!')
             col_val = {e[0]: e[1] for e in zip(columns, values)}
-            self.ses.add(tb(**col_val))
+            new_object = tb(**col_val)
+            self.ses.add(new_object)
         else:
             cols = [c.key for c in tb.__table__.columns if c.key != 'id']
             if len(cols) != len(values):
                 raise ValueError('[!] Columns and values number are not equal!')
             col_val = {e[0]: e[1] for e in zip(cols, values)}
-            self.ses.add(tb(**col_val))
+            new_object = tb(**col_val)
+            self.ses.add(new_object)
         self.ses.commit()
         self.ses.flush()
+        self.ses.refresh(new_object)
+
+        return new_object.id
 
     def select(self, table, columns=None, values=None, first=False):
         """
@@ -246,9 +262,6 @@ class ORM:
         if values:
             if type(values) not in (list, tuple):
                 raise ValueError('[!] Type [%s] for values are not allowed! Use list or tuple.' % type(values))
-        if values:
-            if type(values) not in (list, tuple):
-                raise ValueError('[!] Type [%s is not allowed for values!' % type(values))
         tb = self.table_object(table)
         self.ses = self.session()
         if not columns:
