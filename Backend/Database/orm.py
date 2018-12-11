@@ -192,13 +192,12 @@ class ORM:
         self.session = scoped_session(sessionmaker(bind=self.engine))
         self.ses = None
 
-        self.drop_databse()
         self.create_database()
 
     def create_database(self):
         DB.metadata.create_all(self.engine)
 
-    def drop_databse(self):
+    def drop_database(self):
         DB.metadata.drop_all(self.engine)
 
     def columns_objects(self, table, columns):
