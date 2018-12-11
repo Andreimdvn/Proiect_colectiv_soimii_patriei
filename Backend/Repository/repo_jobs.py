@@ -26,6 +26,9 @@ class RepositoryJobs:
                                 first=True)
 
             if u and pbkdf2_sha256.verify(password, u.password):
+                # check to see if the user has activate the account
+                if not u.verified_by_email:
+                    raise ValueError('[!] You have to activate your account before you can login!')
                 # success
                 hash = self.random_hash_string()
                 while self.orm.select('ActiveLogins', columns=('hash',), values=(hash,), first=True):
