@@ -59,7 +59,7 @@ class Provider(DB):
     first_name = Column(String(100), nullable=False)
     last_name = Column(String(100), nullable=False)
     date_of_birth = Column(Date, nullable=False)
-    phone = Column(Boolean, nullable=False, default=False)
+    phone = Column(String(20), nullable=False, default=False)
 
     user = relationship('User', back_populates='providers')
     reviews = relationship('ProviderReview', back_populates='providers')

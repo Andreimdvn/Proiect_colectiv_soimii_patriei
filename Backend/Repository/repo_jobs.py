@@ -35,7 +35,11 @@ class RepositoryJobs:
                                     values_where=(u.id,))
                 else:
                     self.orm.insert('ActiveLogins', columns=('id_user', 'hash'), values=(u.id, hash))
-                response = hash
+                response = {'token': hash}
+                if u.clients:
+                    response.update({'type': 'client'})
+                else:
+                    response.update({'type': 'provider'})
 
             else:
                 # failed
