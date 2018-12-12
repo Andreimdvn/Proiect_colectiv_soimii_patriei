@@ -3,7 +3,6 @@ import rootStore from "./store/root-store";
 import BrowseRoute from "./components/provider/browse-jobs"
 import HomeRoute from "./components/home";
 import AddJobRoute from "./components/jobs/add-job-form";
-import {Login} from "./components/login/Login";
 import ClientListRoute from "./components/clients/client-list";
 import User from "./components/user/User";
 import EditProfileRoute from "./components/user/edit-profile";
@@ -16,6 +15,8 @@ import { Router } from "react-router-dom";
 import { withCookies, Cookies } from 'react-cookie';
 import { createBrowserHistory } from "history";
 import {Register} from "./components/register/Register";
+import {Login} from "./components/login/Login";
+
 import {TabMenuProps} from "./components/tab-menu/TabMenuProps";
 import {HeaderTabs} from "./view-models/header-tabs";
 import {UserTypes} from "./view-models/user-types";
@@ -32,8 +33,8 @@ class App extends React.Component<Props> {
   }
 
   public render() {
-    this.props.cookies.set("token", "bob");
-    this.props.cookies.set("userType", UserTypes.PROVIDER);
+   // this.props.cookies.set("token", "bob");
+   // this.props.cookies.set("userType", UserTypes.PROVIDER);
 
     // try to load the cookies
     const token = this.props.cookies.get("token");
@@ -46,7 +47,7 @@ class App extends React.Component<Props> {
           <React.Fragment>
             {!logged ? ( // if not logged in, show the register screen
               <React.Fragment>
-                <Register/>
+                <Login/>
               </React.Fragment>
             ) : null}
 
@@ -100,12 +101,7 @@ class App extends React.Component<Props> {
               </React.Fragment>
             ) : null}
           </React.Fragment>
-          ): (
-              <React.Fragment>
-                <Login/>
-              </React.Fragment>
-              )}
-          </Provider>
+        </Provider>
       </div>
     );
   }
