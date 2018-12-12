@@ -12,6 +12,7 @@ import MenuItem from "@material-ui/core/MenuItem/MenuItem";
 import FormControlLabel from "@material-ui/core/FormControlLabel/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox/Checkbox";
 
+
 export class Register extends React.Component {
     state ={
         username: '',
@@ -141,7 +142,12 @@ export class Register extends React.Component {
                         </Select>
                     </FormControl>
                     <FormControlLabel
-                        control={<Checkbox value="termsAccepted" name="termsAccepted" onChange={this.handleTerms}/>}
+                        control={<Checkbox
+                                    value="termsAccepted"
+                                    name="termsAccepted"
+                                    onClick={this.handleTerms}
+                                    checked={this.state.termsAccepted}
+                                />}
                         label="I agree with the Terms and Conditions"
                     />
                     <br/>
