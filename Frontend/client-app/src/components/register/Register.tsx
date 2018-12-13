@@ -154,6 +154,7 @@ export class Register extends React.Component<any> {
                         <br/>
                         <div>
                         <label className="passwordLabel">You already have an account?</label>
+                        <br/>
                         <label onClick={this.props.switchScreen}> Click here to login!</label>
                         </div>
                     <Button
