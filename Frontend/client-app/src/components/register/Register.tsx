@@ -12,6 +12,7 @@ import MenuItem from "@material-ui/core/MenuItem/MenuItem";
 import FormControlLabel from "@material-ui/core/FormControlLabel/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox/Checkbox";
 
+
 export class Register extends React.Component {
     state ={
         username: '',
@@ -21,17 +22,19 @@ export class Register extends React.Component {
         lastName: '',
         birth: '',
         phone: '',
-        type: 'client'
+        type: 'client',
+        termsAccepted : false,
     };
-    termsAccepted : boolean;
     constructor(props) {
         super(props);
     }
 
     handleTerms = (event) => {
         event.preventDefault();
-        this.termsAccepted = !this.termsAccepted;
-        console.log(this.termsAccepted);
+        this.setState({
+            [event.target.name]: !this.state.termsAccepted
+        });
+        console.log(this.state.termsAccepted);
     };
 
     handleSubmit = (event)=>{
@@ -139,9 +142,14 @@ export class Register extends React.Component {
                         </Select>
                     </FormControl>
                     <FormControlLabel
-                        control={<Checkbox value="termsAccepted" />}
+                        control={<Checkbox
+                                    value="termsAccepted"
+                                    name="termsAccepted"
+                                    onClick={this.handleTerms}
+                                    checked={this.state.termsAccepted}
+                                />}
                         label="I agree with the Terms and Conditions"
-                        onChange={this.handleTerms}/>
+                    />
                     <br/>
                     <Button
                         className="submitBtn"
@@ -149,6 +157,7 @@ export class Register extends React.Component {
                         fullWidth={false}
                         variant="contained"
                         color="primary"
+                        disabled={!this.state.termsAccepted}
                     >
                         Register
                     </Button>
