@@ -32,7 +32,7 @@ class App extends React.Component<Props> {
 
   public render() {
     this.props.cookies.set("token", "bob");
-    this.props.cookies.set("userType", UserTypes.PROVIDER);
+    this.props.cookies.set("userType", UserTypes.CLIENT);
 
     // try to load the cookies
     const token = this.props.cookies.get("token");

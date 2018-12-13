@@ -1,3 +1,4 @@
+import datetime
 import string
 import random
 
@@ -97,3 +98,17 @@ class RepositoryJobs:
                             values_where=(token.id_user,))
             return 'Your account was successfully activated!'
         return 'Something went wrong!'
+#### TO DO CLIENTU E HARDCODAT AICI
+    def add_job(self, request_data):
+        try:
+            job_type_pk = self.orm.select('JobType', columns=('description'), values=(type));
+            now = datetime.now()
+            formatted_date = now.strftime('%Y-%m-%d %H:%M:%S')
+            if job_type_pk:
+                self.orm.insert("Job", columns=('id_client', 'type', 'description', 'reward', 'publish_date'),
+                                values=(1, request_data['type'], request_data['description', request_data['reward']],formatted_date ))
+            else:
+                return -1, "Job type does not exist."
+        except ValueError as e:
+            return -1, str(e)
+
