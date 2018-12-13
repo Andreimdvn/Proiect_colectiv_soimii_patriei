@@ -37,20 +37,24 @@ class App extends React.Component<Props> {
 
     // try to load the cookies
     const token = this.props.cookies.get("token");
-    const userType = this.props.cookies.get("userType");
+    // const userType = this.props.cookies.get("userType");
     // const logged = token !== undefined && userType !== undefined;
     const logged = false;
+    const userType = undefined;
     return (
       <div className="App">
         <Provider {...rootStore}>
           <React.Fragment>
-              {!logged ? ( // if not logged in, show the register screen
-                      <Router history={createBrowserHistory()}>
+
+            {!logged ? ( // if not logged in, show the register screen
               <React.Fragment>
-                  <Register/>
-                  <MailValidation/>
+                <Router history={createBrowserHistory()}>
+                  <React.Fragment>
+                    <MailValidation/>
+                    <Register/>
+                  </React.Fragment>
+                </Router>
               </React.Fragment>
-                      </Router>
             ) : null}
 
 

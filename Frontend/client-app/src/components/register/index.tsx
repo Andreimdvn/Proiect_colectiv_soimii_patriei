@@ -5,7 +5,7 @@ import {Register} from "./Register";
 export default () => {
     return (
         <React.Fragment>
-            <Route path="register" component={Register} />
+            <Route path="/register" component={Register} />
         </React.Fragment>
     );
 };

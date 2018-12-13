@@ -11,8 +11,7 @@ import Select from "@material-ui/core/Select/Select";
 import MenuItem from "@material-ui/core/MenuItem/MenuItem";
 import FormControlLabel from "@material-ui/core/FormControlLabel/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox/Checkbox";
-import {BrowserRouter, Link, Redirect, Router} from "react-router-dom";
-import {BrowseJobs} from "../provider/browse-jobs/BrowseJobs";
+import {Redirect} from "react-router-dom";
 
 
 export class Register extends React.Component {

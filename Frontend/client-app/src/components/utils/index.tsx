@@ -5,7 +5,7 @@ import {MailValidation} from "./MailValidation";
 export default () => {
     return (
         <React.Fragment>
-            <Route path="validation" component={MailValidation} />
+            <Route path="/validation" component={MailValidation} />
         </React.Fragment>
     );
 };
