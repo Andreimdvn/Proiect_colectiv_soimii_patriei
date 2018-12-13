@@ -24,6 +24,7 @@ class User(DB):
     clients = relationship('Client', back_populates='user')
     providers = relationship('Provider', back_populates='user')
     active_users = relationship('ActiveLogins', back_populates='user')
+    unactivated_user = relationship('EmailValidationToken', back_populates='user')
 
 
 class ActiveLogins(DB):
@@ -34,6 +35,16 @@ class ActiveLogins(DB):
     hash = Column(String(100), nullable=False)
 
     user = relationship('User', back_populates='active_users')
+
+
+class EmailValidationToken(DB):
+    __tablename__ = 'EmailValidationToken'
+
+    id = Column(Integer, autoincrement=True, primary_key=True)
+    id_user = Column(Integer, ForeignKey(User.id), nullable=False)
+    token = Column(String(100), nullable=False)
+
+    user = relationship('User', back_populates='unactivated_user')
 
 
 class Client(DB):
@@ -186,7 +197,7 @@ class ORM:
     def create_database(self):
         DB.metadata.create_all(self.engine)
 
-    def drop_databse(self):
+    def drop_database(self):
         DB.metadata.drop_all(self.engine)
 
     def columns_objects(self, table, columns):

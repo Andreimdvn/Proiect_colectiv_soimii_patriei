@@ -53,7 +53,7 @@ class App extends React.Component<Props> {
          <React.Fragment>
             {!logged ? ( // if not logged in, show the register screen
               this.state.showLoginWindow ? 
-                (<Login switchScreen={this.handler}/>)
+                (<Login switchScreen={this.handler} cookies={this.props.cookies}/>)
                 :
                 (<Register switchScreen={this.handler}/>)  
             ) : null}

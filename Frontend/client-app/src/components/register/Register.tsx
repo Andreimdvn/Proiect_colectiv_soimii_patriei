@@ -21,17 +21,19 @@ export class Register extends React.Component<any> {
         lastName: '',
         birth: '',
         phone: '',
-        type: 'client'
+        type: 'client',
+        termsAccepted : false,
     };
-    termsAccepted : boolean;
     constructor(props) {
         super(props);
     }
 
     handleTerms = (event) => {
         event.preventDefault();
-        this.termsAccepted = !this.termsAccepted;
-        console.log(this.termsAccepted);
+        this.setState({
+            [event.target.name]: !this.state.termsAccepted
+        });
+        console.log(this.state.termsAccepted);
     };
 
     handleSubmit = (event)=>{
@@ -117,7 +119,7 @@ export class Register extends React.Component<any> {
                                 shrink: true,
                             }}/>
                         </FormControl>
-                      
+
                         <FormControl required={true} fullWidth={true}>
                             <InputLabel htmlFor="username">Username</InputLabel>
                             <Input id="username" name="username" onChange={this.handleInputChange}/>
@@ -141,24 +143,31 @@ export class Register extends React.Component<any> {
                             </Select>
                         </FormControl>
                         <FormControlLabel
-                            control={<Checkbox value="termsAccepted" />}
-                            label="I agree with the Terms and Conditions"
-                            onChange={this.handleTerms}/>
+                        control={<Checkbox
+                                    value="termsAccepted"
+                                    name="termsAccepted"
+                                    onClick={this.handleTerms}
+                                    checked={this.state.termsAccepted}
+                                />}
+                        label="I agree with the Terms and Conditions"
+                        />
+                        <br/>
                         <div>
                         <label className="passwordLabel">You already have an account?</label>
-                        <label onClick={this.props.switchScreen}> Click here to login!</label> 
+                        <label onClick={this.props.switchScreen}> Click here to login!</label>
                         </div>
-                        <Button
-                            className="submitBtn"
-                            type="submit"
-                            fullWidth={false}
-                            variant="contained"
-                            color="primary"
-                        >
-                            Register
-                        </Button>
-                    </form>
-                </Paper>
+                    <Button
+                        className="submitBtn"
+                        type="submit"
+                        fullWidth={false}
+                        variant="contained"
+                        color="primary"
+                        disabled={!this.state.termsAccepted}
+                    >
+                        Register
+                    </Button>
+                </form>
+        </Paper>
         </div>
         );
     }

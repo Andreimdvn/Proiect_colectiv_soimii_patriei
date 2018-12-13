@@ -6,6 +6,12 @@ import Typography from "@material-ui/core/Typography/Typography";
 import FormControl from "@material-ui/core/FormControl/FormControl";
 import InputLabel from "@material-ui/core/InputLabel/InputLabel";
 import Input from "@material-ui/core/Input/Input";
+import { withCookies, Cookies } from 'react-cookie';
+import { stringify } from "querystring";
+
+interface Props {
+    cookies: Cookies
+}
 
 export class Login extends React.Component<any> {
     state = {
@@ -47,9 +53,9 @@ export class Login extends React.Component<any> {
             res.json().then(r => {
                 console.log(r);
                 if (r.status === 0) {
-                    alert(r.response)
-                        this.props.cookies.set("token", r.token);
-                        this.props.cookies.set("userType", r.type);
+                    alert(r.response);
+                    this.props.cookies.set("token", r.response.token);
+                    this.props.cookies.set("userType", r.response.type);
                 } else if (r.status === -1) {
                     alert(r.response)
                 }
@@ -85,7 +91,6 @@ export class Login extends React.Component<any> {
                         <div className="labelButton">                        
                             <label className="passwordLabel">Don't have an accout?</label>
                             <label onClick={this.props.switchScreen}>Register here</label>
-                            
                         </div>
                         <Button className="button" type="submit"
                             variant="contained"
@@ -96,3 +101,4 @@ export class Login extends React.Component<any> {
         );
     }
 }
+export default withCookies(Login); // withCookies adds this.props.cookies
