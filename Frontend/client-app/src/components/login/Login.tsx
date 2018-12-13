@@ -53,7 +53,6 @@ export class Login extends React.Component<any> {
             res.json().then(r => {
                 console.log(r);
                 if (r.status === 0) {
-                    alert(r.response);
                     this.props.cookies.set("token", r.response.token);
                     this.props.cookies.set("userType", r.response.type);
                 } else if (r.status === -1) {
@@ -83,7 +82,7 @@ export class Login extends React.Component<any> {
                         <br/>
                         <FormControl required={true} fullWidth={true}>
                             <InputLabel htmlFor="password">Password</InputLabel>
-                            <Input id="password" name="password" onChange={this.handleChange}/>
+                            <Input type="password" id="password" name="password" onChange={this.handleChange}/>
                         </FormControl>
                         <br/>
                         <br/>
