@@ -11,6 +11,8 @@ import Select from "@material-ui/core/Select/Select";
 import MenuItem from "@material-ui/core/MenuItem/MenuItem";
 import FormControlLabel from "@material-ui/core/FormControlLabel/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox/Checkbox";
+import {BrowserRouter, Link, Redirect, Router} from "react-router-dom";
+import {BrowseJobs} from "../provider/browse-jobs/BrowseJobs";
 
 
 export class Register extends React.Component {
@@ -24,9 +26,21 @@ export class Register extends React.Component {
         phone: '',
         type: 'client',
         termsAccepted : false,
+        redirect: false
     };
     constructor(props) {
         super(props);
+    }
+
+    setRedirect = () => {
+        this.setState({
+            redirect: true
+        })
+    }
+    renderRedirect = () => {
+        if (this.state.redirect) {
+            return <Redirect to='/validation' />
+        }
     }
 
     handleTerms = (event) => {
@@ -34,7 +48,7 @@ export class Register extends React.Component {
         this.setState({
             [event.target.name]: !this.state.termsAccepted
         });
-        console.log(this.state.termsAccepted);
+        // console.log(this.state.termsAccepted);
     };
 
     handleSubmit = (event)=>{
@@ -54,7 +68,7 @@ export class Register extends React.Component {
 
     handleInputChange = (event)=>{
         event.preventDefault();
-        console.log(event.target.value);
+        // console.log(event.target.value);
         this.setState({
             [event.target.name]: event.target.value
         })
@@ -74,7 +88,7 @@ export class Register extends React.Component {
 
         const response = await fetch(request).then(res => {
             res.json().then(r => {
-                console.log(r);
+                // console.log(r);
                 if (r.status === 0) {
                     alert(r.response)
                 } else if (r.status === -1) {
@@ -151,6 +165,7 @@ export class Register extends React.Component {
                         label="I agree with the Terms and Conditions"
                     />
                     <br/>
+                    {this.renderRedirect()}
                     <Button
                         className="submitBtn"
                         type="submit"
@@ -158,6 +173,7 @@ export class Register extends React.Component {
                         variant="contained"
                         color="primary"
                         disabled={!this.state.termsAccepted}
+                        onClick ={this.setRedirect}
                     >
                         Register
                     </Button>

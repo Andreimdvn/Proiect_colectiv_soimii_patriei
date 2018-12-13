@@ -18,6 +18,7 @@ import {Register} from "./components/register/Register";
 import {TabMenuProps} from "./components/tab-menu/TabMenuProps";
 import {HeaderTabs} from "./view-models/header-tabs";
 import {UserTypes} from "./view-models/user-types";
+import {MailValidation} from "./components/utils/MailValidation";
 
 
 interface Props {
@@ -37,16 +38,19 @@ class App extends React.Component<Props> {
     // try to load the cookies
     const token = this.props.cookies.get("token");
     const userType = this.props.cookies.get("userType");
-    const logged = token !== undefined && userType !== undefined;
-
+    // const logged = token !== undefined && userType !== undefined;
+    const logged = false;
     return (
       <div className="App">
         <Provider {...rootStore}>
           <React.Fragment>
-            {!logged ? ( // if not logged in, show the register screen
+              {!logged ? ( // if not logged in, show the register screen
+                      <Router history={createBrowserHistory()}>
               <React.Fragment>
-                <Register/>
+                  <Register/>
+                  <MailValidation/>
               </React.Fragment>
+                      </Router>
             ) : null}
 
 
