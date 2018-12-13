@@ -7,43 +7,92 @@ import FormControl from "@material-ui/core/FormControl/FormControl";
 import InputLabel from "@material-ui/core/InputLabel/InputLabel";
 import Input from "@material-ui/core/Input/Input";
 
-export class Login extends React.Component {
-    handleSubmit() {
-        const a = "ad";
-        return a;
+export class Login extends React.Component<any> {
+    state = {
+        username: '',
+        password: ''
+    };
+
+    handleSubmit = (event) => {
+        event.preventDefault();
+        const data = {
+            username: this.state.username,
+            password: this.state.password
+        };
+
+        this.loginUser(data);
     }
-    handleChange() {
-        const a = "ad";
-        return a;
+
+    handleChange = (event) => {
+        event.preventDefault();
+        console.log(event.target.value);
+        this.setState({
+            [event.target.name] : event.target.value
+        })
     }
+
+    async loginUser(data) {
+        const headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+
+        const options = {
+            method: 'POST',
+            headers,
+            body: JSON.stringify(data)
+        };
+
+        const request = new Request('http://localhost:16000/api/login',options);
+
+        const response = await fetch(request).then(res => {
+            res.json().then(r => {
+                console.log(r);
+                if (r.status === 0) {
+                    alert(r.response)
+                        this.props.cookies.set("token", r.token);
+                        this.props.cookies.set("userType", r.type);
+                } else if (r.status === -1) {
+                    alert(r.response)
+                }
+            });
+        });
+    }
+
     constructor(props : any) {
         super(props);
     }
     render() : React.ReactNode {
-        return (<main className="background">
-                    <Paper className="paper">
+        return (
+            <div className="mainScreenLogin">
+                <Paper className="paper">
                     <Typography style={{height: 20}} component="h1" variant="h5">
                         Sign in
                     </Typography>
+                    <br/>
                     <form className = "form" onSubmit={this.handleSubmit}>
                         <FormControl required={true} fullWidth={true}>
-                            <InputLabel htmlFor="name">Username or email</InputLabel>
-                            <Input className = "input" id="name" name="name" autoFocus={true} onChange={this.handleChange}/>
+                            <InputLabel htmlFor="username">Username or email</InputLabel>
+                            <Input id="username" name="username" autoFocus={true} onChange={this.handleChange}/>
                         </FormControl>
+                        <br/>
+                        <br/>
                         <FormControl required={true} fullWidth={true}>
-                            <InputLabel htmlFor="name">Password</InputLabel>
-                            <Input className = "input" id="password" name="password" autoFocus={true} onChange={this.handleChange}/>
+                            <InputLabel htmlFor="password">Password</InputLabel>
+                            <Input id="password" name="password" onChange={this.handleChange}/>
                         </FormControl>
+                        <br/>
+                        <br/>
+                        <br/>
                         <div className="labelButton">                        
-                            <label className="passwordLabel">Forgot your password?Click here</label>
-                            <Button className="button" type="submit"
+                            <label className="passwordLabel">Don't have an accout?</label>
+                            <label onClick={this.props.switchScreen}>Register here</label>
+                            
+                        </div>
+                        <Button className="button" type="submit"
                             variant="contained"
                             color="secondary"> Login</Button>
-                        </div>
-
                     </form>
-                    </Paper>
-              </main>
+                </Paper>
+            </div>
         );
     }
 }

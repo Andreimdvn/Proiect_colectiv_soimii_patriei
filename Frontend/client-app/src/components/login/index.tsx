@@ -1,11 +1,12 @@
 import { Route } from "react-router";
 import * as React from "react";
 import { Login } from "./Login";
+import { Register } from "../register/Register";
 
 export default () => {
   return (
     <React.Fragment>
-      <Route path="/login" component={Login} />
+      <Route exact={true} path="/login" component={Login} />
     </React.Fragment>
   );
 };

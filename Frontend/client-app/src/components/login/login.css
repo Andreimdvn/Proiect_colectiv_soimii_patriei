@@ -1,62 +1,27 @@
-* {
-  box-sizing: border-box;
-}
-
-.background {
-    background-image: url('./backgroundLogin.jpg');
-    background-repeat: no-repeat;
-    background-size: 100%;
-    height: 100%;
-    width: 100%;
-    display: block;
-    position: absolute;
+.mainScreenLogin{
+  margin-left: 6%;
+  margin-top: 8%;
+  height: 300px;
+  width: 400px;
+  background: #ecf0f1;
+  position: absolute;
 }
 
 .paper {
-    position: absolute;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-items: center;
-    margin-left: 8%;
-    margin-top: 10%;
-    background: #ecf0f1;
-    width: 18%;
-    height: 45%;
-    border-radius: 10px;
-    padding-top: 20px;
-    box-shadow: 10px 10px 15px #333;
-}
-
-.form {
+  position: absolute;
   display: flex;
   flex-direction: column;
-  margin-top: 10%;
-  padding: 0;
-  height: 100%;
-  margin-bottom:5%;
-}
-
-.button {
-    border:none;
-    font-size: 18px;
-    font-weight: 200;
-    cursor: pointer;
-    height: 10%;
-    width: 100%;
-    margin-top: 40px;
-    transition: box-shadow .4s ease;
-}
-
-.input {
+  align-items: center;
+  justify-items: center;
   width: 100%;
-  height: auto;
- 
+  height: 100%;
+  border-radius: 10px;
+  padding-top: 20px;
+  box-sizing: border-box;
+  box-shadow: 10px 10px 15px #333;
 }
-.labelButton {
-  margin-top: 30%;
-  padding-top: 30%;
+
+.submitBtn{
+  margin-top: 10px;
 }
-.passwordLabel{
-  font-size: 8px;
-}
+
