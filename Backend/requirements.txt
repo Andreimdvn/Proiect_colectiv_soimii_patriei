@@ -5,3 +5,4 @@ mysqlclient
 flask-socketio
 python-dateutil
 passlib
+emails

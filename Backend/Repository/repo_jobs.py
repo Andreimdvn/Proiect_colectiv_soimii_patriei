@@ -1,7 +1,8 @@
-from dateutil.parser import parse
-from passlib.hash import pbkdf2_sha256
 import string
 import random
+
+from dateutil.parser import parse
+from passlib.hash import pbkdf2_sha256
 
 from Database.orm import ORM
 
@@ -57,11 +58,11 @@ class RepositoryJobs:
         try:
             r = self.orm.select('User', columns=('username',), values=(username,))
             if r:
-                return -1, '[!] Username [%s] already exists in the database!' % (username,)
+                raise ValueError('[!] Username [%s] already exists in the database!' % (username,))
 
             r = self.orm.select('User', columns=('email',), values=(email,))
             if r:
-                return -1, '[!] Email [%s] already exists in the database!' % (email,)
+                raise ValueError('[!] Email [%s] already exists in the database!' % (email,))
 
             password_hash = pbkdf2_sha256.encrypt(password, rounds=2000, salt_size=16)
 
@@ -74,6 +75,25 @@ class RepositoryJobs:
                 self.orm.insert('Provider', columns=('id', 'first_name', 'last_name', 'date_of_birth', 'phone'),
                                 values=(user_id, first_name, last_name, parse(date_of_birth), phone))
 
-            return 0, "Success!"
+            activation_hash = self.generate_account_validation_hash(user_id)
+
+            return 0, {'response': "Success!", 'activation_hash': activation_hash}
         except ValueError as e:
             return -1, str(e)
+
+    def generate_account_validation_hash(self, user_id):
+        generated_hash = self.random_hash_string()
+        while self.orm.select('EmailValidationToken', columns=('token',), values=(generated_hash,)):
+            generated_hash = self.random_hash_string()
+
+        self.orm.insert('EmailValidationToken', columns=('id_user', 'token'), values=(user_id, generated_hash))
+
+        return generated_hash
+
+    def activate_account(self, key):
+        token = self.orm.select('EmailValidationToken', columns=('token',), values=(key,), first=True)
+        if token:
+            self.orm.update('User', columns=('verified_by_email',), values=(True,), columns_where=('id',),
+                            values_where=(token.id_user,))
+            return 'Your account was successfully activated!'
+        return 'Something went wrong!'
