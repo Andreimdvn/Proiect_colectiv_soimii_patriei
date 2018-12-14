@@ -12,6 +12,7 @@ import MenuItem from "@material-ui/core/MenuItem/MenuItem";
 import FormControlLabel from "@material-ui/core/FormControlLabel/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox/Checkbox";
 import {Redirect} from "react-router-dom";
+import {MailValidation} from "../utils/mailValidation/MailValidation";
 
 
 export class Register extends React.Component {
@@ -98,7 +99,8 @@ export class Register extends React.Component {
     };
 
     render(): React.ReactNode {
-        return (<main>
+        return <React.Fragment>
+        { !this.state.redirect ? (<main>
             <Paper className="paper">
                 <Typography component="h1" variant="h5">
                     Register form
@@ -178,6 +180,7 @@ export class Register extends React.Component {
                     </Button>
                 </form>
         </Paper>
-        </main>);
+        </main>) : (<MailValidation/>) }
+        </React.Fragment>
     }
 }
