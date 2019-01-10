@@ -36,10 +36,9 @@ class App extends React.Component<Props> {
 
     // try to load the cookies
     const token = this.props.cookies.get("token");
-    // const userType = this.props.cookies.get("userType");
-    // const logged = token !== undefined && userType !== undefined;
-    const logged = false;
-    const userType = undefined;
+    const userType = this.props.cookies.get("userType");
+    const logged = token !== undefined && userType !== undefined;
+    
     return (
       <div className="App">
         <Provider {...rootStore}>
