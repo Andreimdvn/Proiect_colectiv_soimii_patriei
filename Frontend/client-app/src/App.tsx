@@ -38,14 +38,20 @@ class App extends React.Component<Props> {
     const token = this.props.cookies.get("token");
     const userType = this.props.cookies.get("userType");
     const logged = token !== undefined && userType !== undefined;
-
+    // const logged = false;
+    // const userType = undefined;
     return (
       <div className="App">
         <Provider {...rootStore}>
           <React.Fragment>
+
             {!logged ? ( // if not logged in, show the register screen
               <React.Fragment>
-                <Register/>
+                <Router history={createBrowserHistory()}>
+                  <React.Fragment>
+                    <Register/>
+                  </React.Fragment>
+                </Router>
               </React.Fragment>
             ) : null}
 
