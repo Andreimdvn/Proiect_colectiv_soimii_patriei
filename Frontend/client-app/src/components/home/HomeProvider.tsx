@@ -3,6 +3,7 @@ import { inject, observer } from "mobx-react";
 
 import { ViewStore } from "src/store/view-store";
 import {RecommendedJobsTable} from "../provider/recommended-jobs/RecommendedJobsTable";
+
 import {Job} from "../../view-models/Job";
 import Paper from "@material-ui/core/Paper/Paper";
 import { MuiThemeProvider } from '@material-ui/core/styles';
@@ -11,6 +12,7 @@ import Typography from "@material-ui/core/Typography/Typography";
 import {HistoryTable} from "../provider/history/HistoryTable";
 import "./home-provider.css";
 import {Cookies, withCookies} from "react-cookie";
+import {JobsPage} from "../provider/recommended-jobs/JobsPage";
 
 interface Props {
   viewStore: ViewStore;
@@ -93,7 +95,8 @@ class HomeProviderBase extends React.Component<Props> {
             <Typography component="h1" variant="h5">
               Recommended for you
             </Typography>
-            <RecommendedJobsTable jobs={this.getRecommendedJobs()}/>
+            {/*<RecommendedJobsTable jobs={this.getRecommendedJobs()}/>*/}
+            <JobsPage jobs={[]}/>
           </Paper>
 
           <Paper className={"paper"}>
