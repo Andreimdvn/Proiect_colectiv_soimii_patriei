@@ -40,7 +40,7 @@ export const JobCard = withStyles(jobCardStyle)(
                 <Grid container={true}>
                   <Grid item={true} xs={6}>
                     <Typography className={classes.typography} component="p">
-                      {this.props.job.reward}
+                      {this.props.job.reward} euro
                     </Typography>
                   </Grid>
                   <Grid item={true} xs={6}>

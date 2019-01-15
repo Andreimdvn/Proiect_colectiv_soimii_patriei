@@ -91,12 +91,11 @@ class HomeProviderBase extends React.Component<Props> {
 
         <React.Fragment>
 
-          <Paper className={"paper"}>
+          <Paper className={"paper"}> {/* recommended section */}
             <Typography component="h1" variant="h5">
               Recommended for you
             </Typography>
-            {/*<RecommendedJobsTable jobs={this.getRecommendedJobs()}/>*/}
-            <JobsPage jobs={[]}/>
+            <JobsPage jobs={this.getRecommendedJobs()}/>
           </Paper>
 
           <Paper className={"paper"}>
