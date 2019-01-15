@@ -92,7 +92,7 @@ class HomeProviderBase extends React.Component<Props> {
         <React.Fragment>
 
           <Paper className={"paper"}> {/* recommended section */}
-            <Typography component="h1" variant="h5">
+            <Typography component="h1" variant="h4">
               Recommended for you
             </Typography>
             <JobsPage jobs={this.getRecommendedJobs()}/>

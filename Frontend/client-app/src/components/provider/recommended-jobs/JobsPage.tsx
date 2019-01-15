@@ -5,9 +5,6 @@ import { StyledComponentProps } from '@material-ui/core';
 import {jobPageStyle} from "./job-page-style";
 import Grid from '@material-ui/core/Grid';
 import {JobCard} from "./JobCard";
-import TableRow from "@material-ui/core/TableRow/TableRow";
-import {JobsTableCell} from "../browse-jobs/JobsTableCell";
-import {Link} from "react-router-dom";
 
 interface Props extends StyledComponentProps{
   jobs:Job[]
@@ -23,7 +20,7 @@ export const JobsPage = withStyles(jobPageStyle)(
       const {classes} = this.props;
 
       return (
-        <Grid container={true} spacing={24}>
+        <Grid container={true} spacing={24} className={classes.container}>
           {[0, 1, 2, 3].map(value => ( // 4 columns, each needs its own key
             <Grid item={true} xs={3} spacing={24} key={value}>
               <Grid container={true} spacing={24} direction="column">
