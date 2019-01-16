@@ -32,14 +32,13 @@ class App extends React.Component<Props> {
 
   public render() {
     this.props.cookies.set("token", "bob");
-    this.props.cookies.set("userType", UserTypes.PROVIDER);
+    this.props.cookies.set("userType", UserTypes.CLIENT);
 
     // try to load the cookies
     const token = this.props.cookies.get("token");
     const userType = this.props.cookies.get("userType");
     const logged = token !== undefined && userType !== undefined;
-    // const logged = false;
-    // const userType = undefined;
+
     return (
       <div className="App">
         <Provider {...rootStore}>
