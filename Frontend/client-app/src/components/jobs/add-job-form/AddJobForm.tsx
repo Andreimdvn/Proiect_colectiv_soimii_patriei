@@ -9,8 +9,9 @@ import {FormControl} from "@material-ui/core";
 import FormLabel from "@material-ui/core/es/FormLabel/FormLabel";
 import RadioGroup from "@material-ui/core/es/RadioGroup/RadioGroup";
 import FormControlLabel from "@material-ui/core/es/FormControlLabel/FormControlLabel";
-import Radio from "@material-ui/core/es/Radio/Radio";
 import Checkbox from "@material-ui/core/es/Checkbox/Checkbox";
+import Divider from '@material-ui/core/Divider';
+import Button from "@material-ui/core/Button/Button";
 
 interface Props {
   viewStore: ViewStore;
@@ -25,6 +26,8 @@ export class AddJobForm extends React.Component<Props> {
         candiDesc: "",
         emplDesc: "",
         payment: 0,
+        street: "",
+        city: "",
     };
 
     constructor(props: Props) {
@@ -102,6 +105,45 @@ export class AddJobForm extends React.Component<Props> {
             </Grid>
             <Grid item={true} xs={12} sm={2} style={{marginTop: 20}}>
                 <Typography variant="h5">
+                    Address
+                </Typography>
+            </Grid>
+            <Grid item={true} xs={12} sm={10}>
+                <form className={"jobForm"}>
+                    <FormControl required={true} fullWidth={true}>
+                        <TextField
+                            id="outlined-uncontrolled"
+                            name="street"
+                            label="Street"
+                            placeholder="Street and number"
+                            className={"textField"}
+                            margin="normal"
+                            variant="outlined"
+                            fullWidth={true}
+                        />
+                        <TextField
+                            id="outlined-uncontrolled"
+                            name="city"
+                            label="City"
+                            className={"textField"}
+                            margin="normal"
+                            variant="outlined"
+                            fullWidth={true}
+                        />
+                        <TextField
+                            id="outlined-uncontrolled"
+                            name="county"
+                            label="County"
+                            className={"textField"}
+                            margin="normal"
+                            variant="outlined"
+                            fullWidth={true}
+                        />
+                    </FormControl>
+                </form>
+            </Grid>
+            <Grid item={true} xs={12} sm={2} style={{marginTop: 20}}>
+                <Typography variant="h5">
                     Details
                 </Typography>
             </Grid>
@@ -153,27 +195,20 @@ export class AddJobForm extends React.Component<Props> {
                             </RadioGroup>
                         </FormControl>
                     </Grid>
-
                 </Grid>
+            </Grid>
+            <Grid item={true} xs={12}>
+                <Button
+                    className="submitBtn"
+                    type="submit"
+                    fullWidth={false}
+                    variant="contained"
+                    color="primary"
+                >
+                    Add job offer
+                </Button>
             </Grid>
         </Grid>
        </div>;
   }
 }
-
-const styles = theme => ({
-    container: {
-        display: 'flex',
-        flexWrap: 'wrap',
-    },
-    textField: {
-        marginLeft: theme.spacing.unit,
-        marginRight: theme.spacing.unit,
-    },
-    dense: {
-        marginTop: 16,
-    },
-    menu: {
-        width: 200,
-    },
-});
