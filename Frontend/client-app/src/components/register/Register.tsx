@@ -12,8 +12,7 @@ import MenuItem from "@material-ui/core/MenuItem/MenuItem";
 import FormControlLabel from "@material-ui/core/FormControlLabel/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox/Checkbox";
 
-
-export class Register extends React.Component {
+export class Register extends React.Component<any> {
     state ={
         username: '',
         password: '',
@@ -77,6 +76,7 @@ export class Register extends React.Component {
                 console.log(r);
                 if (r.status === 0) {
                     alert(r.response)
+                    this.props.switchScreen();
                 } else if (r.status === -1) {
                     alert(r.response)
                 }
@@ -85,63 +85,64 @@ export class Register extends React.Component {
     };
 
     render(): React.ReactNode {
-        return (<main>
-            <Paper className="paper">
-                <Typography component="h1" variant="h5">
-                    Register form
-                </Typography>
-                <form className="userForm" onSubmit={this.handleSubmit}>
-                    <FormControl required={true} fullWidth={true}>
-                        <InputLabel htmlFor="firstName">First name</InputLabel>
-                        <Input id="firstName" name="firstName" autoFocus={true} onChange={this.handleInputChange}/>
-                    </FormControl>
-                    <FormControl required={true} fullWidth={true}>
-                        <InputLabel htmlFor="lastName">Last name</InputLabel>
-                        <Input id="lastName" name="lastName"  onChange={this.handleInputChange}/>
-                    </FormControl>
-                    <FormControl required={true} fullWidth={true}>
-                        <InputLabel htmlFor="email">Email</InputLabel>
-                        <Input type="email" id="email" name="email" onChange={this.handleInputChange}/>
-                    </FormControl>
-                    <FormControl required={true} fullWidth={true}>
-                        <InputLabel htmlFor="phone">Phone number</InputLabel>
-                        <Input id="phone" name="phone" onChange={this.handleInputChange}/>
-                    </FormControl>
-                    <FormControl required={true} fullWidth={true}>
-                        <TextField
-                            label="Birthday"
-                            type="date"
-                            id="birth"
-                            name="birth"
-                            onChange={this.handleInputChange}
-                            InputLabelProps={{
-                            shrink: true,
-                        }}/>
-                    </FormControl>
-                    <br/>
-                    <FormControl required={true} fullWidth={true}>
-                        <InputLabel htmlFor="username">Username</InputLabel>
-                        <Input id="username" name="username" onChange={this.handleInputChange}/>
-                    </FormControl>
-                    <FormControl required={true} fullWidth={true}>
-                        <InputLabel htmlFor="password">Password</InputLabel>
-                        <Input type="password" id="password" name="password" onChange={this.handleInputChange}/>
-                    </FormControl>
-                    <FormControl fullWidth={true}>
-                        <InputLabel htmlFor="account-type">Type</InputLabel>
-                        <Select
-                            value="client"
-                            onChange={this.handleInputChange}
-                            inputProps={{
-                                name: 'type',
-                                id: 'account-type',
-                            }}
-                        >
-                            <MenuItem value="client">Client</MenuItem>
-                            <MenuItem value="provider">Provider</MenuItem>
-                        </Select>
-                    </FormControl>
-                    <FormControlLabel
+        return (
+            <div className="mainScreenRegister">
+                <Paper className="paper">
+                    <Typography component="h1" variant="h5">
+                        Register form
+                    </Typography>
+                    <form className="form" onSubmit={this.handleSubmit}>
+                        <FormControl required={true} fullWidth={true}>
+                            <InputLabel htmlFor="firstName">First name</InputLabel>
+                            <Input id="firstName" name="firstName" autoFocus={true} onChange={this.handleInputChange}/>
+                        </FormControl>
+                        <FormControl required={true} fullWidth={true}>
+                            <InputLabel htmlFor="lastName">Last name</InputLabel>
+                            <Input id="lastName" name="lastName"  onChange={this.handleInputChange}/>
+                        </FormControl>
+                        <FormControl required={true} fullWidth={true}>
+                            <InputLabel htmlFor="email">Email</InputLabel>
+                            <Input type="email" id="email" name="email" onChange={this.handleInputChange}/>
+                        </FormControl>
+                        <FormControl required={true} fullWidth={true}>
+                            <InputLabel htmlFor="phone">Phone number</InputLabel>
+                            <Input id="phone" name="phone" onChange={this.handleInputChange}/>
+                        </FormControl>
+                        <FormControl required={true} fullWidth={true}>
+                            <TextField
+                                label="Birthday"
+                                type="date"
+                                id="birth"
+                                name="birth"
+                                onChange={this.handleInputChange}
+                                InputLabelProps={{
+                                shrink: true,
+                            }}/>
+                        </FormControl>
+
+                        <FormControl required={true} fullWidth={true}>
+                            <InputLabel htmlFor="username">Username</InputLabel>
+                            <Input id="username" name="username" onChange={this.handleInputChange}/>
+                        </FormControl>
+                        <FormControl required={true} fullWidth={true}>
+                            <InputLabel htmlFor="password">Password</InputLabel>
+                            <Input type="password" id="password" name="password" onChange={this.handleInputChange}/>
+                        </FormControl>
+                        <FormControl fullWidth={true}>
+                            <InputLabel htmlFor="account-type">Type</InputLabel>
+                            <Select
+                                value="client"
+                                onChange={this.handleInputChange}
+                                inputProps={{
+                                    name: 'type',
+                                    id: 'account-type',
+                                }}
+                            >
+                                <MenuItem value="client">Client</MenuItem>
+                                <MenuItem value="provider">Provider</MenuItem>
+                            </Select>
+                        </FormControl>
+                        <FormControlLabel
                         control={<Checkbox
                                     value="termsAccepted"
                                     name="termsAccepted"
@@ -149,8 +150,13 @@ export class Register extends React.Component {
                                     checked={this.state.termsAccepted}
                                 />}
                         label="I agree with the Terms and Conditions"
-                    />
-                    <br/>
+                        />
+                        <br/>
+                        <div>
+                        <label className="passwordLabel">You already have an account?</label>
+                        <br/>
+                        <label onClick={this.props.switchScreen}> Click here to login!</label>
+                        </div>
                     <Button
                         className="submitBtn"
                         type="submit"
@@ -163,6 +169,7 @@ export class Register extends React.Component {
                     </Button>
                 </form>
         </Paper>
-        </main>);
+        </div>
+        );
     }
 }
