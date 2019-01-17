@@ -5,7 +5,7 @@ import Grid from "@material-ui/core/es/Grid/Grid";
 import TextField from "@material-ui/core/es/TextField/TextField";
 import Typography from "@material-ui/core/es/Typography";
 import InputAdornment from "@material-ui/core/es/InputAdornment";
-import {FormControl, Paper} from "@material-ui/core";
+import {FormControl, OutlinedInput, Paper, Radio} from "@material-ui/core";
 import FormLabel from "@material-ui/core/es/FormLabel/FormLabel";
 import RadioGroup from "@material-ui/core/es/RadioGroup/RadioGroup";
 import FormControlLabel from "@material-ui/core/es/FormControlLabel/FormControlLabel";
@@ -25,10 +25,12 @@ export class AddJobForm extends React.Component<Props> {
         jobDesc: "",
         candiDesc: "",
         emplDesc: "",
-        payment: 0,
+        payment: "",
         street: "",
         city: "",
-        county: ""
+        county: "",
+        jobType: "",
+        tags: []
     };
 
     constructor(props: Props) {
@@ -38,15 +40,34 @@ export class AddJobForm extends React.Component<Props> {
     handleChange = event =>{
         event.preventDefault();
         console.log(event.target.value);
-        this.setState({
-            [event.target.name]: event.target.value
-        })
+        if(event.target.name === "tags"){
+            console.log("fuck you")
+        }else {
+            this.setState({
+                [event.target.name]: event.target.value
+            })
+        }
     };
 
     handleSubmit = (event) => {
         event.preventDefault();
+        const job = {
+            title: this.state.title,
+            jobDesc: this.state.jobDesc,
+            candidateDesc: this.state.candiDesc,
+            employerDesc: this.state.emplDesc,
+            payment: this.state.payment,
+            street: this.state.street,
+            city: this.state.city,
+            county: this.state.county,
+            jobType: this.state.jobType,
+            tags: this.state.tags
+        };
 
-        this.props.jobStore.addJobOffer("job");
+        this.props.jobStore.addJobOffer(job);
+
+        console.log(this.props.jobStore.message);
+        console.log(this.props.jobStore.status);
     };
 
   render() {
@@ -115,6 +136,7 @@ export class AddJobForm extends React.Component<Props> {
                         fullWidth={true}
                         label="Payment"
                         className={"textField"}
+                        placeholder={"eg. 200 , 1000-1500 etc."}
                         name="payment"
                         onChange={this.handleChange}
                         InputProps={{
@@ -174,51 +196,37 @@ export class AddJobForm extends React.Component<Props> {
             </Grid>
             <Grid item={true} xs={12} sm={10}>
                 <Grid container={true} spacing={8}>
-                        <Grid item={true} xs={12} sm={4}>
-                        <FormControl component="fieldset">
-                            <FormLabel component="legend">Experience</FormLabel>
-                            <RadioGroup
-                                aria-label="Experience"
-                                name="experience"
-                                className={"group"}
-                            >
-                                <FormControlLabel control={<Checkbox value="entry" />} label="Entry-Level (< 2 years)" />
-                                <FormControlLabel control={<Checkbox value="mid"/>} label="Mid-Level (2-5 years)" />
-                                <FormControlLabel control={<Checkbox value="senior"/>} label="Senior-Level (> 5 years)" />
-                                <FormControlLabel control={<Checkbox value="none" />} label="Irrelevant" />
-                            </RadioGroup>
-                        </FormControl>
-                        </Grid>
-                        <Grid item={true} xs={12} sm={4}>
+                    <Grid item={true} xs={12} sm={2}>
                         <FormControl component="fieldset">
                             <FormLabel component="legend">Job type</FormLabel>
                             <RadioGroup
                                 aria-label="Job type"
                                 name="jobType"
                                 className={"group"}
+                                value={this.state.jobType}
+                                onChange={this.handleChange}
                             >
-                                <FormControlLabel control={<Checkbox value="full" />} label="Full-time" />
-                                <FormControlLabel control={<Checkbox value="part"/>} label="Part-time" />
-                                <FormControlLabel control={<Checkbox value="intern"/>} label="Internship" />
-                                <FormControlLabel control={<Checkbox value="temp" />} label="Temporary" />
+                                <FormControlLabel value="Full-time" control={<Radio />} label="Full-time" />
+                                <FormControlLabel value="Part-time" control={<Radio />} label="Part-time" />
+                                <FormControlLabel value="Internship" control={<Radio />} label="Internship" />
+                                <FormControlLabel value="Temporary" control={<Radio  />} label="Temporary" />
                             </RadioGroup>
                         </FormControl>
                     </Grid>
-                    <Grid item={true} xs={12} sm={4}>
-                        <FormControl component="fieldset">
-                            <FormLabel component="legend">Foreign Languages</FormLabel>
-                            <RadioGroup
-                                aria-label="Languages"
-                                name="languages1"
-                                className={"group"}
-                            >
-                                <FormControlLabel control={<Checkbox value="eng" />} label="English" />
-                                <FormControlLabel control={<Checkbox value="hun" />} label="Hungarian" />
-                                <FormControlLabel control={<Checkbox value="fr"/>} label="French" />
-                                <FormControlLabel control={<Checkbox value="ger"/>} label="German" />
-                                <FormControlLabel control={<Checkbox value="ita" />} label="Italian" />
-                                <FormControlLabel control={<Checkbox value="other" />} label="Others" />
-                            </RadioGroup>
+                    <Grid item={true} xs={12} sm={10}>
+                        <FormControl component="fieldset" fullWidth={true}>
+                            <FormLabel component="legend">Tags</FormLabel>
+                            <TextField
+                                id="outlined-uncontrolled"
+                                name="tags"
+                                label="Tags"
+                                placeholder="eg. #dogs #weekends etc."
+                                className={"textField"}
+                                margin="normal"
+                                onChange={this.handleChange}
+                                variant="outlined"
+                                fullWidth={true}
+                            />
                         </FormControl>
                     </Grid>
                 </Grid>
