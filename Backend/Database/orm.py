@@ -272,12 +272,14 @@ class ORM:
 
         return new_object.id
 
-    def select(self, table, columns=None, values=None, first=False):
+    def select(self, table, columns=None, values=None, like_columns=None, like_values=None, first=False):
         """
         Execute a query on all rows in a table and returns the results with all the columns.
         :param table: table name to be queried.
         :param columns: list with required columns for the WHERE clause.
         :param values: list with values corresponding to the given columns
+        :param like_columns:
+        :param like_values:
         :param first: only the first item is returned.
         :return: if first==False, a list with: objects of table type if no columns were specified, tuples<Column> otherwise.
                  if first==True, a single object is returned instead of a list
@@ -288,6 +290,11 @@ class ORM:
         if values:
             if type(values) not in (list, tuple):
                 raise ValueError('[!] Type [%s] for values are not allowed! Use list or tuple.' % type(values))
+        if like_columns:
+            if type(like_columns) not in (list, tuple):
+                raise ValueError('[!] Type [%s] for like_cols are not allowed! Use list or tuple.' % type(like_columns))
+            if not like_values or type(like_values) not in (list, tuple):
+                raise ValueError('[!] Type [%s] for like_vals are not allowed! Use list or tuple.' % type(like_values))
         tb = self.table_object(table)
         self.ses = self.session()
         if not columns:
@@ -300,7 +307,17 @@ class ORM:
             if len(cols) != len(values):
                 raise ValueError('[!] There are not enough values/columns!')
             col_val = {e[0].key: e[1] for e in zip(cols, values)}
-            res = self.ses.query(tb).filter_by(**col_val)
+            like_col_val = None
+            if like_columns:
+                if len(like_columns) != len(like_values):
+                    raise ValueError('[!] There are not enough like_values/like_columns!')
+                like_cols = [getattr(tb, c) for c in like_columns]
+                like_col_val = [e[0].like('%' + e[1] + '%',) for e in zip(like_cols, like_values)]
+            if like_col_val:
+                res = self.ses.query(tb).filter_by(**col_val)
+                res = res.filter(*like_col_val)
+            else:
+                res = self.ses.query(tb).filter_by(**col_val)
         result = res.first() if first else res.all()
         return result
 
