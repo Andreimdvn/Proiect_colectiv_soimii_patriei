@@ -5,19 +5,19 @@ import Grid from "@material-ui/core/es/Grid/Grid";
 import TextField from "@material-ui/core/es/TextField/TextField";
 import Typography from "@material-ui/core/es/Typography";
 import InputAdornment from "@material-ui/core/es/InputAdornment";
-import {FormControl} from "@material-ui/core";
+import {FormControl, Paper} from "@material-ui/core";
 import FormLabel from "@material-ui/core/es/FormLabel/FormLabel";
 import RadioGroup from "@material-ui/core/es/RadioGroup/RadioGroup";
 import FormControlLabel from "@material-ui/core/es/FormControlLabel/FormControlLabel";
 import Checkbox from "@material-ui/core/es/Checkbox/Checkbox";
-import Divider from '@material-ui/core/Divider';
 import Button from "@material-ui/core/Button/Button";
+import {JobStore} from "../../../store/job-store";
 
 interface Props {
-  viewStore: ViewStore;
+  jobStore: JobStore;
 }
 
-@inject("viewStore")
+@inject("jobStore")
 @observer
 export class AddJobForm extends React.Component<Props> {
     state={
@@ -28,14 +28,30 @@ export class AddJobForm extends React.Component<Props> {
         payment: 0,
         street: "",
         city: "",
+        county: ""
     };
 
     constructor(props: Props) {
         super(props);
     }
 
+    handleChange = event =>{
+        event.preventDefault();
+        console.log(event.target.value);
+        this.setState({
+            [event.target.name]: event.target.value
+        })
+    };
+
+    handleSubmit = (event) => {
+        event.preventDefault();
+
+        this.props.jobStore.addJobOffer("job");
+    };
+
   render() {
     return <div className={"root"}>
+        <Paper className="paper">
         <Grid container={true} spacing={8}>
             <Grid item={true} xs={12} sm={2} style={{marginTop: 20}}>
                 <Typography variant="h5">
@@ -50,6 +66,8 @@ export class AddJobForm extends React.Component<Props> {
                             name="title"
                             label="Title"
                             className={"textField"}
+                            onChange={this.handleChange}
+                            value={this.state.title}
                             margin="normal"
                             variant="outlined"
                             fullWidth={true}
@@ -61,6 +79,7 @@ export class AddJobForm extends React.Component<Props> {
                             multiline={true}
                             rows="4"
                             fullWidth={true}
+                            onChange={this.handleChange}
                             className={"textField"}
                             margin="normal"
                             variant="outlined"
@@ -74,6 +93,7 @@ export class AddJobForm extends React.Component<Props> {
                         multiline={true}
                         rows="3"
                         fullWidth={true}
+                        onChange={this.handleChange}
                         className={"textField"}
                         margin="normal"
                         variant="outlined"
@@ -86,6 +106,7 @@ export class AddJobForm extends React.Component<Props> {
                         multiline={true}
                         rows="3"
                         fullWidth={true}
+                        onChange={this.handleChange}
                         className={"textField"}
                         margin="normal"
                         variant="outlined"
@@ -95,6 +116,7 @@ export class AddJobForm extends React.Component<Props> {
                         label="Payment"
                         className={"textField"}
                         name="payment"
+                        onChange={this.handleChange}
                         InputProps={{
                             endAdornment: <InputAdornment position="start">RON</InputAdornment>
                         }}
@@ -117,6 +139,7 @@ export class AddJobForm extends React.Component<Props> {
                             label="Street"
                             placeholder="Street and number"
                             className={"textField"}
+                            onChange={this.handleChange}
                             margin="normal"
                             variant="outlined"
                             fullWidth={true}
@@ -125,6 +148,7 @@ export class AddJobForm extends React.Component<Props> {
                             id="outlined-uncontrolled"
                             name="city"
                             label="City"
+                            onChange={this.handleChange}
                             className={"textField"}
                             margin="normal"
                             variant="outlined"
@@ -136,6 +160,7 @@ export class AddJobForm extends React.Component<Props> {
                             label="County"
                             className={"textField"}
                             margin="normal"
+                            onChange={this.handleChange}
                             variant="outlined"
                             fullWidth={true}
                         />
@@ -175,7 +200,7 @@ export class AddJobForm extends React.Component<Props> {
                                 <FormControlLabel control={<Checkbox value="full" />} label="Full-time" />
                                 <FormControlLabel control={<Checkbox value="part"/>} label="Part-time" />
                                 <FormControlLabel control={<Checkbox value="intern"/>} label="Internship" />
-                                <FormControlLabel control={<Checkbox value="service" />} label="Services" />
+                                <FormControlLabel control={<Checkbox value="temp" />} label="Temporary" />
                             </RadioGroup>
                         </FormControl>
                     </Grid>
@@ -188,6 +213,7 @@ export class AddJobForm extends React.Component<Props> {
                                 className={"group"}
                             >
                                 <FormControlLabel control={<Checkbox value="eng" />} label="English" />
+                                <FormControlLabel control={<Checkbox value="hun" />} label="Hungarian" />
                                 <FormControlLabel control={<Checkbox value="fr"/>} label="French" />
                                 <FormControlLabel control={<Checkbox value="ger"/>} label="German" />
                                 <FormControlLabel control={<Checkbox value="ita" />} label="Italian" />
@@ -204,11 +230,13 @@ export class AddJobForm extends React.Component<Props> {
                     fullWidth={false}
                     variant="contained"
                     color="primary"
+                    onClick={this.handleSubmit}
                 >
                     Add job offer
                 </Button>
             </Grid>
         </Grid>
+        </Paper>
        </div>;
   }
 }
