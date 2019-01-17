@@ -138,8 +138,8 @@ class JobTag(DB):
     id_job = Column(Integer, ForeignKey('Job.id'), primary_key=True)
     id_tag = Column(Integer, ForeignKey('Tag.id'), primary_key=True)
 
-    job = relationship('Job', back_populates='Job')
-    tag = relationship('Tag', back_populates='Tag')
+    job = relationship('Job', back_populates='job_tag')
+    tag = relationship('Tag', back_populates='tag_job')
 
 
 class Job(DB):
