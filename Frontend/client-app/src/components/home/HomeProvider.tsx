@@ -16,18 +16,28 @@ interface Props {
   cookies: Cookies;
 }
 
+interface State {
+  jobs: Job[]
+}
+
 @inject("viewStore")
 @observer
-class HomeProviderBase extends React.Component<Props> {
+class HomeProviderBase extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
+
+    this.state = {jobs: []}
+  }
+
+  componentDidMount() {
+    this.updateJobs();
   }
 
   getToken() {
     return this.props.cookies.get("token");
   }
 
-  getRecommendedJobs() {
+  updateJobs() {
 
     const jsonCfg = require('src/app_properties.json');
     const requestUrl = jsonCfg.baseUrl + "jobs";
@@ -39,18 +49,23 @@ class HomeProviderBase extends React.Component<Props> {
       method: 'POST',
       headers: {
         Accept: 'application/json',
-        'Content-Type': 'application/x-www-form-urlencoded',
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(body)
     });
 
     promisedResponse.then(response => response.json()).then(json =>{
-      console.log(json);
+      if(json.status === 0) {
+        this.setState({jobs: json.response});
+      }
+      else {
+        console.log("ceva a crapat");
+      }
     }).catch(error=> {
       console.log(error);
     });
 
-    return [
+    /*return [
       new Job("1", "cleaning", "clean my house", "bob321", "dinner", "20-09-2018"),
       new Job("2", "dog walk", "walk good boie", "angry_cat98", "5", "23-09-2018"),
       new Job("3", "kid", "Lorem ipsum dolor sit amet, consectetur adipiscing el", "xfg45", "12", "30-09-2018"),
@@ -58,7 +73,7 @@ class HomeProviderBase extends React.Component<Props> {
       new Job("5", "kid", "mentum aliquet purus", "xfg45", "12", "30-09-2018"),
       new Job("6", "kid", "am nunc. Ut viverra massa vitae massa imperdiet pulvinar. Pellentesque commodo massa ipsum, id impe", "xfg45", "12", "30-09-2018"),
       new Job("7", "kid", "", "xfg45", "12", "30-09-2018"),
-    ];
+    ];*/
   }
 
   getHistory() {
@@ -96,7 +111,7 @@ class HomeProviderBase extends React.Component<Props> {
             <Typography component="h1" variant="h4">
               Recommended for you
             </Typography>
-            <JobsPage jobs={this.getRecommendedJobs()}/>
+            <JobsPage jobs={this.state.jobs}/>
 
             <Typography component="h1" variant="h5">
               History
