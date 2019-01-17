@@ -2,6 +2,7 @@ import * as React from "react";
 import Typography from "@material-ui/core/Typography/Typography";
 import Button from "@material-ui/core/Button/Button";
 import {Redirect} from "react-router";
+import "./validation.css";
 
 export class MailValidation extends React.Component{
     constructor(props) {
@@ -24,11 +25,12 @@ export class MailValidation extends React.Component{
     };
 
     render(): React.ReactNode {
-        return (<main>
-            <div className="container">
-                <Typography component="h1" variant="h3">
+        return (
+            <div className="validation-container">
+                <Typography component="h1" variant="display2">
                 Please verify your email address.
-            </Typography>
+                </Typography>
+                <br/>
                 {this.renderRedirect()}
                 <Button
                     className="continueBtn"
@@ -40,7 +42,6 @@ export class MailValidation extends React.Component{
                     Continue
                 </Button>
             </div>
-            </main>
         );
     }
 }

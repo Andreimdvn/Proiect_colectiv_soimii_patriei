@@ -18,7 +18,6 @@ import {Register} from "./components/register/Register";
 import {TabMenuProps} from "./components/tab-menu/TabMenuProps";
 import {HeaderTabs} from "./view-models/header-tabs";
 import {UserTypes} from "./view-models/user-types";
-import {MailValidation} from "./components/utils/MailValidation";
 
 
 interface Props {
@@ -37,10 +36,9 @@ class App extends React.Component<Props> {
 
     // try to load the cookies
     const token = this.props.cookies.get("token");
-    // const userType = this.props.cookies.get("userType");
-    // const logged = token !== undefined && userType !== undefined;
-    const logged = false;
-    const userType = undefined;
+    const userType = this.props.cookies.get("userType");
+    const logged = token !== undefined && userType !== undefined;
+    
     return (
       <div className="App">
         <Provider {...rootStore}>
@@ -50,7 +48,6 @@ class App extends React.Component<Props> {
               <React.Fragment>
                 <Router history={createBrowserHistory()}>
                   <React.Fragment>
-                    <MailValidation/>
                     <Register/>
                   </React.Fragment>
                 </Router>
