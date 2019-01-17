@@ -1,9 +1,9 @@
-import datetime
 import string
 import random
 
 from dateutil.parser import parse
 from passlib.hash import pbkdf2_sha256
+from datetime import datetime
 
 from Database.orm import ORM
 
@@ -101,12 +101,13 @@ class RepositoryJobs:
 #### TO DO CLIENTU E HARDCODAT AICI
     def add_job(self, request_data):
         try:
-            job_type_pk = self.orm.select('JobType', columns=('description'), values=(type));
+            job_type_pk = self.orm.select('JobType', columns=('description',), values=(request_data['type'],) , first=True)
             now = datetime.now()
-            formatted_date = now.strftime('%Y-%m-%d %H:%M:%S')
+            ##formatted_date = now.strftime('%Y-%m-%d %H:%M:%S')
             if job_type_pk:
                 self.orm.insert("Job", columns=('id_client', 'type', 'description', 'reward', 'publish_date'),
-                                values=(1, request_data['type'], request_data['description', request_data['reward']],formatted_date ))
+                                values=(1, job_type_pk.id, request_data['description'], request_data['reward'],now))
+                return 0, "Added sucessfully"
             else:
                 return -1, "Job type does not exist."
         except ValueError as e:

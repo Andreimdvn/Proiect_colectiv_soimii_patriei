@@ -128,7 +128,7 @@ class Controller:
         status = -1
         response = None
 
-        status, response = self.repo.add_job(**request_data)
+        status, response = self.repo.add_job(request_data)
 
         return status, response
 
