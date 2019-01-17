@@ -54,7 +54,11 @@ class HomeProviderBase extends React.Component<Props> {
     return [
       new Job("1", "cleaning", "clean my house", "bob321", "dinner", "20-09-2018"),
       new Job("2", "dog walk", "walk good boie", "angry_cat98", "5", "23-09-2018"),
-      new Job("3", "kid", "take care of my toddler!!", "xfg45", "12", "30-09-2018"),
+      new Job("3", "kid", "Lorem ipsum dolor sit amet, consectetur adipiscing el", "xfg45", "12", "30-09-2018"),
+      new Job("4", "kid", "a vitae massa imperdiet pulvinar. Pellentesque commodo massa ipsum, id imperdiet ipsum tristique sit amet. Proin bibendum dui in ultricies euismod. Nunc ", "xfg45", "12", "30-09-2018"),
+      new Job("5", "kid", "mentum aliquet purus", "xfg45", "12", "30-09-2018"),
+      new Job("6", "kid", "am nunc. Ut viverra massa vitae massa imperdiet pulvinar. Pellentesque commodo massa ipsum, id impe", "xfg45", "12", "30-09-2018"),
+      new Job("7", "kid", "", "xfg45", "12", "30-09-2018"),
     ];
   }
 

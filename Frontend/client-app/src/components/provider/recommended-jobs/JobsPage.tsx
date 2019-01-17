@@ -21,11 +21,11 @@ export const JobsPage = withStyles(jobPageStyle)(
 
       return (
         <Grid container={true} spacing={24} className={classes.container}>
-          {[0, 1, 2, 3].map(value => ( // 4 columns, each needs its own key
-            <Grid item={true} xs={3} spacing={24} key={value}>
+          {[0, 1, 2].map(value => ( // 4 columns, each needs its own key
+            <Grid item={true} xs={4} spacing={24} key={value}>
               <Grid container={true} spacing={24} direction="column">
                 {this.props.jobs.map((job, index) =>{
-                  if(index >= value / 4 * this.props.jobs.length && index < (value + 1) / 4 * this.props.jobs.length) // only display the jobs that should appear in the current column
+                  if(index >= value / 3 * this.props.jobs.length && index < (value + 1) / 3 * this.props.jobs.length) // only display the jobs that should appear in the current column
                     return (<JobCard key={job.id} job={job}/>);
                   else
                     return;
