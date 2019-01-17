@@ -42,7 +42,7 @@ class FlaskServer:
         self.flask_app.add_url_rule('/api/login', 'login', self.login, methods=['POST'])
         self.flask_app.add_url_rule('/activation/<key>', 'activation/<key>', self.activation, methods=['GET'])
         self.flask_app.add_url_rule('/api/logout', 'logout', self.logout, methods=['POST'])
-        self.flask_app.add_url_rule('/api/jobs', 'jobs', self.jobs, methods=['GET'])
+        self.flask_app.add_url_rule('/api/jobs', 'jobs', self.jobs, methods=['POST'])
 
     def test_request(self):
         self.request_data = request.get_json()
