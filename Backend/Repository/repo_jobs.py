@@ -114,9 +114,9 @@ class RepositoryJobs:
         for job in jobs:
             response.append({
                 'id': job.id,
-                'type': job.job_type[0].description,
+                'type': job.description,
                 'description': job.description,
-                'publisher': '%s %s' % (job.client[0].first_name, job.client[0].last_name),
+                'publisher': '%s %s' % (job.client.first_name, job.client.last_name),
                 'reward': job.reward,
                 'date': job.publish_date
             })

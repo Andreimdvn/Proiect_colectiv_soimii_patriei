@@ -77,4 +77,4 @@ class FlaskServer:
         else:
             response = self.controller.provide_data()
 
-        return json.dumps({'status': status, 'response': response})
+        return json.dumps({'status': status, 'response': response}, indent=4, sort_keys=True, default=str)
