@@ -93,23 +93,17 @@ class HomeProviderBase extends React.Component<Props> {
     return (
       <MuiThemeProvider theme = {theme}>
 
-        <React.Fragment>
 
-          <Paper className={"paper"}> {/* recommended section */}
             <Typography component="h1" variant="h4">
               Recommended for you
             </Typography>
             <JobsPage jobs={this.getRecommendedJobs()}/>
-          </Paper>
 
-          <Paper className={"paper"}>
             <Typography component="h1" variant="h5">
               History
             </Typography>
-            <HistoryTable jobs={this.getHistory()}/>
-          </Paper>
+            <JobsPage jobs={this.getHistory()}/>
 
-        </React.Fragment>
       </MuiThemeProvider>
 
     );
