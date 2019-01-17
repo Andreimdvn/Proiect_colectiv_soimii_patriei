@@ -107,19 +107,11 @@ class HomeProviderBase extends React.Component<Props, State> {
     return (
       <MuiThemeProvider theme = {theme}>
 
-
-            <Typography component="h1" variant="h4">
-              Recommended for you
+            <Typography>
+              *search bar placeholder*
             </Typography>
             <JobsPage jobs={this.state.jobs}/>
-
-            <Typography component="h1" variant="h5">
-              History
-            </Typography>
-            <JobsPage jobs={this.getHistory()}/>
-
       </MuiThemeProvider>
-
     );
   }
 }
