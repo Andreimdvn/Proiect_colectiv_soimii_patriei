@@ -15,6 +15,8 @@ import { Router } from "react-router-dom";
 import { withCookies, Cookies } from 'react-cookie';
 import { createBrowserHistory } from "history";
 import {Register} from "./components/register/Register";
+import {Login} from "./components/login/Login";
+
 import {TabMenuProps} from "./components/tab-menu/TabMenuProps";
 import {HeaderTabs} from "./view-models/header-tabs";
 import {UserTypes} from "./view-models/user-types";
@@ -25,15 +27,21 @@ interface Props {
 }
 
 class App extends React.Component<Props> {
+  state = {
+    showLoginWindow: true
+  }
   constructor(props) {
     super(props);
 
+    this.handler.bind(this);
+  }
+  handler = () => {
+    this.setState({
+      showLoginWindow: !this.state.showLoginWindow
+    });
   }
 
   public render() {
-    this.props.cookies.set("token", "bob");
-    this.props.cookies.set("userType", UserTypes.CLIENT);
-
     // try to load the cookies
     const token = this.props.cookies.get("token");
     const userType = this.props.cookies.get("userType");
@@ -42,14 +50,13 @@ class App extends React.Component<Props> {
     return (
       <div className="App">
         <Provider {...rootStore}>
-          <React.Fragment>
+         <React.Fragment>
             {!logged ? ( // if not logged in, show the register screen
-              <React.Fragment>
-                <Register/>
-              </React.Fragment>
+              this.state.showLoginWindow ?
+                (<Login switchScreen={this.handler} cookies={this.props.cookies}/>)
+                :
+                (<Register switchScreen={this.handler}/>)
             ) : null}
-
-
             {userType === UserTypes.CLIENT ? ( // client home page
               <React.Fragment>
                 <Router history={createBrowserHistory()}>
