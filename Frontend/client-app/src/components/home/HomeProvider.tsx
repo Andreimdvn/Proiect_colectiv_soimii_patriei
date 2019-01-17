@@ -2,14 +2,11 @@ import * as React from "react";
 import { inject, observer } from "mobx-react";
 
 import { ViewStore } from "src/store/view-store";
-import {RecommendedJobsTable} from "../provider/recommended-jobs/RecommendedJobsTable";
 
 import {Job} from "../../view-models/Job";
-import Paper from "@material-ui/core/Paper/Paper";
 import { MuiThemeProvider } from '@material-ui/core/styles';
 import {theme} from "../../themes/main-theme";
 import Typography from "@material-ui/core/Typography/Typography";
-import {HistoryTable} from "../provider/history/HistoryTable";
 import "./home-provider.css";
 import {Cookies, withCookies} from "react-cookie";
 import {JobsPage} from "../provider/recommended-jobs/JobsPage";
@@ -33,8 +30,10 @@ class HomeProviderBase extends React.Component<Props> {
   getRecommendedJobs() {
 
     const jsonCfg = require('src/app_properties.json');
-    const requestUrl = jsonCfg.baseUrl + "/recommended/";
+    const requestUrl = jsonCfg.baseUrl + "jobs/";
     const token = this.getToken();
+
+    const body = {token: "asd"}; // fixme token
 
     const promisedResponse = fetch(requestUrl, {
       method: 'POST',
@@ -42,7 +41,7 @@ class HomeProviderBase extends React.Component<Props> {
         Accept: 'application/json',
         'Content-Type': 'application/x-www-form-urlencoded',
       },
-      body: "token=" + token + "&limit=5"
+      body: JSON.stringify(body)
     });
 
     promisedResponse.then(response => response.json()).then(json =>{
