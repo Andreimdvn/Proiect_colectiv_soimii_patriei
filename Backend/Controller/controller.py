@@ -1,8 +1,11 @@
-import Database.orm
 import logging
 import re
+import time
+
+import emails
 
 from Repository.repo_jobs import RepositoryJobs
+import Database.orm
 
 register_fields = {
     'username': str,
@@ -11,8 +14,12 @@ register_fields = {
     'first_name': str,
     'last_name': str,
     'date_of_birth': lambda x: re.match(r'^[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}$', x),
-    'phone': str,
+    'phone': lambda x: re.match(r'^[0-9]{10}$', x),
     'account_type': ('client', 'provider')
+}
+login_fields = {
+    'username': str,
+    'password': str
 }
 
 
@@ -23,8 +30,17 @@ class Controller:
         self.repo = RepositoryJobs(db_config)
         self.logger = logging.getLogger()
 
-    def login(self, username=None, password=None):
-        pass
+    def login(self, request_data):
+        if 'username' not in request_data or 'password' not in request_data:
+            status = -1
+            response = '[!] You have to specify a username and a password'
+        elif request_data.get('username') and request_data.get('password'):
+            status, response = self.repo.login(**request_data)
+        else:
+            status, response = -1, "[!] You have to specify values for parameters!"
+
+        self.logger.debug("Login: returning status: {} response: {}".format(status, response))
+        return status, response
 
     def register(self, request_data):
         sanitized_request = {}
@@ -34,12 +50,12 @@ class Controller:
         for k, v in register_fields.items():
             if k not in request_data:
                 if not response:
-                    response = '[!] Field(s) [%s' % (k,)
+                    response = '[!] Fields [%s' % (k,)
                 else:
                     response += ', ' + k
-            elif type(v) in (str,):
+            elif v and type(v) in (str,):
                 sanitized_request[k] = v(request_data[k])
-            elif type(v) in (tuple,):
+            elif v and type(v) in (tuple,):
                 if request_data[k] not in v:
                     if not response:
                         response = '[!] Field [%s] has an invalid value!' % (k,)
@@ -55,9 +71,53 @@ class Controller:
                     sanitized_request[k] = request_data[k]
         else:
             if response:
-                response += '] is(are) mandatory!'
+                response += '] are mandatory!'
         if not response:
             status, response = self.repo.register(**sanitized_request)
 
-        self.logger.debug("Register: returning: status: {} response:{}".format(status, response))
+        if status == 0:
+            self.send_validation_mail(sanitized_request.get('email'), response.get('activation_hash'))
+            response = response.get('response')
+
+        self.logger.debug("Register: returning: status: {} response: {}".format(status, response))
+        return status, response
+
+    def send_validation_mail(self, email, activation_hash):
+        """
+        Send a validation email (tries 2 times) to a user to notice them to activate the account
+        :param activation_hash: generated hash for activation
+        :param email: the email were the activation link will be sent
+        :return:
+        """
+        url = 'http://0.0.0.0:16000/activation'
+
+        for i in range(2):
+            m = emails.Message(html='<html>To activate your account <a href="%s/%s">click here</a></html>' % (url, activation_hash),
+                               subject='Activate your account!',
+                               mail_from='facultaubb@gmail.com')
+
+            r = m.send(render={'url': url,
+                               'hash': activation_hash},
+                       smtp={'host': 'smtp.gmail.com',
+                             'tls': True,
+                             'user': 'facultaubb@gmail.com',
+                             'password': 'P@rolamea'},
+                       to=email)
+            if r.status_code not in (250,) and i != 1:
+                time.sleep(5)
+            else:
+                break
+
+    def activate(self, key):
+        return self.repo.activate_account(key)
+
+    def logout(self, data):
+        status = 0
+        response = False
+        if 'token' not in data:
+            status = -1
+
+        if status:
+            response = self.repo.logout(data.get('token'))
+
         return status, response

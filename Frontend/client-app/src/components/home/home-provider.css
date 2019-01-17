@@ -1,0 +1,9 @@
+.paper {
+    /*margin: 50px;
+    */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-items: center;
+    padding: 20px 30px 30px;
+}

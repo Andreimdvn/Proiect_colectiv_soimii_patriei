@@ -3,3 +3,6 @@ flask
 flask_sqlalchemy
 mysqlclient
 flask-socketio
+python-dateutil
+passlib
+emails
