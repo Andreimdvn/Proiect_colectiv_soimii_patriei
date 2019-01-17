@@ -1,7 +1,6 @@
 import { Route } from "react-router";
 import * as React from "react";
 import { Login } from "./Login";
-import { Register } from "../register/Register";
 
 export default () => {
   return (
