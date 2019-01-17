@@ -33,7 +33,6 @@ class ActiveLogins(DB):
     id = Column(Integer, autoincrement=True, primary_key=True)
     id_user = Column(Integer, ForeignKey(User.id), nullable=False)
     hash = Column(String(100), nullable=False)
-    active = Column(Boolean, nullable=False, default=True)
 
     user = relationship('User', back_populates='active_users')
 
@@ -133,13 +132,14 @@ class ProviderAbilities(DB):
     abilities = relationship('Ability')
 
 
-class JobType(DB):
-    __tablename__ = 'JobType'
+class JobTag(DB):
+    __tablename__ = 'JobTag'
 
-    id = Column(Integer, autoincrement=True, primary_key=True)
-    description = Column(String(100), nullable=False)
+    id_job = Column(Integer, ForeignKey('Job.id'), primary_key=True)
+    id_tag = Column(Integer, ForeignKey('Tag.id'), primary_key=True)
 
-    jobs = relationship('Job', back_populates='job_type')
+    job = relationship('Job', back_populates='job_tag')
+    tag = relationship('Tag', back_populates='tag_job')
 
 
 class Job(DB):
@@ -147,15 +147,29 @@ class Job(DB):
 
     id = Column(Integer, autoincrement=True, primary_key=True)
     id_client = Column(Integer, ForeignKey(Client.id), nullable=False)
-    type = Column(Integer, ForeignKey(JobType.id), nullable=False)
     description = Column(String(100), nullable=False)
+    provider_description = Column(String(100), nullable=False)
+    client_description = Column(String(100), nullable=False)
     reward = Column(String(100), nullable=False)
+    street = Column(String(100), nullable=False)
+    city = Column(String(100), nullable=False)
+    country = Column(String(100), nullable=False)
+    type = Column(String(100), nullable=False)
     publish_date = Column(DateTime, nullable=False, default=datetime.datetime.utcnow)
 
     client = relationship('Client', back_populates='jobs')
-    job_type = relationship('JobType', back_populates='jobs')
     given_to = relationship('JobProvider', back_populates='job')
     requests = relationship('JobRequest', back_populates='job')
+    job_tag = relationship('JobTag', back_populates='job')
+
+
+class Tag(DB):
+    __tablename__ = 'Tag'
+
+    id = Column(Integer, autoincrement=True, primary_key=True)
+    name = Column(String(100), nullable=False)
+
+    tag_job = relationship('JobTag', back_populates='tag')
 
 
 class JobProvider(DB):
