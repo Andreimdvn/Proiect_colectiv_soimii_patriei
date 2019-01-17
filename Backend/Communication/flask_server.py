@@ -41,6 +41,7 @@ class FlaskServer:
         self.flask_app.add_url_rule('/api/register', 'register', self.register, methods=['POST'])
         self.flask_app.add_url_rule('/api/login', 'login', self.login, methods=['POST'])
         self.flask_app.add_url_rule('/activation/<key>', 'activation/<key>', self.activation, methods=['GET'])
+        self.flask_app.add_url_rule('/job/<job_id>', 'job/<job_id>', self.get_job_details, methods=['POST'])
 
     def test_request(self):
         self.request_data = request.get_json()
@@ -59,3 +60,8 @@ class FlaskServer:
 
     def activation(self, key):
         return self.controller.activate(key)
+
+    def get_job_details(self, job_id):
+        request_data = request.get_json() or {}
+        status, response = self.controller.get_job(job_id)
+        return json.dumps({'status': status, 'response': response})

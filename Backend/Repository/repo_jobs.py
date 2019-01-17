@@ -97,3 +97,18 @@ class RepositoryJobs:
                             values_where=(token.id_user,))
             return 'Your account was successfully activated!'
         return 'Something went wrong!'
+
+    def get_job(self, job_id):
+        job = self.orm.select('Job', columns=('id',), values=(job_id,), first=True)
+        if job:
+            return 0, {
+                'title': job.title,
+                'jobDescription': job.description,
+                'candidateDescription': job.provider_description,
+                'employer': '%s %s' % (job.client.first_name, job.client.last_name),
+                'payment': job.reward,
+                'address': '%s; %s - %s' % (job.street, job.city, job.country),
+                'jobType': job.type,
+                'tags': [t.tag.tag_job[0].tag.name for t in job.job_tag]
+            }
+        return -1, "Required job doesn't exist!"

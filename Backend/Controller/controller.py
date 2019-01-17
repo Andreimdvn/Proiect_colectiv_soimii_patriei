@@ -35,7 +35,6 @@ class Controller:
             status = -1
             response = '[!] You have to specify a username and a password'
         elif request_data.get('username') and request_data.get('password'):
-            print("HERE")
             status, response = self.repo.login(**request_data)
         else:
             status, response = -1, "[!] You have to specify values for parameters!"
@@ -111,3 +110,7 @@ class Controller:
 
     def activate(self, key):
         return self.repo.activate_account(key)
+
+    def get_job(self, job_id):
+        return self.repo.get_job(job_id)
+
