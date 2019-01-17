@@ -1,30 +1,23 @@
 import { observable, action, computed } from "mobx";
-import {Cookies, withCookies} from "react-cookie";
-import * as React from "react";
 
 
-interface Props {
-    cookies: Cookies
-}
-
-export class JobStore extends React.Component<Props>{
-    @observable jobs = [];
-    @observable status;
+export class JobStore {
+    @observable status = -1;
     @observable message = "";
+    @observable jobs = [];
 
     @computed get allJobs(){
         return this.jobs;
     }
 
-    @action
-    async addJobOffer(job){
-        const headers = new Headers();
-        const token = this.props.cookies.get("token");
-        headers.append('Content-Type','application/json');
 
+    @action
+    async addJobOffer(job,token){
+        const headers = new Headers();
+        headers.append('Content-Type','application/json');
         const data = {
-            token: token,
-            job: job
+            // token: token,
+            // job: job
         };
 
         const options = {
@@ -45,4 +38,4 @@ export class JobStore extends React.Component<Props>{
     }
 }
 
-export default withCookies(JobStore); // withCookies adds this.props.cookies
+export default new JobStore(); // withCookies adds this.props.cookies

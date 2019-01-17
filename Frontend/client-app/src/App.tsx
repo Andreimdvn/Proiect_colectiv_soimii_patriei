@@ -12,7 +12,8 @@ import "./App.css";
 import { Provider } from "mobx-react";
 import * as React from "react";
 import { Router } from "react-router-dom";
-import { withCookies, Cookies } from 'react-cookie';
+import { withCookies} from 'react-cookie';
+import Cookies from 'universal-cookie';
 import { createBrowserHistory } from "history";
 import {Register} from "./components/register/Register";
 import {TabMenuProps} from "./components/tab-menu/TabMenuProps";
@@ -33,7 +34,8 @@ class App extends React.Component<Props> {
   public render() {
     this.props.cookies.set("token", "bob");
     this.props.cookies.set("userType", UserTypes.CLIENT);
-
+    const cookie = new Cookies();
+    cookie.set("token","gofyourself",{path: "/"});
     // try to load the cookies
     const token = this.props.cookies.get("token");
     const userType = this.props.cookies.get("userType");

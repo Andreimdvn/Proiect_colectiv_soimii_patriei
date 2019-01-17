@@ -9,17 +9,18 @@ import {FormControl, OutlinedInput, Paper, Radio} from "@material-ui/core";
 import FormLabel from "@material-ui/core/es/FormLabel/FormLabel";
 import RadioGroup from "@material-ui/core/es/RadioGroup/RadioGroup";
 import FormControlLabel from "@material-ui/core/es/FormControlLabel/FormControlLabel";
-import Checkbox from "@material-ui/core/es/Checkbox/Checkbox";
 import Button from "@material-ui/core/Button/Button";
 import {JobStore} from "../../../store/job-store";
+import {Cookies, withCookies} from "react-cookie";
 
 interface Props {
-  jobStore: JobStore;
+    jobStore: JobStore,
+    cookies: Cookies,
 }
 
 @inject("jobStore")
 @observer
-export class AddJobForm extends React.Component<Props> {
+export class AddJobForm extends React.Component<any> {
     state={
         title: "",
         jobDesc: "",
@@ -33,7 +34,7 @@ export class AddJobForm extends React.Component<Props> {
         tags: []
     };
 
-    constructor(props: Props) {
+    constructor(props: any) {
         super(props);
     }
 
@@ -41,7 +42,9 @@ export class AddJobForm extends React.Component<Props> {
         event.preventDefault();
         console.log(event.target.value);
         if(event.target.name === "tags"){
-            console.log("fuck you")
+            const tagss = event.target.value.split("#");
+            tagss.splice(0,1);
+            this.setState({tags: tagss} );
         }else {
             this.setState({
                 [event.target.name]: event.target.value
@@ -63,8 +66,9 @@ export class AddJobForm extends React.Component<Props> {
             jobType: this.state.jobType,
             tags: this.state.tags
         };
-
-        this.props.jobStore.addJobOffer(job);
+        const cookie = new Cookies();
+        const token = cookie.get("token");
+        this.props.jobStore.addJobOffer(job,token);
 
         console.log(this.props.jobStore.message);
         console.log(this.props.jobStore.status);
@@ -248,3 +252,5 @@ export class AddJobForm extends React.Component<Props> {
        </div>;
   }
 }
+
+export default withCookies(AddJobForm);
