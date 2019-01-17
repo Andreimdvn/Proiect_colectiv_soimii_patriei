@@ -30,7 +30,7 @@ class HomeProviderBase extends React.Component<Props> {
   getRecommendedJobs() {
 
     const jsonCfg = require('src/app_properties.json');
-    const requestUrl = jsonCfg.baseUrl + "jobs/";
+    const requestUrl = jsonCfg.baseUrl + "jobs";
     const token = this.getToken();
 
     const body = {token: "asd"}; // fixme token
@@ -63,7 +63,7 @@ class HomeProviderBase extends React.Component<Props> {
 
   getHistory() {
     const jsonCfg = require('src/app_properties.json');
-    const requestUrl = jsonCfg.baseUrl + "/history/";
+    const requestUrl = jsonCfg.baseUrl + "jobs";
     const token = this.getToken();
 
     const promisedResponse = fetch(requestUrl, {
