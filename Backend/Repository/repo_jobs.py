@@ -97,3 +97,12 @@ class RepositoryJobs:
                             values_where=(token.id_user,))
             return 'Your account was successfully activated!'
         return 'Something went wrong!'
+
+    def logout(self, token):
+        tkn = self.orm.select('ActiveLogins', columns=('hash',), values=(token,), first=True)
+        if tkn and tkn.active:
+            self.orm.update('ActiveLogins', columns=('active',), values=(False,), columns_where=('hash',),
+                            values_where=(token,))
+            return True
+
+        return False
