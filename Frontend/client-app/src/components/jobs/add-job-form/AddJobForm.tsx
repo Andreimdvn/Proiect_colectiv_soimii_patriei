@@ -1,6 +1,5 @@
 import * as React from "react";
 import { inject, observer } from "mobx-react";
-import { ViewStore } from "src/store/view-store";
 import Grid from "@material-ui/core/es/Grid/Grid";
 import TextField from "@material-ui/core/es/TextField/TextField";
 import Typography from "@material-ui/core/es/Typography";
@@ -12,6 +11,7 @@ import FormControlLabel from "@material-ui/core/es/FormControlLabel/FormControlL
 import Button from "@material-ui/core/Button/Button";
 import {JobStore} from "../../../store/job-store";
 import {Cookies, withCookies} from "react-cookie";
+import "./addJobForm.css";
 
 interface Props {
     jobStore: JobStore,
@@ -76,7 +76,6 @@ export class AddJobForm extends React.Component<any> {
 
   render() {
     return <div className={"root"}>
-        <Paper className="paper">
         <Grid container={true} spacing={8}>
             <Grid item={true} xs={12} sm={2} style={{marginTop: 20}}>
                 <Typography variant="h5">
@@ -248,7 +247,6 @@ export class AddJobForm extends React.Component<any> {
                 </Button>
             </Grid>
         </Grid>
-        </Paper>
        </div>;
   }
 }
