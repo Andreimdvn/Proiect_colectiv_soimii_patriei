@@ -141,4 +141,4 @@ class Controller:
         return self.repo.provide_data()
 
     def view_applicants(self, request_data):
-        return self.repo.view_applicants(request_data.get('id_client'))
+        return self.repo.view_applicants(request_data.get('token'))

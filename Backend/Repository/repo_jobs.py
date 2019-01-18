@@ -148,8 +148,10 @@ class RepositoryJobs:
             })
         return response
 
-    def view_applicants(self, request_data):
-        pk_user = self.orm.select("ActiveLogins", columns=('hash',), values=(request_data['token'],), first=True)
+    def view_applicants(self, token):
+        pk_user = self.orm.select("ActiveLogins", columns=('hash',), values=(token,), first=True)
+        if not pk_user:
+            return -1, 'Invalid token!'
         id_client = self.orm.select("Client", columns=('id',), values=(pk_user.id,), first=True)
         jobs = self.orm.select('Job', columns=('id_client',), values=(id_client,))
         response = []
