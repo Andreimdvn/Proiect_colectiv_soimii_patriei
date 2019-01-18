@@ -52,6 +52,9 @@ export class Login extends React.Component<any> {
       res.json().then(r => {
         console.log(r);
         if (r.status === 0) {
+          const cookies = new Cookies();
+          cookies.set("token", r.response.token);
+          cookies.set("userType", r.response.type);
           this.props.cookies.set("token", r.response.token);
           this.props.cookies.set("userType", r.response.type);
         } else if (r.status === -1) {
