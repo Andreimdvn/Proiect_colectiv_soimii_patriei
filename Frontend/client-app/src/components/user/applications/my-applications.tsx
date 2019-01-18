@@ -1,9 +1,10 @@
 import * as React from "react";
 import {ApplicationView} from "./application-view/ApplicationView";
-import {observer} from "mobx-react";
+import {inject, observer} from "mobx-react";
 import Grid from "@material-ui/core/Grid/Grid";
 import "./my-applications.css";
 
+@inject("applicastionStore")
 @observer
 export class MyApplications extends React.Component<any>{
     state = {
