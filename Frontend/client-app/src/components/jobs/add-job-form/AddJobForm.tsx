@@ -4,7 +4,6 @@ import Grid from "@material-ui/core/es/Grid/Grid";
 import TextField from "@material-ui/core/es/TextField/TextField";
 import Typography from "@material-ui/core/es/Typography";
 import InputAdornment from "@material-ui/core/es/InputAdornment";
-import {FormControl, OutlinedInput, Paper, Radio} from "@material-ui/core";
 import FormLabel from "@material-ui/core/es/FormLabel/FormLabel";
 import RadioGroup from "@material-ui/core/es/RadioGroup/RadioGroup";
 import FormControlLabel from "@material-ui/core/es/FormControlLabel/FormControlLabel";
@@ -12,6 +11,8 @@ import Button from "@material-ui/core/Button/Button";
 import {JobStore} from "../../../store/job-store";
 import {Cookies, withCookies} from "react-cookie";
 import "./addJobForm.css";
+import FormControl from "@material-ui/core/es/FormControl/FormControl";
+import Radio from "@material-ui/core/es/Radio/Radio";
 
 interface Props {
     jobStore: JobStore,
@@ -200,8 +201,8 @@ export class AddJobForm extends React.Component<any> {
             <Grid item={true} xs={12} sm={10}>
                 <Grid container={true} spacing={8}>
                     <Grid item={true} xs={12} sm={2}>
-                        <FormControl component="fieldset">
-                            <FormLabel component="legend">Job type</FormLabel>
+                        <FormControl component={"fieldset" as "div"}>
+                            <FormLabel>Job type</FormLabel>
                             <RadioGroup
                                 aria-label="Job type"
                                 name="jobType"
@@ -217,8 +218,8 @@ export class AddJobForm extends React.Component<any> {
                         </FormControl>
                     </Grid>
                     <Grid item={true} xs={12} sm={10}>
-                        <FormControl component="fieldset" fullWidth={true}>
-                            <FormLabel component="legend">Tags</FormLabel>
+                        <FormControl component={"fieldset" as "div"} fullWidth={true}>
+                            <FormLabel>Tags</FormLabel>
                             <TextField
                                 id="outlined-uncontrolled"
                                 name="tags"
