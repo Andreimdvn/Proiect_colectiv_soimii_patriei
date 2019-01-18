@@ -21,6 +21,10 @@ login_fields = {
     'username': str,
     'password': str
 }
+request_job_fields = {
+    'token': str,
+    'job_id': int
+}
 
 
 class Controller:
@@ -111,6 +115,31 @@ class Controller:
 
     def activate(self, key):
         return self.repo.activate_account(key)
+
+    def get_job(self, job_id):
+        return self.repo.get_job(job_id)
+
+    def request_job(self, request_data):
+        status = 0
+        response = None
+        sanitized_request = {}
+
+        for k, v in request_job_fields.items():
+            if k not in request_data:
+                status = -1
+                response = 'Field [%s] is not present in the request!' % (k,)
+                break
+            else:
+                try:
+                    sanitized_request[k] = v(request_data.get(k))
+                except:
+                    status = -1
+                    response = 'Field [%s] has the wrong type!' % (k,)
+                    break
+        else:
+            status, response = self.repo.request_job(**sanitized_request)
+
+        return status, response
 
     def add_job(self, request_data):
         """

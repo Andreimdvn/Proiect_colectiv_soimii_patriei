@@ -7,6 +7,8 @@ import json
 from Communication.flask_server import FlaskServer
 from Controller.controller import Controller
 
+
+WORKING_DIRECTORY = os.path.dirname(os.path.abspath(__file__))
 logger = None
 
 
