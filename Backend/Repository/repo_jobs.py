@@ -1,3 +1,4 @@
+import datetime
 import string
 import random
 
@@ -80,6 +81,72 @@ class RepositoryJobs:
             return 0, {'response': "Success!", 'activation_hash': activation_hash}
         except ValueError as e:
             return -1, str(e)
+
+    def searchForJobs(self, description, type, tags):
+        description_result = self.orm.select('Job', like_columns=('description',), like_values=(description,))
+        type_result = self.orm.select('Job', columns=('type',), values=(type,))
+        mylist = []
+        for tag in tags:
+            result_tags = self.orm.select('Tag', columns=('name',), values=(tag,))
+            if result_tags:
+                for jobtag in result_tags:
+                    for job in jobtag.tag_job:
+                        if isinstance(job.publish_date, datetime.datetime):
+                            date = job.publish_date.__str__()
+                        founded = {
+                            "type": job.job.type,
+                            "description": job.job.description,
+                            "city": job.job.city,
+                            "client_description": job.job.client_description,
+                            "country": job.job.country,
+                            "publish_date": date,
+                            "reward": job.job.reward,
+                            "street": job.job.street,
+                            "title": job.job.title,
+                            "requests": job.job.requests
+                        }
+                        if founded not in mylist:
+                            mylist.append(founded)
+
+        if type_result:
+            for job in type_result:
+                if isinstance(job.publish_date, datetime.datetime):
+                    date = job.publish_date.__str__()
+                founded = {
+                    "type": job.type,
+                    "description": job.description,
+                    "city": job.city,
+                    "client_description": job.client_description,
+                    "country": job.country,
+                    "publish_date": date,
+                    "reward": job.reward,
+                    "street": job.street,
+                    "title": job.title,
+                    "requests": job.requests
+                }
+                if founded not in mylist:
+                    mylist.append(founded)
+
+        if description_result:
+            for job in description_result:
+                if isinstance(job.publish_date, datetime.datetime):
+                    date = job.publish_date.__str__()
+                founded = {
+                    "type": job.type,
+                    "description": job.description,
+                    "city": job.city,
+                    "client_description": job.client_description,
+                    "country": job.country,
+                    "publish_date": date,
+                    "reward": job.reward,
+                    "street": job.street,
+                    "title": job.title,
+                    "requests": job.requests
+                }
+                if founded not in mylist:
+                    mylist.append(founded)
+
+        return 0, mylist
 
     def generate_account_validation_hash(self, user_id):
         generated_hash = self.random_hash_string()

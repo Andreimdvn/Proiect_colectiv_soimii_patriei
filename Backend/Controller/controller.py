@@ -89,12 +89,13 @@ class Controller:
         :param email: the email were the activation link will be sent
         :return:
         """
-        url = 'http://0.0.0.0:16000/activation'
+        url = 'http://127.0.0.1:16000/activation'
 
         for i in range(2):
-            m = emails.Message(html='<html>To activate your account <a href="%s/%s">click here</a></html>' % (url, activation_hash),
-                               subject='Activate your account!',
-                               mail_from='facultaubb@gmail.com')
+            m = emails.Message(
+                html='<html>To activate your account <a href="%s/%s">click here</a></html>' % (url, activation_hash),
+                subject='Activate your account!',
+                mail_from='facultaubb@gmail.com')
 
             r = m.send(render={'url': url,
                                'hash': activation_hash},
@@ -110,3 +111,35 @@ class Controller:
 
     def activate(self, key):
         return self.repo.activate_account(key)
+
+    def filter(self, description, type, tags):
+        return self.repo.searchForJobs(description, type, tags)
+
+    def add_job(self, request_data):
+        """
+        Add a new job
+        :param data_request:
+        :return:
+        """
+
+        status = -1
+        response = None
+
+        status, response = self.repo.add_job(request_data)
+
+        return status, response
+
+
+    def logout(self, data):
+        status = 0
+        response = False
+        if 'token' not in data:
+            status = -1
+
+        if status:
+            response = self.repo.logout(data.get('token'))
+
+        return status, response
+
+    def provide_data(self):
+        return self.repo.provide_data()
