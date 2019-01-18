@@ -4,9 +4,9 @@ import BrowseRoute from "./components/provider/browse-jobs";
 import HomeRoute from "./components/home";
 import AddJobRoute from "./components/jobs/add-job-form";
 import ClientListRoute from "./components/clients/client-list";
+import ApplicationsRoute from "./components/user/applications";
 import User from "./components/user/User";
 import EditProfileRoute from "./components/user/edit-profile";
-import UserOffersRoute from "./components/user/offers";
 import "./App.css";
 
 import { Provider } from "mobx-react";
@@ -110,7 +110,7 @@ class App extends React.Component<Props> {
                     <AddJobRoute />
                     <ClientListRoute />
                     <EditProfileRoute />
-                    <UserOffersRoute />
+                    <ApplicationsRoute />
                   </React.Fragment>
                   {/* </Router> */}
                 </React.Fragment>
@@ -133,7 +133,7 @@ class App extends React.Component<Props> {
                     <HomeRoute.providerHome />
                     <BrowseRoute />
                     <EditProfileRoute />
-                    <UserOffersRoute />
+                    <ApplicationsRoute />
                   </React.Fragment>
                   {/* </Router> */}
                 </React.Fragment>

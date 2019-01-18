@@ -43,6 +43,7 @@ class User extends React.Component<any, State> {
         this.handleLogout();
       } else {
         const destinationURL = "/user/" + event.target.value;
+        console.log(destinationURL);
         this.setState({ redirect: <Redirect to={destinationURL} /> }, () => {
           this.setState({ redirect: undefined });
         });
@@ -94,7 +95,7 @@ class User extends React.Component<any, State> {
           onChange={this.handleChange}
           className="account-box-select"
         >
-          <MenuItem value="offers">My job offers</MenuItem>
+          <MenuItem value="applications">My applications</MenuItem>
           <MenuItem value="edit">Edit profile</MenuItem>
           <MenuItem value="logout">Log out</MenuItem>
         </Select>
