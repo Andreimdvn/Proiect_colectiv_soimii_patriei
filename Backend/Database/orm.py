@@ -6,7 +6,6 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String, ForeignKey, Date, create_engine, Boolean, DateTime
 from sqlalchemy.orm import relationship, sessionmaker, scoped_session
 
-
 # username / password / host / port / database
 MYSQL_CON_STRING = 'mysql://%s:%s@%s:%s/%s'
 
@@ -158,6 +157,7 @@ class Job(DB):
     city = Column(String(100), nullable=False)
     country = Column(String(100), nullable=False)
     type = Column(String(100), nullable=False)
+
     publish_date = Column(DateTime, nullable=False, default=datetime.datetime.utcnow)
 
     client = relationship('Client', back_populates='jobs')
@@ -316,7 +316,9 @@ class ORM:
                 if len(like_columns) != len(like_values):
                     raise ValueError('[!] There are not enough like_values/like_columns!')
                 like_cols = [getattr(tb, c) for c in like_columns]
+
                 like_col_val = [e[0].like('%' + e[1] + '%',) for e in zip(like_cols, like_values)]
+
             if like_col_val:
                 res = self.ses.query(tb).filter_by(**col_val)
                 res = res.filter(*like_col_val)

@@ -1,3 +1,4 @@
+import logging
 import string
 import random
 
@@ -11,6 +12,7 @@ from Database.orm import ORM
 class RepositoryJobs:
 
     def __init__(self, config):
+        self.logger = logging.getLogger()
         self.orm = ORM(config)
 
     def random_hash_string(self, length=32):
@@ -81,6 +83,31 @@ class RepositoryJobs:
             return 0, {'response': "Success!", 'activation_hash': activation_hash}
         except ValueError as e:
             return -1, str(e)
+
+    def searchForJobs(self, description, type, tags):
+        all_jobs = self.orm.select('Job')
+        returned_jobs = []
+        for job in all_jobs:
+            if description is '' or description in job.description:
+                if type is '' or type == job.type:
+                    all_tags_in_db = self.orm.select("Tag")
+                    id_needed_tags = set([tag.id for tag in all_tags_in_db if tag.name in tags])
+                    all_jobtag = self.orm.select("JobTag")
+                    id_current_tags = set([all_jobtag.id_tag for tag in all_jobtag])
+                    if not id_needed_tags.issubset(id_current_tags):
+                        continue
+                    returned_jobs.append({
+                        "id": job.id,
+                        "type": job.type,
+                        "description": job.description,
+                        "publish_date": str(job.publish_date),
+                        "reward": job.reward,
+                        "title": job.title,
+                    })
+
+        self.logger.info("Filtered jobs: {}".format(returned_jobs))
+
+        return 0, returned_jobs
 
     def generate_account_validation_hash(self, user_id):
         generated_hash = self.random_hash_string()
