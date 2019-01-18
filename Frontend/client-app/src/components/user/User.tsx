@@ -7,10 +7,15 @@ import { Redirect } from "react-router";
 import { ReactNode } from "react";
 
 import "./user.css";
+import { Cookies } from "react-cookie";
 
 interface State {
   open: boolean;
   redirect: ReactNode;
+}
+
+interface Props {
+  cookies: Cookies;
 }
 
 const initialState: State = {
@@ -18,7 +23,7 @@ const initialState: State = {
   redirect: undefined
 };
 
-class User extends React.Component<{}, State> {
+class User extends React.Component<any, State> {
   constructor(props: any) {
     super(props);
     this.state = initialState;
@@ -34,11 +39,45 @@ class User extends React.Component<{}, State> {
 
   handleChange = event => {
     if (event.target.value) {
-      const destinationURL = "/user/" + event.target.value;
-      this.setState({ redirect: <Redirect to={destinationURL} /> }, () => {
-        this.setState({ redirect: undefined });
-      });
+      if (event.target.value === "logout") {
+        this.handleLogout();
+      } else {
+        const destinationURL = "/user/" + event.target.value;
+        this.setState({ redirect: <Redirect to={destinationURL} /> }, () => {
+          this.setState({ redirect: undefined });
+        });
+      }
     }
+  };
+
+  handleLogout = async () => {
+    const cookies = new Cookies();
+    const headers = new Headers();
+    headers.append("Content-Type", "application/json");
+
+    const options = {
+      method: "POST",
+      headers,
+      body: JSON.stringify({ token: cookies.get("token") })
+    };
+
+    const request = new Request("http://localhost:16000/api/logout", options);
+
+    const response = await fetch(request).then(res => {
+      res.json().then(r => {
+        if (r.status === 0) {
+          cookies.set("token", "");
+          cookies.set("userType", "");
+          this.props.cookies.set("token", "");
+          this.props.cookies.set("userType", "");
+          this.setState({ redirect: <Redirect to={""} /> }, () => {
+            this.setState({ redirect: undefined });
+          });
+        } else if (r.status === -1) {
+          alert(r.response);
+        }
+      });
+    });
   };
 
   render() {
@@ -57,7 +96,7 @@ class User extends React.Component<{}, State> {
         >
           <MenuItem value="offers">My job offers</MenuItem>
           <MenuItem value="edit">Edit profile</MenuItem>
-          <MenuItem>Log out</MenuItem>
+          <MenuItem value="logout">Log out</MenuItem>
         </Select>
       </div>
     );

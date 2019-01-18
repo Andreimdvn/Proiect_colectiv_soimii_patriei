@@ -18,7 +18,6 @@ export class HomeClient extends React.Component<Props> {
   render(): React.ReactNode {
     return <div>
         Homepage
-        <ViewJob idJob='1'/>
     </div>;
   }
 }

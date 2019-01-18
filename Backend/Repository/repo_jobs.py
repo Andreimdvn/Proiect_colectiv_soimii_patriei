@@ -137,3 +137,27 @@ class RepositoryJobs:
 
         response = 'Give some values!' if not response else response
         return status, response
+
+    def logout(self, token):
+        tkn = self.orm.select('ActiveLogins', columns=('hash',), values=(token,), first=True)
+        if tkn and tkn.active:
+            self.orm.update('ActiveLogins', columns=('active',), values=(False,), columns_where=('hash',),
+                            values_where=(token,))
+            return True
+
+        return False
+
+    def provide_data(self):
+        jobs = self.orm.select('Job')
+        response = []
+
+        for job in jobs:
+            response.append({
+                'id': job.id,
+                'type': job.description,
+                'description': job.description,
+                'publisher': '%s %s' % (job.client.first_name, job.client.last_name),
+                'reward': job.reward,
+                'date': job.publish_date
+            })
+        return response

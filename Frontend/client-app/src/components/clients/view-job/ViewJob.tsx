@@ -4,9 +4,11 @@ import Typography from "@material-ui/core/Typography/Typography";
 import "./ViewJob.css";
 import { Avatar, Chip, GridList, GridListTile, Card, Grid, Button } from "@material-ui/core";
 import { propTypes } from "mobx-react";
+import { Cookies } from "react-cookie";
 
 let idJob = '';
-
+const cookie = new Cookies();
+    
 export class ViewJob extends React.Component<any> {
     state = {
         title: '',
@@ -28,9 +30,9 @@ export class ViewJob extends React.Component<any> {
             headers,
             body: JSON.stringify(this.state),
         };
-        console.log("Get job");
+        console.log("Get job " +options);
 
-        const request = new Request('http://localhost:16000/job/' + this.props.idJob ,options);
+        const request = new Request('http://localhost:16000/job/' + idJob ,options);
 
         const response = await fetch(request).then(res => {
             res.json().then(r => {
@@ -62,18 +64,23 @@ export class ViewJob extends React.Component<any> {
 
         console.log(props);
         idJob = this.props.idJob;
+        idJob = window.location.href.split('/').slice(-1)[0];
+
+        console.log('Id job is : ' + idJob);
         this.getJob();
     }
 
     async handleApplyJob() {
         const headers = new Headers();
         headers.append('Content-Type', 'application/json');
-        const tokenProvider = "laLkN7zfofKMoOUYlXqoSb9fAq2EBEXF";
+        const tokenProvider = cookie.get('token');
     
         const data = {
             token: tokenProvider,
             job_id: idJob
         };
+        
+        console.log(tokenProvider);
 
         const options = {
             method: 'POST',

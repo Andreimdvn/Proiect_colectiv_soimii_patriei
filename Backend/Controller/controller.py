@@ -140,3 +140,16 @@ class Controller:
 
         return status, response
 
+    def logout(self, data):
+        status = 0
+        response = False
+        if 'token' not in data:
+            status = -1
+
+        if status:
+            response = self.repo.logout(data.get('token'))
+
+        return status, response
+
+    def provide_data(self):
+        return self.repo.provide_data()

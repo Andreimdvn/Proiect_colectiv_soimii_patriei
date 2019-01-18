@@ -5,7 +5,7 @@ import { AddJobForm } from "./AddJobForm";
 export default () => {
   return (
     <React.Fragment>
-      <Route path="/add" component={AddJobForm} />
+      <Route path="/add" component={AddJobForm} cookies={"cookies"}/>
     </React.Fragment>
   );
 };

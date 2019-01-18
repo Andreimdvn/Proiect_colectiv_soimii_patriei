@@ -5,8 +5,9 @@
   "dependencies": {
     "@material-ui/core": "^3.5.1",
     "@material-ui/icons": "^3.0.1",
+    "bootstrap": "^4.2.1",
     "classnames": "^2.2.6",
-    "mobx": "^5.6.0",
+    "mobx": "^5.7.0",
     "mobx-react": "^5.3.6",
     "react": "^16.6.3",
     "react-cookie": "^3.0.8",
@@ -14,7 +15,8 @@
     "react-router": "^4.3.1",
     "react-router-dom": "^4.3.1",
     "react-scripts-ts": "3.1.0",
-    "typescript": "^2.9.1"
+    "typescript": "^2.9.1",
+    "universal-cookie": "^3.0.7"
   },
   "scripts": {
     "start": "react-scripts-ts start",
