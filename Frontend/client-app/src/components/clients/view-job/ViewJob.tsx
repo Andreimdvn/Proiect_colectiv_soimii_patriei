@@ -48,7 +48,7 @@ export class ViewJob extends React.Component<any> {
                         payment: fields.payment,
                         address: fields.address,
                         jobType: fields.jobType,
-                        tags: fields.tags,
+                        Tags: fields.tags,
                     });
                 } else if (r.status === -1) {
                     alert(r.response)
@@ -94,7 +94,7 @@ export class ViewJob extends React.Component<any> {
             res.json().then(r => {
                 console.log(r);
                 if (r.status === 0) {
-                    alert("Mere");
+                    alert("Your request has been sent to the client!");
                 } else if (r.status === -1) {
                     alert(r.response)
                 }
