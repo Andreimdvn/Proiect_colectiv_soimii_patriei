@@ -177,7 +177,7 @@ export class Register extends React.Component<any> {
               <FormControl fullWidth={true}>
                 <InputLabel htmlFor="account-type">Type</InputLabel>
                 <Select
-                  value="client"
+                  value={this.state.type}
                   onChange={this.handleInputChange}
                   inputProps={{
                     name: "type",

@@ -3,6 +3,7 @@ import random
 
 from dateutil.parser import parse
 from passlib.hash import pbkdf2_sha256
+from datetime import datetime
 
 from Database.orm import ORM
 
@@ -98,6 +99,31 @@ class RepositoryJobs:
             return 'Your account was successfully activated!'
         return 'Something went wrong!'
 
+    #### TO DO CLIENTU E HARDCODAT AICI
+    def add_job(self, request_data):
+        try:
+
+            pk_user = self.orm.select("ActiveLogins", columns=('hash',), values=(request_data['token'],), first=True)
+            pk_client = self.orm.select("Client", columns=('id',), values=(pk_user.id,), first=True)
+            job_pk = self.orm.insert("Job", columns=('title', 'id_client', 'description', 'provider_description',
+                                                     'client_description', 'reward', 'street', 'city', 'country',
+                                                     'type', 'publish_date'),
+                                     values=(request_data['job']['title'], pk_client.id, request_data['job']['jobDesc'],
+                                             request_data['job']['candidateDesc'], request_data['job']['employerDesc'],
+                                             request_data['job']['payment'], request_data['job']['street'],
+                                             request_data['job']['city'],
+                                             request_data['job']['county'], request_data['job']['jobType'], None))
+
+            for tag in request_data['job']['tags']:
+                tag_pk = self.orm.insert("Tag", columns=('name',),
+                                         values=(tag,))
+                self.orm.insert("JobTag", columns=('id_job', 'id_tag'),
+                                values=(job_pk, tag_pk))
+
+            return 0, "Added sucessfully"
+        except ValueError as e:
+            return -1, str(e)
+
     def logout(self, token):
         tkn = self.orm.select('ActiveLogins', columns=('hash',), values=(token,), first=True)
         if tkn and tkn.active:
@@ -106,3 +132,40 @@ class RepositoryJobs:
             return True
 
         return False
+
+    def provide_data(self):
+        jobs = self.orm.select('Job')
+        response = []
+
+        for job in jobs:
+            response.append({
+                'id': job.id,
+                'type': job.description,
+                'description': job.description,
+                'publisher': '%s %s' % (job.client.first_name, job.client.last_name),
+                'reward': job.reward,
+                'date': job.publish_date
+            })
+        return response
+
+    def view_applicants(self, token):
+        pk_user = self.orm.select("ActiveLogins", columns=('hash',), values=(token,), first=True)
+        if not pk_user:
+            return -1, 'Invalid token!'
+        id_client = self.orm.select("Client", columns=('id',), values=(pk_user.id,), first=True)
+        jobs = self.orm.select('Job', columns=('id_client',), values=(id_client,))
+        response = []
+
+        for job in jobs:
+            id_job = job.id
+            jobprovider = self.orm.select('JobProvider', columns=('id_job',), values=(id_job,))
+            id_provider = jobprovider.id_provider
+            provider = self.orm.select('Provider', columns=('id',), values=(id_provider,))
+            response.append({
+                'assigned_date': jobprovider.assigned_date,
+                'first_name': provider.first_name,
+                'last_name': provider.last_name,
+                'title': job.title,
+                'description': job.description,
+            })
+        return 0, response
