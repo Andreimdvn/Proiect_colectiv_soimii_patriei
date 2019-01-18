@@ -44,6 +44,7 @@ class FlaskServer:
         self.flask_app.add_url_rule('/api/add_job', 'add_job', self.add_job, methods=['POST'])
         self.flask_app.add_url_rule('/api/logout', 'logout', self.logout, methods=['POST'])
         self.flask_app.add_url_rule('/api/jobs', 'jobs', self.jobs, methods=['POST'])
+        self.flask_app.add_url_rule('/api/jobs_for_provider', 'jobs_for_provider', self.jobs_for_provider, methods=['POST'])
 
     def test_request(self):
         self.request_data = request.get_json()
@@ -84,3 +85,8 @@ class FlaskServer:
             response = self.controller.provide_data()
 
         return json.dumps({'status': status, 'response': response}, indent=4, sort_keys=True, default=str)
+
+    def jobs_for_provider(self):
+        request_data = request.get_json() or {}
+        status, response = self.controller.jobs_for_provider(request_data)
+        return json.dumps({'status' : status, 'response' : response})

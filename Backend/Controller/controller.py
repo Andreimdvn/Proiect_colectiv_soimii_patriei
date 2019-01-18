@@ -139,3 +139,17 @@ class Controller:
 
     def provide_data(self):
         return self.repo.provide_data()
+
+    def jobs_for_provider(self, request_data):
+        """
+        Return a list with all applicants for a provider
+        :param request_data: is token of provider
+        :return:
+        """
+
+        status = -1
+        response = None
+
+        status, response = self.repo.jobs_for_provider(request_data)
+
+        return status, response
