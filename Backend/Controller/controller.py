@@ -89,7 +89,7 @@ class Controller:
         :param email: the email were the activation link will be sent
         :return:
         """
-        url = 'http://0.0.0.0:16000/activation'
+        url = 'http://127.0.0.1:16000/activation'
 
         for i in range(2):
             m = emails.Message(html='<html>To activate your account <a href="%s/%s">click here</a></html>' % (url, activation_hash),
