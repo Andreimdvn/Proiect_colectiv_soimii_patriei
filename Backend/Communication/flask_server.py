@@ -41,7 +41,9 @@ class FlaskServer:
         self.flask_app.add_url_rule('/api/register', 'register', self.register, methods=['POST'])
         self.flask_app.add_url_rule('/api/login', 'login', self.login, methods=['POST'])
         self.flask_app.add_url_rule('/activation/<key>', 'activation/<key>', self.activation, methods=['GET'])
+        self.flask_app.add_url_rule('/api/add_job', 'add_job', self.add_job, methods=['POST'])
         self.flask_app.add_url_rule('/api/logout', 'logout', self.logout, methods=['POST'])
+        self.flask_app.add_url_rule('/api/jobs', 'jobs', self.jobs, methods=['POST'])
         self.flask_app.add_url_rule('/api/applicants', 'applicants', self.applicants, methods=['POST'])
 
     def test_request(self):
@@ -62,10 +64,27 @@ class FlaskServer:
     def activation(self, key):
         return self.controller.activate(key)
 
+    def add_job(self):
+        request_data = request.get_json() or {}
+        status, response = self.controller.add_job(request_data)
+        return json.dumps({'status': status, 'response': response})
+
     def logout(self):
         request_data = request.get_json() or {}
         status, response = self.controller.logout(request_data)
         return json.dumps({'status': status, 'response': response})
+
+    def jobs(self):
+        request_data = request.get_json() or {}
+
+        status = 0
+        if 'token' not in request_data:
+            status = -1
+            response = 'Invalid parameters!'
+        else:
+            response = self.controller.provide_data()
+
+        return json.dumps({'status': status, 'response': response}, indent=4, sort_keys=True, default=str)
 
     def applicants(self):
         request_data = request.get_json() or {}
