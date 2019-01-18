@@ -9,13 +9,17 @@ import Typography from "@material-ui/core/es/Typography/Typography";
 import Grid from "@material-ui/core/es/Grid/Grid";
 import {jobFilterStyle} from "./JobFilterStyle";
 import Input from "@material-ui/core/es/Input/Input";
+import Button from "@material-ui/core/es/Button/Button";
 
 interface Props extends StyledComponentProps{
   onFilterCallback: any
 }
 
 interface State {
-  type: string
+  type: string;
+  tags: string;
+  description: string;
+
 }
 
 export const JobFilter = withStyles(jobFilterStyle)(
@@ -23,7 +27,7 @@ export const JobFilter = withStyles(jobFilterStyle)(
     constructor(props) {
       super(props);
 
-      this.state = {type: 'any'};
+      this.state = {type: 'any', tags: '', description: ''};
     }
 
     doFilter(callback) {
@@ -45,13 +49,33 @@ export const JobFilter = withStyles(jobFilterStyle)(
     onChangeType = event => {
       this.setState({ type: event.target.value });
     };
+    onChangeTags = event => {
+      this.setState({ tags: event.target.value });
+    };
+    onChangeDescription = event => {
+      this.setState({ description: event.target.value });
+    };
+    onSearch = () => {
+      const type = this.state.type;
+      const tags = this.state.tags;
+      const description = this.state.description;
+
+      const jsonObj: {[k: string]: any} = {};
+      if(type !== 'any')
+        jsonObj.type = type;
+      if(tags !== '')
+        jsonObj.tags = tags;
+      if(description !== '')
+        jsonObj.description = description;
+
+    };
 
     render() {
       const {classes} = this.props;
 
       return (
         <React.Fragment>
-          <Grid container={true}>
+          <Grid container={true} className={classes.container}>
             <Grid item={true} xs={1}>
               <Typography className={classes.label}>Job type</Typography>
 
@@ -81,6 +105,7 @@ export const JobFilter = withStyles(jobFilterStyle)(
                 inputProps={{
                   'aria-label': 'Description',
                 }}
+                onChange={this.onChangeTags}
               />
             </Grid>
 
@@ -94,11 +119,14 @@ export const JobFilter = withStyles(jobFilterStyle)(
                 inputProps={{
                   'aria-label': 'Description',
                 }}
+                onChange={this.onChangeDescription}
               />
             </Grid>
 
             <Grid item={true} xs={1}>
-              <button>Search</button>
+              <Button variant="contained" color="primary" className={classes.searchButton} onClick={this.onSearch}>
+                Search
+              </Button>
             </Grid>
 
             </Grid>
