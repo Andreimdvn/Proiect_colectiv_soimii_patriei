@@ -1,9 +1,11 @@
 import sys
 import datetime
 
+import sqlalchemy as sa
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, Integer, String, ForeignKey, Date, create_engine, Boolean, DateTime, BLOB
+from sqlalchemy import Column, Integer, String, ForeignKey, Date, create_engine, Boolean, DateTime
 from sqlalchemy.orm import relationship, sessionmaker, scoped_session
+from sqlalchemy.dialects import mysql
 
 
 # username / password / host / port / database
@@ -19,7 +21,7 @@ class User(DB):
     username = Column(String(100), nullable=False, unique=True)
     email = Column(String(100), nullable=False, unique=True)
     password = Column(String(100), nullable=False)
-    avatar = Column(BLOB, nullable=True)
+    avatar = Column(sa.LargeBinary().with_variant(mysql.LONGBLOB(), 'mysql'), nullable=True)
     verified_by_email = Column(Boolean, nullable=False, default=False)
 
     clients = relationship('Client', back_populates='user')
@@ -76,7 +78,7 @@ class Provider(DB):
     last_name = Column(String(100), nullable=False)
     date_of_birth = Column(Date, nullable=False)
     phone = Column(String(20), nullable=False, default=False)
-    cv = Column(BLOB, nullable=True)
+    cv = Column(sa.LargeBinary().with_variant(mysql.LONGBLOB(), 'mysql'), nullable=True)
 
     user = relationship('User', back_populates='providers')
     reviews = relationship('ProviderReview', back_populates='providers')

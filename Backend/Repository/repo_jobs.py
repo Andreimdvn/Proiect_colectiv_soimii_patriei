@@ -123,7 +123,7 @@ class RepositoryJobs:
                     'phone': client.phone,
                     'details': client.details,
                     'name': '%s %s' % (client.first_name, client.last_name),
-                    'avatar': client.user.avatar
+                    'avatar': base64.b64encode(client.user.avatar).decode('ascii') if client.user.avatar else None
 
                 }
             elif user.providers:
@@ -135,8 +135,8 @@ class RepositoryJobs:
                     'email': provider.user.email,
                     'phone': provider.phone,
                     'name': '%s %s' % (provider.first_name, provider.last_name),
-                    'avatar': provider.user.avatar,
-                    'cv': provider.cv
+                    'avatar': base64.b64encode(provider.user.avatar).decode('ascii') if provider.user.avatar else None,
+                    'cv': base64.b64encode(provider.cv).decode('ascii') if provider.cv else None
                 }
 
         return "Invalid parameters!"
@@ -161,7 +161,7 @@ class RepositoryJobs:
                 provider_fields = ('phone', 'cv', 'avatar')
                 for k, v in data.items():
                     if k in provider_fields:
-                        if k not in ('avatar',):
+                        if k not in ('avatar', 'cv'):
                             self.orm.update('Provider', columns=(k,), values=(v,), columns_where=('id',),
                                             values_where=(user.id,))
                         else:
