@@ -158,7 +158,7 @@ class RepositoryJobs:
             for current_job in id_jobs:
                 jobs = self.orm.select("Job", columns=('id',), values=(current_job.id,))
                 for job in jobs:
-                    jobs_for_provider.append({"title": job.title, "date": str(current_job.assigned_date)})
-            return  0, json.dumps(jobs_for_provider)
+                    jobs_for_provider.append({"id": job.id, "title": job.title, "date": str(current_job.assigned_date)})
+            return  0, jobs_for_provider
         except ValueError as e:
             return -1, str(e)
