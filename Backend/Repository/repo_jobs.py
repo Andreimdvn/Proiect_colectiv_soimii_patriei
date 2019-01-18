@@ -101,8 +101,13 @@ class RepositoryJobs:
 #### TO DO CLIENTU E HARDCODAT AICI
     def add_job(self, request_data):
         try:
-            job_pk = self.orm.insert("Job", columns=('id_client', 'description', 'provider_description', 'client_description', 'reward', 'street', 'city', 'country', 'type', 'publish_date'),
-                                values=(1, request_data['jobDesc'], request_data['candidateDesc'], request_data['employerDesc'], request_data['payment'], request_data['street'], request_data['city'], request_data['county'], request_data['jobType'],None))
+            job_pk = self.orm.insert("Job", columns=('title', 'id_client', 'description', 'provider_description',
+                                                     'client_description', 'reward', 'street', 'city', 'country',
+                                                     'type', 'publish_date'),
+                                values=(request_data['title'], 1, request_data['jobDesc'],
+                                        request_data['candidateDesc'], request_data['employerDesc'],
+                                        request_data['payment'], request_data['street'], request_data['city'],
+                                        request_data['county'], request_data['jobType'], None))
 
             for tag in request_data['tags']:
                 tag_pk = self.orm.insert("Tag", columns=('name',),
