@@ -1,5 +1,6 @@
 import sys
 import datetime
+import logging
 
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String, ForeignKey, Date, create_engine, Boolean, DateTime
@@ -208,7 +209,8 @@ class ORM:
         self.engine = create_engine(con_string, pool_size=500)
         self.session = scoped_session(sessionmaker(bind=self.engine))
         self.ses = None
-
+        logging.basicConfig()
+        logging.getLogger('sqlalchemy.engine').setLevel(logging.DEBUG)
         self.create_database()
 
     def create_database(self):
