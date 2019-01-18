@@ -12,7 +12,7 @@ import "./App.css";
 import { Provider } from "mobx-react";
 import * as React from "react";
 import { Router } from "react-router-dom";
-import { withCookies} from "react-cookie";
+import { withCookies } from "react-cookie";
 import Cookies from "universal-cookie";
 import { Register } from "./components/register/Register";
 import { Login } from "./components/login/Login";
@@ -21,6 +21,7 @@ import { TabMenuProps } from "./components/tab-menu/TabMenuProps";
 import { HeaderTabs } from "./view-models/header-tabs";
 import { UserTypes } from "./view-models/user-types";
 import history from "./history";
+import ApplicantList from "./components/user/applicants";
 
 interface Props {
   cookies: Cookies;
@@ -75,7 +76,7 @@ class App extends React.Component<Props> {
               {!logged ? ( // if not logged in, show the register screen
                 this.state.showLoginWindow ? (
                   <Login
-                    cookies = {this.props.cookies}
+                    cookies={this.props.cookies}
                     switchScreen={this.handler}
                   />
                 ) : (
@@ -91,7 +92,7 @@ class App extends React.Component<Props> {
                 <React.Fragment>
                   {/* <Router history={createBrowserHistory()}> */}
                   <React.Fragment>
-                    <User cookies={this.props.cookies}/>
+                    <User cookies={this.props.cookies} />
                     <header className="App-header">Student Jobs</header>
 
                     <TabMenu
@@ -110,7 +111,7 @@ class App extends React.Component<Props> {
                     <AddJobRoute />
                     <ClientListRoute />
                     <EditProfileRoute />
-                    <UserOffersRoute />
+                    <ApplicantList />
                   </React.Fragment>
                   {/* </Router> */}
                 </React.Fragment>
@@ -120,7 +121,7 @@ class App extends React.Component<Props> {
                 <React.Fragment>
                   {/* <Router history={createBrowserHistory()}> */}
                   <React.Fragment>
-                    <User cookies={this.props.cookies}/>
+                    <User cookies={this.props.cookies} />
                     <header className="App-header">Provider screen</header>
 
                     <TabMenu

@@ -1,0 +1,23 @@
+.applicantCard {
+  margin: 10px 0;
+}
+
+.leftCardApplicant {
+  float: left;
+  padding: 0 0 10px 0;
+}
+
+.rightCardApplicant {
+  float: right;
+  padding: 0 0 10px 0;
+  width: 80vw;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  height: 100%;
+}
+
+.avatar {
+  margin-left: 35%;
+  margin-bottom: 10px;
+}
