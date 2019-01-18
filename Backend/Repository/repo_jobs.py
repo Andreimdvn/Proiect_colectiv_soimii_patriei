@@ -277,4 +277,3 @@ class RepositoryJobs:
         if not tkn or not tkn.active:
             return False
         return True
-
