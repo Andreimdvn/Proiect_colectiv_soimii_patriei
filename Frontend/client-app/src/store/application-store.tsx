@@ -1,7 +1,12 @@
-import {action, observable} from "mobx";
+import {action, computed, observable} from "mobx";
+
 
 export class ApplicationStore {
     @observable applications = [];
+
+    @computed get allApps(){
+        return this.applications;
+    }
 
     @action
     async getApplications(token){
@@ -20,11 +25,12 @@ export class ApplicationStore {
 
         const request = new Request('http://localhost:16000/api/jobs_for_provider',options);
 
-        const response = await fetch(request).then(res => {
+        await fetch(request).then(res => {
             res.json().then(r => {
-                console.log(r);
-
+                this.applications = r.response;
             });
         })
     }
 }
+
+export default new ApplicationStore()

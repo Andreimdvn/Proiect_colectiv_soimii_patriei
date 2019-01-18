@@ -8,7 +8,6 @@ import WorkIcon from "@material-ui/icons/Work";
 
 interface Props {
     title: string,
-    email: string,
     date: string
 }
 
@@ -22,18 +21,18 @@ export class ApplicationView extends React.Component<Props> {
             <div className={'root'}>
                     <Grid container={true} spacing={0}>
                         <Grid item={true} xs={2}>
-                            <Avatar style={{marginTop: 5, marginLeft: 5}}>
+                            <Avatar style={{marginTop: 1, marginLeft: 5}}>
                                 <WorkIcon />
                             </Avatar>
                         </Grid>
                         <Grid item={true} xs={8}>
                             <Typography component="h2" variant="headline" gutterBottom={true}>
-                                Job title
+                                {this.props.title}
                             </Typography>
                         </Grid>
                         <Grid item={true} xs={2}>
                             <Typography variant="caption" gutterBottom={true} align="center">
-                                date
+                                {this.props.date}
                             </Typography>
                         </Grid>
                     </Grid>
