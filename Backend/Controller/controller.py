@@ -111,6 +111,21 @@ class Controller:
     def activate(self, key):
         return self.repo.activate_account(key)
 
+    def add_job(self, request_data):
+        """
+        Add a new job
+        :param data_request:
+        :return:
+        """
+
+        status = -1
+        response = None
+
+        status, response = self.repo.add_job(request_data)
+
+        return status, response
+
+
     def logout(self, data):
         status = 0
         response = False
