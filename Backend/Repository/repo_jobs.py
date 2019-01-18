@@ -114,7 +114,7 @@ class RepositoryJobs:
         return -1, "Required job doesn't exist!"
 
     def request_job(self, token=None, job_id=None):
-        status = 0
+        status = -1
         response = None
         if token and job_id:
             r_provider = self.orm.select('ActiveLogins', columns=('hash',), values=(token,), first=True)
@@ -128,6 +128,7 @@ class RepositoryJobs:
                         response = 'Provider already requested this job!'
                     else:
                         self.orm.insert('JobRequest', values=(r_job.id, r_provider.id, None, False))
+                        status = 0
                         response = 'Job request was successfully processed!'
                 else:
                     response = 'Invalid job id!'

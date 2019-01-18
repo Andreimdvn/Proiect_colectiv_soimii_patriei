@@ -68,7 +68,7 @@ class FlaskServer:
 
     def request_job(self):
         request_data = request.get_json() or {}
-
+        print(request_data)
         status = -1
         response = '[!] Give some parameters!'
         if request_data:

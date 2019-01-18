@@ -20,6 +20,7 @@ import {Login} from "./components/login/Login";
 import {TabMenuProps} from "./components/tab-menu/TabMenuProps";
 import {HeaderTabs} from "./view-models/header-tabs";
 import {UserTypes} from "./view-models/user-types";
+import { ViewJob } from "./components/clients/view-job/ViewJob";
 
 
 interface Props {
@@ -53,7 +54,8 @@ class App extends React.Component<Props> {
          <React.Fragment>
             {!logged ? ( // if not logged in, show the register screen
               this.state.showLoginWindow ? 
-                (<Login switchScreen={this.handler} cookies={this.props.cookies}/>)
+             //   (<ViewJob/>) 
+               (<Login switchScreen={this.handler} cookies={this.props.cookies}/>)
                 :
                 (<Register switchScreen={this.handler}/>)  
             ) : null}

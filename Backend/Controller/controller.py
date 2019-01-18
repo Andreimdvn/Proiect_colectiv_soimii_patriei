@@ -126,14 +126,14 @@ class Controller:
         for k, v in request_job_fields.items():
             if k not in request_data:
                 status = -1
-                response = 'Field [%s] is not present in the request!'
+                response = 'Field [%s] is not present in the request!' % (k,)
                 break
             else:
                 try:
                     sanitized_request[k] = v(request_data.get(k))
                 except:
                     status = -1
-                    response = 'Field [%s] has the wrong type!'
+                    response = 'Field [%s] has the wrong type!' % (k,)
                     break
         else:
             status, response = self.repo.request_job(**sanitized_request)
