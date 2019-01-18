@@ -94,7 +94,12 @@ class User extends React.Component<any, State> {
           onChange={this.handleChange}
           className="account-box-select"
         >
-          <MenuItem value="offers">My job offers</MenuItem>
+          {this.props.cookies.get("userType") === "client" ? (
+            <MenuItem value="applicants">View applicants</MenuItem>
+          ) : (
+            <MenuItem value="offers">My job offers</MenuItem>
+          )}
+
           <MenuItem value="edit">Edit profile</MenuItem>
           <MenuItem value="logout">Log out</MenuItem>
         </Select>
