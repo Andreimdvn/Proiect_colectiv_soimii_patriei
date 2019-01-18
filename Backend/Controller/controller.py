@@ -147,7 +147,6 @@ class Controller:
         :param data_request:
         :return:
         """
-
         status = -1
         response = None
 
@@ -175,3 +174,4 @@ class Controller:
             return False
 
         return self.repo.token_validation(token)
+

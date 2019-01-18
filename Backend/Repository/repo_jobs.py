@@ -1,5 +1,6 @@
 import string
 import random
+import base64
 
 from dateutil.parser import parse
 from passlib.hash import pbkdf2_sha256
@@ -172,7 +173,6 @@ class RepositoryJobs:
             return True
 
         return False
-
 
     def provide_data(self):
         jobs = self.orm.select('Job')

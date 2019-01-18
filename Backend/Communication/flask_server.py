@@ -107,9 +107,6 @@ class FlaskServer:
             if request.content_type != 'application/json':
                 return json.dumps({'status': -1, 'response': 'Content-Type need to be application/json!'})
 
-    def profile(self):
-        pass
-
     def jobs(self):
         request_data = request.get_json() or {}
 
@@ -125,4 +122,13 @@ class FlaskServer:
     def applicants(self):
         request_data = request.get_json() or {}
         status, response = self.controller.view_applicants(request_data)
+
+    def profile(self):
+        request_data = request.get_json() or {}
+        status, response = self.controller.profile(request_data)
+        return json.dumps({'status': status, 'response': response})
+
+    def edit_profile(self):
+        request_data = request.get_json() or {}
+        status, response = self.controller.edit_profile(request_data)
         return json.dumps({'status': status, 'response': response})
