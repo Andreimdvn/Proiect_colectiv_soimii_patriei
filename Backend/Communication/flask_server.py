@@ -80,6 +80,8 @@ class FlaskServer:
         if request_data:
             status, response = self.controller.request_job(request_data)
 
+        return json.dumps({'status': status, 'response': response})
+
     def add_job(self):
         request_data = request.get_json() or {}
         status, response = self.controller.add_job(request_data)
