@@ -1,8 +1,10 @@
+import json
 import string
 import random
 
 from dateutil.parser import parse
 from passlib.hash import pbkdf2_sha256
+from datetime import datetime
 
 from Database.orm import ORM
 
@@ -98,6 +100,30 @@ class RepositoryJobs:
             return 'Your account was successfully activated!'
         return 'Something went wrong!'
 
+    def add_job(self, request_data):
+        try:
+
+            pk_user = self.orm.select("ActiveLogins", columns=('hash',), values=(request_data['token'],), first=True)
+            pk_client = self.orm.select("Client", columns=('id',), values=(pk_user.id,), first=True)
+            job_pk = self.orm.insert("Job", columns=('title', 'id_client', 'description', 'provider_description',
+                                                     'client_description', 'reward', 'street', 'city', 'country',
+                                                     'type', 'publish_date'),
+                                     values=(request_data['job']['title'], pk_client.id, request_data['job']['jobDesc'],
+                                             request_data['job']['candidateDesc'], request_data['job']['employerDesc'],
+                                             request_data['job']['payment'], request_data['job']['street'],
+                                             request_data['job']['city'],
+                                             request_data['job']['county'], request_data['job']['jobType'], None))
+
+            for tag in request_data['job']['tags']:
+                tag_pk = self.orm.insert("Tag", columns=('name',),
+                                         values=(tag,))
+                self.orm.insert("JobTag", columns=('id_job', 'id_tag'),
+                                values=(job_pk, tag_pk))
+
+            return 0, "Added sucessfully"
+        except ValueError as e:
+            return -1, str(e)
+
     def logout(self, token):
         tkn = self.orm.select('ActiveLogins', columns=('hash',), values=(token,), first=True)
         if tkn and tkn.active:
@@ -121,3 +147,18 @@ class RepositoryJobs:
                 'date': job.publish_date
             })
         return response
+
+    def jobs_for_provider(self, request_data):
+        try:
+            jobs_for_provider = []
+            pk_user = self.orm.select("ActiveLogins", columns=('hash',), values=(request_data['token'],), first=True)
+            pk_provider = self.orm.select("Provider", columns=('id',), values=(pk_user.id,), first=True)
+
+            id_jobs = self.orm.select("JobProvider", columns=('id_provider',), values=(pk_provider.id,))
+            for current_job in id_jobs:
+                jobs = self.orm.select("Job", columns=('id',), values=(current_job.id,))
+                for job in jobs:
+                    jobs_for_provider.append({"title": job.title, "date": str(current_job.assigned_date)})
+            return  0, json.dumps(jobs_for_provider)
+        except ValueError as e:
+            return -1, str(e)
