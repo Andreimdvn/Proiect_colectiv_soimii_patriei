@@ -44,6 +44,9 @@ class FlaskServer:
 
         self.flask_app.add_url_rule('/job/<job_id>', 'job/<job_id>', self.get_job_details, methods=['POST'])
         self.flask_app.add_url_rule('/api/request_job', 'request_job', self.request_job, methods=['POST'])
+
+        self.flask_app.add_url_rule('/api/add_job', 'add_job', self.add_job, methods=['POST'])
+
         self.flask_app.add_url_rule('/api/logout', 'logout', self.logout, methods=['POST'])
         self.flask_app.add_url_rule('/api/jobs', 'jobs', self.jobs, methods=['POST'])
 
@@ -76,6 +79,11 @@ class FlaskServer:
         response = '[!] Give some parameters!'
         if request_data:
             status, response = self.controller.request_job(request_data)
+
+    def add_job(self):
+        request_data = request.get_json() or {}
+        status, response = self.controller.add_job(request_data)
+
         return json.dumps({'status': status, 'response': response})
 
     def logout(self):

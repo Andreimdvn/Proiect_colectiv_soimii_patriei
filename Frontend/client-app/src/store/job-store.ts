@@ -28,7 +28,7 @@ export class JobStore {
             body: JSON.stringify(data)
         };
 
-        const request = new Request('http://localhost:16000/api/add',options);
+        const request = new Request('http://localhost:16000/api/add_job',options);
 
         const response = await fetch(request).then(res => {
             res.json().then(r => {
