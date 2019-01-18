@@ -112,3 +112,27 @@ class RepositoryJobs:
                 'tags': [t.tag.tag_job[0].tag.name for t in job.job_tag]
             }
         return -1, "Required job doesn't exist!"
+
+    def request_job(self, token=None, job_id=None):
+        status = 0
+        response = None
+        if token and job_id:
+            r_provider = self.orm.select('ActiveLogins', columns=('hash',), values=(token,), first=True)
+            if r_provider and self.orm.select('Provider', columns=('id',), values=(r_provider.id,), first=True):
+                r_job = self.orm.select('Job', columns=('id',), values=(job_id,), first=True)
+                if r_job:
+                    exists = self.orm.select('JobRequest', columns=('id_job', 'id_provider'), values=(r_job.id,
+                                                                                                      r_provider.id),
+                                             first=True)
+                    if exists:
+                        response = 'Provider already requested this job!'
+                    else:
+                        self.orm.insert('JobRequest', values=(r_job.id, r_provider.id, None, False))
+                        response = 'Job request was successfully processed!'
+                else:
+                    response = 'Invalid job id!'
+            else:
+                response = 'Invalid token!'
+
+        response = 'Give some values!' if not response else response
+        return status, response
