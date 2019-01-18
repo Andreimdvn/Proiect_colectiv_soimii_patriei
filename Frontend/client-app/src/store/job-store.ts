@@ -16,9 +16,11 @@ export class JobStore {
         const headers = new Headers();
         headers.append('Content-Type','application/json');
         const data = {
-            // token: token,
-            // job: job
+            token: {},
+            job: {}
         };
+        data.job = job;
+        data.token = token;
 
         const options = {
             method: 'POST',
