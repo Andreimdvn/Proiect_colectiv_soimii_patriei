@@ -121,3 +121,6 @@ class Controller:
             response = self.repo.logout(data.get('token'))
 
         return status, response
+
+    def provide_data(self):
+        return self.repo.provide_data()
