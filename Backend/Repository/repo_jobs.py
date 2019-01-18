@@ -198,12 +198,12 @@ class RepositoryJobs:
 
         for job in jobs:
             id_job = job.id
-            jobprovider = self.orm.select('JobProvider', columns=('id_job',), values=(id_job,))
+            jobprovider = self.orm.select('JobRequest', columns=('id_job',), values=(id_job,))
             for job_provider_entity in jobprovider:
                 id_provider = job_provider_entity.id_provider
                 provider = self.orm.select('Provider', columns=('id',), values=(id_provider,))
                 response.append({
-                    'assigned_date': str(job_provider_entity.assigned_date),
+                    'assigned_date': str(job_provider_entity.request_date),
                     'first_name': provider[0].first_name,
                     'last_name': provider[0].last_name,
                     'title': job.title,
