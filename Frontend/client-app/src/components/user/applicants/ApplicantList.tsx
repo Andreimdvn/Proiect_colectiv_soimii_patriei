@@ -79,7 +79,9 @@ export class ApplicantList extends React.Component<Props, State> {
                 a.last_name,
                 a.assigned_date.substr(0, a.assigned_date.indexOf(" ")),
                 a.title,
-                a.description
+                a.description,
+                a.provider_id,
+                a.job_id
               )
             );
           });

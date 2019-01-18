@@ -168,5 +168,7 @@ class RepositoryJobs:
                     'last_name': provider[0].last_name,
                     'title': job.title,
                     'description': job.description,
+                    'provider_id': provider[0].id,
+                    'job_id': job.id
                 })
         return 0, response
