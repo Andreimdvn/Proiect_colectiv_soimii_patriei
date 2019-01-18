@@ -128,3 +128,18 @@ class RepositoryJobs:
             return True
 
         return False
+
+    def provide_data(self):
+        jobs = self.orm.select('Job')
+        response = []
+
+        for job in jobs:
+            response.append({
+                'id': job.id,
+                'type': job.description,
+                'description': job.description,
+                'publisher': '%s %s' % (job.client.first_name, job.client.last_name),
+                'reward': job.reward,
+                'date': job.publish_date
+            })
+        return response
