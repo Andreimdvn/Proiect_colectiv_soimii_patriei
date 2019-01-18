@@ -72,20 +72,20 @@ class App extends React.Component<Props> {
         <Provider {...rootStore}>
           <Router history={history}>
             <React.Fragment>
-              {!logged ? ( // if not logged in, show the register screen
-                this.state.showLoginWindow ? (
-                  <Login
-                    switchScreen={this.handler}
-                    cookies={this.props.cookies}
-                  />
-                ) : (
-                  <Register switchScreen={this.handler} />
-                )
-              ) : // <React.Fragment>
-              //   <Login />
-              //   <Register />
-              // </React.Fragment>
-              null}
+              {/*{!logged ? ( // if not logged in, show the register screen*/}
+                {/*this.state.showLoginWindow ? (*/}
+                  {/*<Login*/}
+                    {/*switchScreen={this.handler}*/}
+                    {/*cookies={this.props.cookies}*/}
+                  {/*/>*/}
+                {/*) : (*/}
+                  {/*<Register switchScreen={this.handler} />*/}
+                {/*)*/}
+              {/*) : // <React.Fragment>*/}
+              {/*//   <Login />*/}
+              {/*//   <Register />*/}
+              {/*// </React.Fragment>*/}
+              {/*null}*/}
 
               {userType === UserTypes.CLIENT ? ( // client home page
                 <React.Fragment>
