@@ -23,7 +23,7 @@ const initialState: State = {
   redirect: undefined
 };
 
-class User extends React.Component<Props, State> {
+class User extends React.Component<any, State> {
   constructor(props: any) {
     super(props);
     this.state = initialState;
@@ -51,13 +51,14 @@ class User extends React.Component<Props, State> {
   };
 
   handleLogout = async () => {
+    const cookies = new Cookies();
     const headers = new Headers();
     headers.append("Content-Type", "application/json");
 
     const options = {
       method: "POST",
       headers,
-      body: JSON.stringify({ token: this.props.cookies.get("token") })
+      body: JSON.stringify({ token: cookies.get("token") })
     };
 
     const request = new Request("http://localhost:16000/api/logout", options);
@@ -65,6 +66,8 @@ class User extends React.Component<Props, State> {
     const response = await fetch(request).then(res => {
       res.json().then(r => {
         if (r.status === 0) {
+          cookies.set("token", "");
+          cookies.set("userType", "");
           this.props.cookies.set("token", "");
           this.props.cookies.set("userType", "");
           this.setState({ redirect: <Redirect to={""} /> }, () => {
@@ -91,7 +94,12 @@ class User extends React.Component<Props, State> {
           onChange={this.handleChange}
           className="account-box-select"
         >
-          <MenuItem value="offers">My job offers</MenuItem>
+          {this.props.cookies.get("userType") === "client" ? (
+            <MenuItem value="applicants">View applicants</MenuItem>
+          ) : (
+            <MenuItem value="offers">My job offers</MenuItem>
+          )}
+
           <MenuItem value="edit">Edit profile</MenuItem>
           <MenuItem value="logout">Log out</MenuItem>
         </Select>

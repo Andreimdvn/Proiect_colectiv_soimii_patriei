@@ -8,20 +8,20 @@ import User from "./components/user/User";
 import EditProfileRoute from "./components/user/edit-profile";
 import UserOffersRoute from "./components/user/offers";
 import "./App.css";
-
+import JobDetails from "./components/clients/view-job";
 import { Provider } from "mobx-react";
 import * as React from "react";
 import { Router } from "react-router-dom";
-import { withCookies, Cookies } from "react-cookie";
-import { createBrowserHistory } from "history";
+import { withCookies } from "react-cookie";
+import Cookies from "universal-cookie";
 import { Register } from "./components/register/Register";
 import { Login } from "./components/login/Login";
 
 import { TabMenuProps } from "./components/tab-menu/TabMenuProps";
 import { HeaderTabs } from "./view-models/header-tabs";
 import { UserTypes } from "./view-models/user-types";
-import { Redirect } from "react-router";
 import history from "./history";
+import ApplicantList from "./components/user/applicants";
 
 interface Props {
   cookies: Cookies;
@@ -58,8 +58,9 @@ class App extends React.Component<Props> {
 
   public render() {
     // try to load the cookies
-    const token = this.props.cookies.get("token");
-    const userType = this.props.cookies.get("userType");
+    const cookies = new Cookies();
+    const token = cookies.get("token");
+    const userType = cookies.get("userType");
     console.log(token);
     const logged =
       token !== undefined &&
@@ -75,8 +76,8 @@ class App extends React.Component<Props> {
               {!logged ? ( // if not logged in, show the register screen
                 this.state.showLoginWindow ? (
                   <Login
-                    switchScreen={this.handler}
                     cookies={this.props.cookies}
+                    switchScreen={this.handler}
                   />
                 ) : (
                   <Register switchScreen={this.handler} />
@@ -110,7 +111,7 @@ class App extends React.Component<Props> {
                     <AddJobRoute />
                     <ClientListRoute />
                     <EditProfileRoute />
-                    <UserOffersRoute />
+                    <ApplicantList />
                   </React.Fragment>
                   {/* </Router> */}
                 </React.Fragment>
@@ -133,6 +134,7 @@ class App extends React.Component<Props> {
                     <HomeRoute.providerHome />
                     <BrowseRoute />
                     <EditProfileRoute />
+                    <JobDetails/> 
                     <UserOffersRoute />
                   </React.Fragment>
                   {/* </Router> */}

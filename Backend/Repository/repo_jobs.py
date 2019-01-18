@@ -4,6 +4,7 @@ import base64
 
 from dateutil.parser import parse
 from passlib.hash import pbkdf2_sha256
+from datetime import datetime
 
 from Database.orm import ORM
 
@@ -99,6 +100,71 @@ class RepositoryJobs:
             return 'Your account was successfully activated!'
         return 'Something went wrong!'
 
+    #### TO DO CLIENTU E HARDCODAT AICI
+    def add_job(self, request_data):
+        try:
+
+            pk_user = self.orm.select("ActiveLogins", columns=('hash',), values=(request_data['token'],), first=True)
+            pk_client = self.orm.select("Client", columns=('id',), values=(pk_user.id,), first=True)
+            job_pk = self.orm.insert("Job", columns=('title', 'id_client', 'description', 'provider_description',
+                                                     'client_description', 'reward', 'street', 'city', 'country',
+                                                     'type', 'publish_date'),
+                                     values=(request_data['job']['title'], pk_client.id, request_data['job']['jobDesc'],
+                                             request_data['job']['candidateDesc'], request_data['job']['employerDesc'],
+                                             request_data['job']['payment'], request_data['job']['street'],
+                                             request_data['job']['city'],
+                                             request_data['job']['county'], request_data['job']['jobType'], None))
+
+            for tag in request_data['job']['tags']:
+                tag_pk = self.orm.insert("Tag", columns=('name',),
+                                         values=(tag,))
+                self.orm.insert("JobTag", columns=('id_job', 'id_tag'),
+                                values=(job_pk, tag_pk))
+
+            return 0, "Added sucessfully"
+        except ValueError as e:
+            return -1, str(e)
+
+    def get_job(self, job_id):
+        job = self.orm.select('Job', columns=('id',), values=(job_id,), first=True)
+        if job:
+            return 0, {
+                'title': job.title,
+                'jobDescription': job.description,
+                'candidateDescription': job.provider_description,
+                'employer': '%s %s' % (job.client.first_name, job.client.last_name),
+                'payment': job.reward,
+                'address': '%s; %s - %s' % (job.street, job.city, job.country),
+                'jobType': job.type,
+                'tags': [t.tag.tag_job[0].tag.name for t in job.job_tag]
+            }
+        return -1, "Required job doesn't exist!"
+
+    def request_job(self, token=None, job_id=None):
+        status = -1
+        response = None
+        if token and job_id:
+            r_provider = self.orm.select('ActiveLogins', columns=('hash',), values=(token,), first=True)
+            if r_provider and self.orm.select('Provider', columns=('id',), values=(r_provider.id_user,), first=True):
+                r_job = self.orm.select('Job', columns=('id',), values=(job_id,), first=True)
+                if r_job:
+                    exists = self.orm.select('JobRequest', columns=('id_job', 'id_provider'), values=(r_job.id,
+                                                                                                      r_provider.id_user),
+                                             first=True)
+                    if exists:
+                        response = 'Provider already requested this job!'
+                    else:
+                        self.orm.insert('JobRequest', values=(r_job.id, r_provider.id_user, None, False))
+                        status = 0
+                        response = 'Job request was successfully processed!'
+                else:
+                    response = 'Invalid job id!'
+            else:
+                response = 'Invalid token!'
+
+        response = 'Give some values!' if not response else response
+        return status, response
+
     def logout(self, token):
         tkn = self.orm.select('ActiveLogins', columns=('hash',), values=(token,), first=True)
         if tkn and tkn.active:
@@ -172,3 +238,43 @@ class RepositoryJobs:
             return 'Success!'
         else:
             return 'Invalid parameters!'
+
+    def provide_data(self):
+        jobs = self.orm.select('Job')
+        response = []
+
+        for job in jobs:
+            response.append({
+                'id': job.id,
+                'type': job.description,
+                'description': job.description,
+                'publisher': '%s %s' % (job.client.first_name, job.client.last_name),
+                'reward': job.reward,
+                'date': job.publish_date
+            })
+        return response
+
+    def view_applicants(self, token):
+        pk_user = self.orm.select("ActiveLogins", columns=('hash',), values=(token,), first=True)
+        if not pk_user:
+            return -1, 'Invalid token!'
+        id_client = self.orm.select("Client", columns=('id',), values=(pk_user.id,), first=True)
+        jobs = self.orm.select('Job', columns=('id_client',), values=(id_client.id,))
+        response = []
+
+        for job in jobs:
+            id_job = job.id
+            jobprovider = self.orm.select('JobRequest', columns=('id_job',), values=(id_job,))
+            for job_provider_entity in jobprovider:
+                id_provider = job_provider_entity.id_provider
+                provider = self.orm.select('Provider', columns=('id',), values=(id_provider,))
+                response.append({
+                    'assigned_date': str(job_provider_entity.request_date),
+                    'first_name': provider[0].first_name,
+                    'last_name': provider[0].last_name,
+                    'title': job.title,
+                    'description': job.description,
+                    'provider_id': provider[0].id,
+                    'job_id': job.id
+                })
+        return 0, response

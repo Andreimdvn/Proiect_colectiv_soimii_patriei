@@ -1,0 +1,35 @@
+.mainDiv{
+    align-items: center;
+    margin-left: 2%;
+    margin-right: 2%;
+    text-align: center;
+    display: block;
+    vertical-align: center;
+}
+
+.Tags {
+    width: 5;
+}
+
+ul {
+    vertical-align: center;
+    padding: 5px;
+}
+li {
+    padding: 5px;
+}
+
+.card {
+    width: auto;
+    height: 200px;
+}
+
+.cardMain {
+    width: auto;
+    height: 600px;
+}
+
+.gridList {
+    width: 500;
+    height: 450;
+}

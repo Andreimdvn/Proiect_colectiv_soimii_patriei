@@ -1,11 +1,11 @@
 import { Route } from "react-router";
 import * as React from "react";
-import { AddJobForm } from "./AddJobForm";
+import { ApplicantList } from "./ApplicantList";
 
 export default () => {
   return (
     <React.Fragment>
-      <Route path="/add" component={AddJobForm} cookies={"cookies"}/>
+      <Route path="/user/applicants" component={ApplicantList} />
     </React.Fragment>
   );
 };

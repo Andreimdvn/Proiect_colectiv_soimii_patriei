@@ -2,6 +2,7 @@ import * as React from "react";
 import { inject, observer } from "mobx-react";
 
 import { ViewStore } from "src/store/view-store";
+import { ViewJob } from "../clients/view-job/ViewJob";
 
 interface Props {
   viewStore: ViewStore;
@@ -15,6 +16,8 @@ export class HomeClient extends React.Component<Props> {
   }
 
   render(): React.ReactNode {
-    return <div>Homepage</div>;
+    return <div>
+        Homepage
+    </div>;
   }
 }

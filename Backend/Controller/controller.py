@@ -21,6 +21,10 @@ login_fields = {
     'username': str,
     'password': str
 }
+request_job_fields = {
+    'token': str,
+    'job_id': int
+}
 
 
 class Controller:
@@ -89,12 +93,13 @@ class Controller:
         :param email: the email were the activation link will be sent
         :return:
         """
-        url = 'http://0.0.0.0:16000/activation'
+        url = 'http://127.0.0.1:16000/activation'
 
         for i in range(2):
-            m = emails.Message(html='<html>To activate your account <a href="%s/%s">click here</a></html>' % (url, activation_hash),
-                               subject='Activate your account!',
-                               mail_from='facultaubb@gmail.com')
+            m = emails.Message(
+                html='<html>To activate your account <a href="%s/%s">click here</a></html>' % (url, activation_hash),
+                subject='Activate your account!',
+                mail_from='facultaubb@gmail.com')
 
             r = m.send(render={'url': url,
                                'hash': activation_hash},
@@ -110,6 +115,45 @@ class Controller:
 
     def activate(self, key):
         return self.repo.activate_account(key)
+
+    def get_job(self, job_id):
+        return self.repo.get_job(job_id)
+
+    def request_job(self, request_data):
+        status = 0
+        response = None
+        sanitized_request = {}
+
+        for k, v in request_job_fields.items():
+            if k not in request_data:
+                status = -1
+                response = 'Field [%s] is not present in the request!' % (k,)
+                break
+            else:
+                try:
+                    sanitized_request[k] = v(request_data.get(k))
+                except:
+                    status = -1
+                    response = 'Field [%s] has the wrong type!' % (k,)
+                    break
+        else:
+            status, response = self.repo.request_job(**sanitized_request)
+
+        return status, response
+
+    def add_job(self, request_data):
+        """
+        Add a new job
+        :param data_request:
+        :return:
+        """
+
+        status = -1
+        response = None
+
+        status, response = self.repo.add_job(request_data)
+
+        return status, response
 
     def logout(self, data):
         status = 0
@@ -143,3 +187,9 @@ class Controller:
             response = self.repo.edit_profile(data)
 
         return status, response
+
+    def provide_data(self):
+        return self.repo.provide_data()
+
+    def view_applicants(self, request_data):
+        return self.repo.view_applicants(request_data.get('token'))
