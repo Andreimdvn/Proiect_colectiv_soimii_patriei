@@ -1,5 +1,6 @@
 import string
 import random
+import base64
 
 from dateutil.parser import parse
 from passlib.hash import pbkdf2_sha256
@@ -106,3 +107,68 @@ class RepositoryJobs:
             return True
 
         return False
+
+    def profile(self, token):
+        tkn = self.orm.select('ActiveLogins', columns=('hash',), values=(token,), first=True)
+        if tkn and tkn.active:
+            user = tkn.user
+            if user.clients:
+                # client profile
+                client = user.clients[0]
+
+                return {
+                    'company_name': client.company_name,
+                    'site_link': client.site_link,
+                    'email': client.user.email,
+                    'phone': client.phone,
+                    'details': client.details,
+                    'name': '%s %s' % (client.first_name, client.last_name),
+                    'avatar': client.user.avatar
+
+                }
+            elif user.providers:
+                # provider profile
+                provider = user.providers[0]
+
+                return {
+                    'username': provider.user.username,
+                    'email': provider.user.email,
+                    'phone': provider.phone,
+                    'name': '%s %s' % (provider.first_name, provider.last_name),
+                    'avatar': provider.user.avatar,
+                    'cv': provider.cv
+                }
+
+        return "Invalid parameters!"
+
+    def edit_profile(self, data):
+        tkn = self.orm.select('ActiveLogins', columns=('hash',), values=(data.get('token'),), first=True)
+        if tkn and tkn.active:
+            user = tkn.user
+
+            if user.clients:
+                client_fields = ('site_link', 'company_name', 'phone', 'details', 'avatar')
+                for k, v in data.items():
+                    if k in client_fields:
+                        if k not in ('avatar',):
+                            self.orm.update('Client', columns=(k,), values=(v,), columns_where=('id',),
+                                            values_where=(user.id,))
+                        else:
+                            v = base64.b64decode(v)
+                            self.orm.update('User', columns=(k,), values=(v,), columns_where=('id',),
+                                            values_where=(user.id,))
+            elif user.providers:
+                provider_fields = ('phone', 'cv', 'avatar')
+                for k, v in data.items():
+                    if k in provider_fields:
+                        if k not in ('avatar',):
+                            self.orm.update('Provider', columns=(k,), values=(v,), columns_where=('id',),
+                                            values_where=(user.id,))
+                        else:
+                            v = base64.b64decode(v)
+                            self.orm.update('User', columns=(k,), values=(v,), columns_where=('id',),
+                                            values_where=(user.id,))
+
+            return 'Success!'
+        else:
+            return 'Invalid parameters!'

@@ -2,7 +2,7 @@ import sys
 import datetime
 
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, Integer, String, ForeignKey, Date, create_engine, Boolean, DateTime
+from sqlalchemy import Column, Integer, String, ForeignKey, Date, create_engine, Boolean, DateTime, BLOB
 from sqlalchemy.orm import relationship, sessionmaker, scoped_session
 
 
@@ -19,6 +19,7 @@ class User(DB):
     username = Column(String(100), nullable=False, unique=True)
     email = Column(String(100), nullable=False, unique=True)
     password = Column(String(100), nullable=False)
+    avatar = Column(BLOB, nullable=True)
     verified_by_email = Column(Boolean, nullable=False, default=False)
 
     clients = relationship('Client', back_populates='user')
@@ -33,6 +34,7 @@ class ActiveLogins(DB):
     id = Column(Integer, autoincrement=True, primary_key=True)
     id_user = Column(Integer, ForeignKey(User.id), nullable=False)
     hash = Column(String(100), nullable=False)
+    active = Column(Boolean, nullable=False, default=True)
 
     user = relationship('User', back_populates='active_users')
 
@@ -54,6 +56,9 @@ class Client(DB):
     first_name = Column(String(100), nullable=False)
     last_name = Column(String(100), nullable=False)
     date_of_birth = Column(Date, nullable=False)
+    company_name = Column(String(100), nullable=True)
+    site_link = Column(String(100), nullable=True)
+    details = Column(String(1000), nullable=True)
     phone = Column(String(20), nullable=False, default=False)
 
     user = relationship('User', back_populates='clients')
@@ -71,6 +76,7 @@ class Provider(DB):
     last_name = Column(String(100), nullable=False)
     date_of_birth = Column(Date, nullable=False)
     phone = Column(String(20), nullable=False, default=False)
+    cv = Column(BLOB, nullable=True)
 
     user = relationship('User', back_populates='providers')
     reviews = relationship('ProviderReview', back_populates='providers')

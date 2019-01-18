@@ -42,6 +42,8 @@ class FlaskServer:
         self.flask_app.add_url_rule('/api/login', 'login', self.login, methods=['POST'])
         self.flask_app.add_url_rule('/activation/<key>', 'activation/<key>', self.activation, methods=['GET'])
         self.flask_app.add_url_rule('/api/logout', 'logout', self.logout, methods=['POST'])
+        self.flask_app.add_url_rule('/profile', 'profile', self.profile, methods=['POST'])
+        self.flask_app.add_url_rule('/api/edit_profile', 'edit_profile', self.edit_profile, methods=['POST'])
 
     def test_request(self):
         self.request_data = request.get_json()
@@ -64,4 +66,14 @@ class FlaskServer:
     def logout(self):
         request_data = request.get_json() or {}
         status, response = self.controller.logout(request_data)
+        return json.dumps({'status': status, 'response': response})
+
+    def profile(self):
+        request_data = request.get_json() or {}
+        status, response = self.controller.profile(request_data)
+        return json.dumps({'status': status, 'response': response})
+
+    def edit_profile(self):
+        request_data = request.get_json() or {}
+        status, response = self.controller.edit_profile(request_data)
         return json.dumps({'status': status, 'response': response})

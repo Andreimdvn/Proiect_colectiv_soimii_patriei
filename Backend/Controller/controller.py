@@ -117,7 +117,29 @@ class Controller:
         if 'token' not in data:
             status = -1
 
-        if status:
+        if status == 0:
             response = self.repo.logout(data.get('token'))
+
+        return status, response
+
+    def profile(self, data):
+        status = 0
+        response = False
+        if 'token' not in data:
+            status = -1
+
+        if status == 0:
+            response = self.repo.profile(data.get('token'))
+
+        return status, response
+
+    def edit_profile(self, data):
+        status = 0
+        response = False
+        if 'token' not in data:
+            status = -1
+
+        if status == 0:
+            response = self.repo.edit_profile(data)
 
         return status, response
