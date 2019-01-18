@@ -101,15 +101,16 @@ class RepositoryJobs:
 #### TO DO CLIENTU E HARDCODAT AICI
     def add_job(self, request_data):
         try:
-            job_type_pk = self.orm.select('JobType', columns=('description',), values=(request_data['type'],) , first=True)
-            now = datetime.now()
-            ##formatted_date = now.strftime('%Y-%m-%d %H:%M:%S')
-            if job_type_pk:
-                self.orm.insert("Job", columns=('id_client', 'type', 'description', 'reward', 'publish_date'),
-                                values=(1, job_type_pk.id, request_data['description'], request_data['reward'],now))
-                return 0, "Added sucessfully"
-            else:
-                return -1, "Job type does not exist."
+            job_pk = self.orm.insert("Job", columns=('id_client', 'description', 'provider_description', 'client_description', 'reward', 'street', 'city', 'country', 'type', 'publish_date'),
+                                values=(1, request_data['jobDesc'], request_data['candidateDesc'], request_data['employerDesc'], request_data['payment'], request_data['street'], request_data['city'], request_data['county'], request_data['jobType'],None))
+
+            for tag in request_data['tags']:
+                tag_pk = self.orm.insert("Tag", columns=('name',),
+                                         values=(tag,))
+                self.orm.insert("JobTag", columns=('id_job', 'id_tag'),
+                                values=(job_pk, tag_pk))
+
+            return 0, "Added sucessfully"
         except ValueError as e:
             return -1, str(e)
 
