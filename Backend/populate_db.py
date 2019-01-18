@@ -1,6 +1,8 @@
 import os
 from datetime import datetime
 
+from passlib.handlers.pbkdf2 import pbkdf2_sha256
+
 from Database.orm import ORM
 from main import parse_input_file, WORKING_DIRECTORY
 
@@ -13,24 +15,28 @@ def run():
     populate(orm)
 
 
+def hash_pass(password):
+    return pbkdf2_sha256.encrypt(password, rounds=2000, salt_size=16)
+
+
 def populate_user(orm):
     print("Inserting into 'User'")
     orm.insert('User', columns=('username', 'email', 'password', 'verified_by_email'),
-               values=('andreimdv', 'andreimdv@yahoo.com', 'pass123', False))
+               values=('andreimdv', 'andreimdv@yahoo.com', hash_pass('pass123'), False))
     orm.insert('User', columns=('username', 'email', 'password', 'verified_by_email'),
-               values=('root', 'root@root.com', 'root', True))
+               values=('root', 'root@root.com', hash_pass('root'), True))
     orm.insert('User', columns=('username', 'email', 'password', 'verified_by_email'),
-               values=('admin', 'admin@gmail.com', 'admin', False))
+               values=('admin', 'admin@gmail.com', hash_pass('admin'), False))
     orm.insert('User', columns=('username', 'email', 'password', 'verified_by_email'),
-               values=('client', 'admin6@gmail.com', 'client', False))
+               values=('client', 'admin6@gmail.com', hash_pass('client'), False))
     orm.insert('User', columns=('username', 'email', 'password', 'verified_by_email'),
-               values=('client2', 'admin7@gmail.com', 'client2', False))
+               values=('client2', 'admin7@gmail.com', hash_pass('client2'), False))
     orm.insert('User', columns=('username', 'email', 'password', 'verified_by_email'),
-               values=('provider', 'admin8@gmail.com', 'provider', False))
+               values=('provider', 'admin8@gmail.com', hash_pass('provider'), False))
     orm.insert('User', columns=('username', 'email', 'password', 'verified_by_email'),
-               values=('provider2', 'admin9@gmail.com', 'provider2', False))
+               values=('provider2', 'admin9@gmail.com', hash_pass('provider2'), False))
     orm.insert('User', columns=('username', 'email', 'password', 'verified_by_email'),
-               values=('provider3', 'admin10@gmail.com', 'provider3', False))
+               values=('provider3', 'admin10@gmail.com', hash_pass('provider3'), False))
 
 
 def populate_client(orm):
