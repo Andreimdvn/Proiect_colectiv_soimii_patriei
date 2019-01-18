@@ -10,6 +10,7 @@ import Grid from "@material-ui/core/es/Grid/Grid";
 import {jobFilterStyle} from "./JobFilterStyle";
 import Input from "@material-ui/core/es/Input/Input";
 import Button from "@material-ui/core/es/Button/Button";
+import {JobTag} from "./JobTag";
 
 interface Props extends StyledComponentProps{
   onFilterCallback: any
@@ -17,7 +18,8 @@ interface Props extends StyledComponentProps{
 
 interface State {
   type: string;
-  tags: string;
+  tags: string[];
+  currentTag: string;
   description: string;
 
 }
@@ -27,11 +29,12 @@ export const JobFilter = withStyles(jobFilterStyle)(
     constructor(props) {
       super(props);
 
-      this.state = {type: 'any', tags: '', description: ''};
+      this.state = {type: 'any', tags: [], currentTag: '', description: ''};
     }
 
     doFilter(callback) {
       // todo get things from state params
+      // todo also this should be in onSearch
 
       const jobs = [
         new Job("1", "cleaning", "clean my house", "bob321", "dinner", "20-09-2018"),
@@ -50,7 +53,7 @@ export const JobFilter = withStyles(jobFilterStyle)(
       this.setState({ type: event.target.value });
     };
     onChangeTags = event => {
-      this.setState({ tags: event.target.value });
+      this.setState({ currentTag: event.target.value });
     };
     onChangeDescription = event => {
       this.setState({ description: event.target.value });
@@ -63,12 +66,28 @@ export const JobFilter = withStyles(jobFilterStyle)(
       const jsonObj: {[k: string]: any} = {};
       if(type !== 'any')
         jsonObj.type = type;
-      if(tags !== '')
+      if(tags.length !== 0) {
         jsonObj.tags = tags;
+      }
       if(description !== '')
         jsonObj.description = description;
 
+      console.log(jsonObj);
+
     };
+
+    checkForEnter = (event) => {
+      if (event.key === 'Enter' && this.state.currentTag !== '') {
+        this.state.tags.push(this.state.currentTag);
+        this.setState({currentTag: ''});
+      }
+    };
+
+    onPressX(index:number) {
+      const pl = this.state.tags;
+      pl.splice(index, 1);
+      this.setState({tags: pl});
+    }
 
     render() {
       const {classes} = this.props;
@@ -95,10 +114,21 @@ export const JobFilter = withStyles(jobFilterStyle)(
               </Select>
             </Grid>
 
-            <Grid item={true} xs={1}/>
-
-
             <Grid item={true} xs={2}>
+              <Grid container={true}>
+                {this.state.tags.map((tag, index) => {
+                  return (
+                    <Grid item={true} xs={6} key={index}>
+                      <JobTag  tag={tag} callback={()=>{this.onPressX(index)}}/>
+                    </Grid>
+                  );
+                })}
+              </Grid>
+            </Grid>
+
+            <Grid item={true} xs={1}>
+
+
               <Input
                 placeholder="Tags"
                 className={classes.input}
@@ -106,6 +136,8 @@ export const JobFilter = withStyles(jobFilterStyle)(
                   'aria-label': 'Description',
                 }}
                 onChange={this.onChangeTags}
+                onKeyDown = {this.checkForEnter}
+                value = {this.state.currentTag}
               />
             </Grid>
 
