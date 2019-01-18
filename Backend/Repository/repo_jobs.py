@@ -106,3 +106,22 @@ class RepositoryJobs:
             return True
 
         return False
+
+    def view_applicants(self, id_client):
+        jobs = self.orm.select('Job', columns=('id_client',), values=(id_client,))
+        response = []
+
+        for job in jobs:
+            id_job = job.id
+            jobprovider = self.orm.select('JobProvider', columns=('id_job',), values=(id_job,))
+            id_provider = jobprovider.id_provider
+            provider = self.orm.select('Provider', columns=('id',), values=(id_provider,))
+            response.append({
+                'assigned_date': jobprovider.assigned_date,
+                'first_name': provider.first_name,
+                'last_name': provider.last_name,
+                'title': job.title,
+                'description': job.description,
+            })
+        return 0, response
+

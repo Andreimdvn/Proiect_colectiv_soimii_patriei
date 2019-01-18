@@ -121,3 +121,6 @@ class Controller:
             response = self.repo.logout(data.get('token'))
 
         return status, response
+
+    def view_applicants(self, request_data):
+        return self.repo.view_applicants(request_data.get('id_client'))
