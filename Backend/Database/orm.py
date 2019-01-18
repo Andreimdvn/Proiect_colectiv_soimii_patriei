@@ -135,8 +135,9 @@ class ProviderAbilities(DB):
 class JobTag(DB):
     __tablename__ = 'JobTag'
 
-    id_job = Column(Integer, ForeignKey('Job.id'), primary_key=True)
-    id_tag = Column(Integer, ForeignKey('Tag.id'), primary_key=True)
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    id_job = Column(Integer, ForeignKey('Job.id'))
+    id_tag = Column(Integer, ForeignKey('Tag.id'))
 
     job = relationship('Job', back_populates='job_tag')
     tag = relationship('Tag', back_populates='tag_job')
@@ -147,6 +148,7 @@ class Job(DB):
 
     id = Column(Integer, autoincrement=True, primary_key=True)
     id_client = Column(Integer, ForeignKey(Client.id), nullable=False)
+    title = Column(String(100), nullable=False)
     description = Column(String(100), nullable=False)
     provider_description = Column(String(100), nullable=False)
     client_description = Column(String(100), nullable=False)
