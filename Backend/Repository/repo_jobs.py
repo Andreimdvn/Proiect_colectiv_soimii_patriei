@@ -153,19 +153,20 @@ class RepositoryJobs:
         if not pk_user:
             return -1, 'Invalid token!'
         id_client = self.orm.select("Client", columns=('id',), values=(pk_user.id,), first=True)
-        jobs = self.orm.select('Job', columns=('id_client',), values=(id_client,))
+        jobs = self.orm.select('Job', columns=('id_client',), values=(id_client.id,))
         response = []
 
         for job in jobs:
             id_job = job.id
             jobprovider = self.orm.select('JobProvider', columns=('id_job',), values=(id_job,))
-            id_provider = jobprovider.id_provider
-            provider = self.orm.select('Provider', columns=('id',), values=(id_provider,))
-            response.append({
-                'assigned_date': jobprovider.assigned_date,
-                'first_name': provider.first_name,
-                'last_name': provider.last_name,
-                'title': job.title,
-                'description': job.description,
-            })
+            for job_provider_entity in jobprovider:
+                id_provider = job_provider_entity.id_provider
+                provider = self.orm.select('Provider', columns=('id',), values=(id_provider,))
+                response.append({
+                    'assigned_date': str(job_provider_entity.assigned_date),
+                    'first_name': provider[0].first_name,
+                    'last_name': provider[0].last_name,
+                    'title': job.title,
+                    'description': job.description,
+                })
         return 0, response

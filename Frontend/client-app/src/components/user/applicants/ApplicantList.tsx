@@ -9,37 +9,42 @@ import FaceIcon from "@material-ui/icons/Face";
 import "./applicants.css";
 import { Cookies } from "react-cookie";
 import Application from "./ApplicantViewModel";
+import applicants from ".";
 
 interface Props {
   viewStore: ViewStore;
 }
 
+interface State {
+  applicantsList: Application[];
+}
+
 @inject("viewStore")
 @observer
-export class ApplicantList extends React.Component<Props> {
-  private applicants = [
-    new Application(
-      "Applicant1",
-      "Applicant1",
-      "18-01-2019",
-      "JobTitle",
-      "Lorem ipsum dolor sit amet, l semper nisl luctus. Mauris ut tellus luctus, vulputate nunc sed, suscipit odio. Ut congue ultrices porttitor. Sed nec turpis risus. "
-    ),
-    new Application(
-      "Applicant1",
-      "Applicant1",
-      "18-01-2019",
-      "JobTitle",
-      "Lorem ipsum dolor sit amet, l semper nisl luctus. Mauris ut tellus luctus, vulputate nunc sed, suscipit odio. Ut congue ultrices porttitor. Sed nec turpis risus. "
-    ),
-    new Application(
-      "Applicant1",
-      "Applicant1",
-      "18-01-2019",
-      "JobTitle",
-      "Lorem ipsum dolor sit amet, l semper nisl luctus. Mauris ut tellus luctus, vulputate nunc sed, suscipit odio. Ut congue ultrices porttitor. Sed nec turpis risus. "
-    )
-  ];
+export class ApplicantList extends React.Component<Props, State> {
+  // private applicants = [
+  //   new Application(
+  //     "Applicant1",
+  //     "Applicant1",
+  //     "18-01-2019",
+  //     "JobTitle",
+  //     "Lorem ipsum dolor sit amet, l semper nisl luctus. Mauris ut tellus luctus, vulputate nunc sed, suscipit odio. Ut congue ultrices porttitor. Sed nec turpis risus. "
+  //   ),
+  //   new Application(
+  //     "Applicant1",
+  //     "Applicant1",
+  //     "18-01-2019",
+  //     "JobTitle",
+  //     "Lorem ipsum dolor sit amet, l semper nisl luctus. Mauris ut tellus luctus, vulputate nunc sed, suscipit odio. Ut congue ultrices porttitor. Sed nec turpis risus. "
+  //   ),
+  //   new Application(
+  //     "Applicant1",
+  //     "Applicant1",
+  //     "18-01-2019",
+  //     "JobTitle",
+  //     "Lorem ipsum dolor sit amet, l semper nisl luctus. Mauris ut tellus luctus, vulputate nunc sed, suscipit odio. Ut congue ultrices porttitor. Sed nec turpis risus. "
+  //   )
+  // ];
 
   constructor(props: Props) {
     super(props);
@@ -66,7 +71,19 @@ export class ApplicantList extends React.Component<Props> {
     const response = await fetch(request).then(res => {
       res.json().then(r => {
         if (r.status === 0) {
-          console.log("succes");
+          const applicantsResp = [];
+          r.response.map(a => {
+            applicantsResp.push(
+              new Application(
+                a.first_name,
+                a.last_name,
+                a.assigned_date.substr(0, a.assigned_date.indexOf(" ")),
+                a.title,
+                a.description
+              )
+            );
+          });
+          this.setState({ applicantsList: applicantsResp });
         } else if (r.status === -1) {
           console.log("fail");
         }
@@ -75,26 +92,24 @@ export class ApplicantList extends React.Component<Props> {
   };
 
   render() {
-    return this.applicants.map((a, index) => (
+    return this.state.applicantsList.map((a, index) => (
       <div key={index} className="applicantCard">
         <Card>
-          <CardContent>
-            <div className="leftCardApplicant">
-              <div className="avatar">
-                <Avatar alt="avatar">
-                  <FaceIcon />
-                </Avatar>
-              </div>
-              <Typography variant="title">
-                {a.firstname} {a.lastname}
-              </Typography>
-              <Typography variant="subtitle2">Applied: {a.date}</Typography>
+          <div className="leftCardApplicant">
+            <div className="avatar">
+              <Avatar alt="avatar">
+                <FaceIcon />
+              </Avatar>
             </div>
-            <div className="rightCardApplicant">
-              <Typography variant="title">{a.jobTitle}</Typography>
-              <Typography variant="subtitle2">{a.jobDescription}</Typography>
-            </div>
-          </CardContent>
+            <Typography variant="title">
+              {a.firstname} {a.lastname}
+            </Typography>
+            <Typography variant="subtitle2">Applied: {a.date}</Typography>
+          </div>
+          <div className="rightCardApplicant">
+            <Typography variant="title">{a.jobTitle}</Typography>
+            <Typography variant="subtitle2">{a.jobDescription}</Typography>
+          </div>
         </Card>
       </div>
     ));

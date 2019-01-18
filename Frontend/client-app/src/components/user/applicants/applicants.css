@@ -2,19 +2,27 @@
   margin: 10px 0;
 }
 
+.applicantCard div {
+  background-color: #eacfc0;
+}
+
 .leftCardApplicant {
   float: left;
-  padding: 0 0 10px 0;
+  padding: 0 30px 10px;
+}
+
+.applicantCard div :hover {
+  cursor: pointer;
 }
 
 .rightCardApplicant {
   float: right;
-  padding: 0 0 10px 0;
+  padding: 30px 0 10px 0;
   width: 80vw;
   display: flex;
-  justify-content: center;
+  align-items: center;
   flex-direction: column;
-  height: 100%;
+  min-height: 100px;
 }
 
 .avatar {
