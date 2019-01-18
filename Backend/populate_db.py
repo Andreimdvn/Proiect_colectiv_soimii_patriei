@@ -59,9 +59,10 @@ def populate_provider(orm):
 
 def populate_job(orm):
     print("Insert into 'Job'")
-    orm.insert('Provider', columns=('id_client', 'description', 'provider_description', 'client_description', 'reward',
-                                    'street', 'city', 'country', 'type', 'publish_date'),
-               values=())
+    orm.insert('Provider', columns=('id_client', 'title', 'description', 'provider_description', 'client_description',
+                                    'reward', 'street', 'city', 'country', 'type', 'publish_date'),
+               values=(1, 'SC PLIMBA-MA SRL', 'Plimba animalul tau preferat!', 'iubitor de animale',
+                       'Adapost de animale care cauta oameni carora le place sa isi petreaca timpul cu animalele', ''))
 
 
 def populate(orm):
