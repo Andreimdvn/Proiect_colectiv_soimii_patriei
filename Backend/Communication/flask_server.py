@@ -39,23 +39,25 @@ class FlaskServer:
         self.flask_app.add_url_rule('/api/register', 'register', self.register, methods=['POST'])
         self.flask_app.add_url_rule('/api/login', 'login', self.login, methods=['POST'])
         self.flask_app.add_url_rule('/activation/<key>', 'activation/<key>', self.activation, methods=['GET'])
-
         self.flask_app.add_url_rule('/job/<job_id>', 'job/<job_id>', self.get_job_details, methods=['POST'])
         self.flask_app.add_url_rule('/api/request_job', 'request_job', self.request_job, methods=['POST'])
-
         self.flask_app.add_url_rule('/api/add_job', 'add_job', self.add_job, methods=['POST'])
-
         self.flask_app.add_url_rule('/api/logout', 'logout', self.logout, methods=['POST'])
-        self.flask_app.add_url_rule('/api/jobs', 'jobs', self.jobs, methods=['POST'])
-        self.flask_app.add_url_rule('/api/applicants', 'applicants', self.applicants, methods=['POST'])
         self.flask_app.add_url_rule('/profile', 'profile', self.profile, methods=['POST'])
         self.flask_app.add_url_rule('/api/edit_profile', 'edit_profile', self.edit_profile, methods=['POST'])
+        self.flask_app.add_url_rule('/api/jobs', 'jobs', self.jobs, methods=['POST'])
+        self.flask_app.add_url_rule('/api/applicants', 'applicants', self.applicants, methods=['POST'])
+        self.flask_app.add_url_rule('/api/get_job_types', 'get_job_types', self.get_job_types, methods=['POST'])
         self.flask_app.before_request(self.verify_user_token)
 
     def test_request(self):
         self.request_data = request.get_json()
         self.logger.debug("Req data: {}".format(self.request_data))
         return json.dumps("Hello world! Got req: {}".format(self.request_data))
+
+    def get_job_types(self):
+        status, response = self.controller.get_job_types()
+        return json.dumps({'status': status, 'response': response})
 
     def register(self):
         request_data = request.get_json() or {}
