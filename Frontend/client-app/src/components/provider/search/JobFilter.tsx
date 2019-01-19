@@ -13,7 +13,7 @@ import Button from "@material-ui/core/es/Button/Button";
 import {JobTag} from "./JobTag";
 
 interface Props extends StyledComponentProps{
-  onFilterCallback: any
+  onFilterCallback: any;
 }
 
 interface State {
@@ -21,7 +21,7 @@ interface State {
   tags: string[];
   currentTag: string;
   description: string;
-
+  jobTypes: string[];
 }
 
 export const JobFilter = withStyles(jobFilterStyle)(
@@ -29,7 +29,33 @@ export const JobFilter = withStyles(jobFilterStyle)(
     constructor(props) {
       super(props);
 
-      this.state = {type: 'any', tags: [], currentTag: '', description: ''};
+      this.state = {type: 'any', tags: [], currentTag: '', description: '', jobTypes: []};
+
+      this.getJobTypes();
+    }
+
+    getJobTypes() {
+      const promisedResponse = fetch("http://localhost:16000/api/get_job_types", {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: ''
+      });
+
+      promisedResponse.then(response => response.json()).then(json =>{
+        console.log(json);
+        if(json.status === 0) {
+          const types = json.response.types; // fixme this might be wrong
+          this.setState({jobTypes: types});
+        }
+        else {
+          console.log("ceva a crapat");
+        }
+      }).catch(error=> {
+        console.log(error);
+      });
     }
 
     // doFilter(callback) {
@@ -83,7 +109,7 @@ export const JobFilter = withStyles(jobFilterStyle)(
       // ];
       // this.props.onFilterCallback(jobs);
 
-      const promisedResponse = fetch("http://localhost:16000/api/filter", { // fixme change link
+      const promisedResponse = fetch("http://localhost:16000/api/filter", {
         method: 'POST',
         headers: {
           Accept: 'application/json',
@@ -138,9 +164,14 @@ export const JobFilter = withStyles(jobFilterStyle)(
                   id: 'age-simple',
                 }}
               >
-                <MenuItem value={'any'}>Any</MenuItem>
-                <MenuItem value={'partTime'}>Part time</MenuItem>
-                <MenuItem value={'fullTime'}>Full time</MenuItem>
+                {this.state.jobTypes.map((type, index)=> {
+                  return (
+                    <MenuItem value={type} key={index}>{type}</MenuItem>
+                  );
+                })};
+                {/*<MenuItem value={'any'}>Any</MenuItem>*/}
+                {/*<MenuItem value={'partTime'}>Part time</MenuItem>*/}
+                {/*<MenuItem value={'fullTime'}>Full time</MenuItem>*/}
               </Select>
             </Grid>
 
