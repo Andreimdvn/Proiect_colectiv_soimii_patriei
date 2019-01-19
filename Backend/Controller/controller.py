@@ -116,12 +116,13 @@ class Controller:
     def activate(self, key):
         return self.repo.activate_account(key)
 
+    def filter(self, description, type, tags):
+        return self.repo.searchForJobs(description, type, tags)
+
     def get_job(self, job_id):
         return self.repo.get_job(job_id)
 
     def request_job(self, request_data):
-        status = 0
-        response = None
         sanitized_request = {}
 
         for k, v in request_job_fields.items():
@@ -147,23 +148,7 @@ class Controller:
         :param data_request:
         :return:
         """
-
-        status = -1
-        response = None
-
         status, response = self.repo.add_job(request_data)
-
-        return status, response
-
-
-    def logout(self, data):
-        status = 0
-        response = False
-        if 'token' not in data:
-            status = -1
-
-        if status:
-            response = self.repo.logout(data.get('token'))
 
         return status, response
 
@@ -186,3 +171,27 @@ class Controller:
 
     def view_applicants(self, request_data):
         return self.repo.view_applicants(request_data.get('token'))
+
+    def logout(self, data):
+        return 0, self.repo.logout(data.get('token'))
+
+    def profile(self, data):
+        return 0, self.repo.profile(data.get('token'))
+
+    def edit_profile(self, data):
+        return 0, self.repo.edit_profile(data)
+
+    def provide_data(self):
+        return self.repo.provide_data()
+
+    def get_job_types(self):
+        status = 0
+        response = self.repo.get_job_types()
+        return status, response
+
+    def token_validation(self, token):
+        if not token:
+            return False
+
+        return self.repo.token_validation(token)
+

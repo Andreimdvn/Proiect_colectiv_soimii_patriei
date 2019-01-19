@@ -2,10 +2,11 @@ import sys
 import datetime
 import logging
 
+import sqlalchemy as sa
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String, ForeignKey, Date, create_engine, Boolean, DateTime
 from sqlalchemy.orm import relationship, sessionmaker, scoped_session
-
+from sqlalchemy.dialects import mysql
 
 # username / password / host / port / database
 MYSQL_CON_STRING = 'mysql://%s:%s@%s:%s/%s'
@@ -20,6 +21,7 @@ class User(DB):
     username = Column(String(100), nullable=False, unique=True)
     email = Column(String(100), nullable=False, unique=True)
     password = Column(String(100), nullable=False)
+    avatar = Column(sa.LargeBinary().with_variant(mysql.LONGBLOB(), 'mysql'), nullable=True)
     verified_by_email = Column(Boolean, nullable=False, default=False)
 
     clients = relationship('Client', back_populates='user')
@@ -34,6 +36,7 @@ class ActiveLogins(DB):
     id = Column(Integer, autoincrement=True, primary_key=True)
     id_user = Column(Integer, ForeignKey(User.id), nullable=False)
     hash = Column(String(100), nullable=False)
+    active = Column(Boolean, nullable=False, default=True)
 
     user = relationship('User', back_populates='active_users')
 
@@ -55,6 +58,9 @@ class Client(DB):
     first_name = Column(String(100), nullable=False)
     last_name = Column(String(100), nullable=False)
     date_of_birth = Column(Date, nullable=False)
+    company_name = Column(String(100), nullable=True)
+    site_link = Column(String(100), nullable=True)
+    details = Column(String(1000), nullable=True)
     phone = Column(String(20), nullable=False, default=False)
 
     user = relationship('User', back_populates='clients')
@@ -72,6 +78,7 @@ class Provider(DB):
     last_name = Column(String(100), nullable=False)
     date_of_birth = Column(Date, nullable=False)
     phone = Column(String(20), nullable=False, default=False)
+    cv = Column(sa.LargeBinary().with_variant(mysql.LONGBLOB(), 'mysql'), nullable=True)
 
     user = relationship('User', back_populates='providers')
     reviews = relationship('ProviderReview', back_populates='providers')
@@ -158,6 +165,7 @@ class Job(DB):
     city = Column(String(100), nullable=False)
     country = Column(String(100), nullable=False)
     type = Column(String(100), nullable=False)
+
     publish_date = Column(DateTime, nullable=False, default=datetime.datetime.utcnow)
 
     client = relationship('Client', back_populates='jobs')
@@ -316,7 +324,9 @@ class ORM:
                 if len(like_columns) != len(like_values):
                     raise ValueError('[!] There are not enough like_values/like_columns!')
                 like_cols = [getattr(tb, c) for c in like_columns]
+
                 like_col_val = [e[0].like('%' + e[1] + '%',) for e in zip(like_cols, like_values)]
+
             if like_col_val:
                 res = self.ses.query(tb).filter_by(**col_val)
                 res = res.filter(*like_col_val)

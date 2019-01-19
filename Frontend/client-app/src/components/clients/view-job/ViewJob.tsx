@@ -25,12 +25,19 @@ export class ViewJob extends React.Component<any> {
         const headers = new Headers();
         headers.append('Content-Type', 'application/json');
 
+        const tokenProvider = cookie.get('token');
+        const data = {
+          token: tokenProvider
+        };
+
         const options = {
             method: 'POST',
             headers,
-            body: JSON.stringify(this.state),
+            body: JSON.stringify(data),
         };
-        console.log("Get job " +options);
+
+
+      console.log("Get job " +options);
 
         const request = new Request('http://localhost:16000/job/' + idJob ,options);
 
