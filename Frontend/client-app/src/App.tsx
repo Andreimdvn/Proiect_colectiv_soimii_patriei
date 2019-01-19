@@ -8,7 +8,7 @@ import User from "./components/user/User";
 import EditProfileRoute from "./components/user/edit-profile";
 import UserOffersRoute from "./components/user/offers";
 import "./App.css";
-
+import JobDetails from "./components/clients/view-job";
 import { Provider } from "mobx-react";
 import * as React from "react";
 import { Router } from "react-router-dom";
@@ -133,6 +133,7 @@ class App extends React.Component<Props> {
                     <HomeRoute.providerHome />
                     <BrowseRoute />
                     <EditProfileRoute />
+                    <JobDetails/> 
                     <UserOffersRoute />
                   </React.Fragment>
                   {/* </Router> */}

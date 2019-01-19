@@ -8,23 +8,39 @@ import CardActionArea from '@material-ui/core/CardActionArea';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
+import viewJob from "src/components/clients/view-job";
+import { Route, Redirect } from "react-router";
+
+interface State {
+  redirect: React.ReactNode
+}
 
 interface Props extends StyledComponentProps{
-  job:Job
+  job:Job,
 }
 
 
 export const JobCard = withStyles(jobCardStyle)(
-  class RecommendedJobsTableBase extends React.Component<Props> {
+  class RecommendedJobsTableBase extends React.Component<Props, State> {
     constructor(props) {
       super(props);
+      this.state = {
+        redirect : undefined
+      };
     }
+
 
     render() {
       const {classes} = this.props;
 
-      return (
-        <Grid item={true} xs={12}>
+      return this.state.redirect ? (this.state.redirect) : (
+        <a href ="localhost:3000/job/id">
+        <Grid item={true} xs={12} onClick= {() => {
+            this.setState({ redirect: <Redirect to={"/job/" + this.props.job.id} /> },
+              () => {
+                this.setState( {redirect : undefined})
+              }
+            )}} >
           <Card className={classes.card}>
             <CardActionArea>
               <CardContent>
@@ -53,6 +69,7 @@ export const JobCard = withStyles(jobCardStyle)(
             </CardActionArea>
           </Card>
         </Grid>
+        </a>
       );
     }
   }
