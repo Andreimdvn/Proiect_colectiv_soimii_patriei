@@ -123,8 +123,6 @@ class Controller:
         return self.repo.get_job(job_id)
 
     def request_job(self, request_data):
-        status = 0
-        response = None
         sanitized_request = {}
 
         for k, v in request_job_fields.items():
@@ -150,9 +148,6 @@ class Controller:
         :param data_request:
         :return:
         """
-        status = -1
-        response = None
-
         status, response = self.repo.add_job(request_data)
 
         return status, response
