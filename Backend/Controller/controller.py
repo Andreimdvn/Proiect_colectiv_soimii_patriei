@@ -153,7 +153,7 @@ class Controller:
         status, response = self.repo.add_job(request_data)
 
         return status, response
-
+      
     def provide_data(self):
         return self.repo.provide_data()
 
