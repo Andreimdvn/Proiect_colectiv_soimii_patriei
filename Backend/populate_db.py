@@ -22,21 +22,21 @@ def hash_pass(password):
 def populate_user(orm):
     print("Inserting into 'User'")
     orm.insert('User', columns=('username', 'email', 'password', 'verified_by_email'),
-               values=('andreimdv', 'andreimdv@yahoo.com', hash_pass('pass123'), False))
+               values=('andreimdv', 'andreimdv@yahoo.com', hash_pass('pass123'), True))
     orm.insert('User', columns=('username', 'email', 'password', 'verified_by_email'),
                values=('root', 'root@root.com', hash_pass('root'), True))
     orm.insert('User', columns=('username', 'email', 'password', 'verified_by_email'),
-               values=('admin', 'admin@gmail.com', hash_pass('admin'), False))
+               values=('admin', 'admin@gmail.com', hash_pass('admin'), True))
     orm.insert('User', columns=('username', 'email', 'password', 'verified_by_email'),
-               values=('client', 'admin6@gmail.com', hash_pass('client'), False))
+               values=('client', 'admin6@gmail.com', hash_pass('client'), True))
     orm.insert('User', columns=('username', 'email', 'password', 'verified_by_email'),
-               values=('client2', 'admin7@gmail.com', hash_pass('client2'), False))
+               values=('client2', 'admin7@gmail.com', hash_pass('client2'), True))
     orm.insert('User', columns=('username', 'email', 'password', 'verified_by_email'),
-               values=('provider', 'admin8@gmail.com', hash_pass('provider'), False))
+               values=('provider', 'admin8@gmail.com', hash_pass('provider'), True))
     orm.insert('User', columns=('username', 'email', 'password', 'verified_by_email'),
-               values=('provider2', 'admin9@gmail.com', hash_pass('provider2'), False))
+               values=('provider2', 'admin9@gmail.com', hash_pass('provider2'), True))
     orm.insert('User', columns=('username', 'email', 'password', 'verified_by_email'),
-               values=('provider3', 'admin10@gmail.com', hash_pass('provider3'), False))
+               values=('provider3', 'admin10@gmail.com', hash_pass('provider3'), True))
 
 
 def populate_client(orm):
@@ -100,21 +100,21 @@ def populate_job(orm):
 
 def populate_tags(orm):
     print("Insert into 'Tag'")
-    orm.insert('Tag', columns=('name',), values=("#animale",))
-    orm.insert('Tag', columns=('name',), values=("#plimbare",))
-    orm.insert('Tag', columns=('name',), values=("#pisica",))
+    orm.insert('Tag', columns=('name',), values=("animale",))
+    orm.insert('Tag', columns=('name',), values=("plimbare",))
+    orm.insert('Tag', columns=('name',), values=("pisica",))
 
-    orm.insert('Tag', columns=('name',), values=("#pliante",))
-    orm.insert('Tag', columns=('name',), values=("#promovare",))
+    orm.insert('Tag', columns=('name',), values=("pliante",))
+    orm.insert('Tag', columns=('name',), values=("promovare",))
 
-    orm.insert('Tag', columns=('name',), values=("#turism",))
-    orm.insert('Tag', columns=('name',), values=("#lovecluj",))
+    orm.insert('Tag', columns=('name',), values=("turism",))
+    orm.insert('Tag', columns=('name',), values=("lovecluj",))
 
-    orm.insert('Tag', columns=('name',), values=("#mancare",))
-    orm.insert('Tag', columns=('name',), values=("#bucatar_sef",))
+    orm.insert('Tag', columns=('name',), values=("mancare",))
+    orm.insert('Tag', columns=('name',), values=("bucatar_sef",))
 
-    orm.insert('Tag', columns=('name',), values=("#aer_liber",))
-    orm.insert('Tag', columns=('name',), values=("#tunde_iarba",))
+    orm.insert('Tag', columns=('name',), values=("aer_liber",))
+    orm.insert('Tag', columns=('name',), values=("tunde_iarba",))
 
 
 def populate_jobtag(orm):
