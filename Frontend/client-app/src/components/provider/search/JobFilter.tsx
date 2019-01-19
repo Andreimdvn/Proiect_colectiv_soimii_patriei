@@ -29,7 +29,7 @@ export const JobFilter = withStyles(jobFilterStyle)(
     constructor(props) {
       super(props);
 
-      this.state = {type: 'any', tags: [], currentTag: '', description: '', jobTypes: []};
+      this.state = {type: 'any', tags: [], currentTag: '', description: '', jobTypes: ['please wait']};
 
       this.getJobTypes();
     }
@@ -41,13 +41,13 @@ export const JobFilter = withStyles(jobFilterStyle)(
           Accept: 'application/json',
           'Content-Type': 'application/json',
         },
-        body: ''
+        body: '{}'
       });
 
       promisedResponse.then(response => response.json()).then(json =>{
         console.log(json);
         if(json.status === 0) {
-          const types = json.response.types; // fixme this might be wrong
+          const types = json.response; // fixme this might be wrong
           this.setState({jobTypes: types});
         }
         else {
@@ -89,14 +89,13 @@ export const JobFilter = withStyles(jobFilterStyle)(
       const description = this.state.description;
 
       const jsonObj: {[k: string]: any} = {};
-      if(type === 'any')
-        jsonObj.type = "";
-      // if(tags.length !== 0)
-        jsonObj.tags = tags;
-      // if(description !== '')
-        jsonObj.description = description;
+      jsonObj.type = type;
+      jsonObj.tags = tags;
+      jsonObj.description = description;
 
+      console.log("jsonObj");
       console.log(jsonObj);
+      console.log(type);
 
       // const jobs = [
       //   new Job("1", "cleaning", "clean my house", "bob321", "dinner", "20-09-2018"),
@@ -164,14 +163,16 @@ export const JobFilter = withStyles(jobFilterStyle)(
                   id: 'age-simple',
                 }}
               >
-                {this.state.jobTypes.map((type, index)=> {
-                  return (
+                {this.state.jobTypes === undefined || this.state.jobTypes.length === 0 ? (
+                  null
+                ) : (
+                  this.state.jobTypes.map((type, index)=> {
+                    return (
                     <MenuItem value={type} key={index}>{type}</MenuItem>
-                  );
-                })};
-                {/*<MenuItem value={'any'}>Any</MenuItem>*/}
-                {/*<MenuItem value={'partTime'}>Part time</MenuItem>*/}
-                {/*<MenuItem value={'fullTime'}>Full time</MenuItem>*/}
+                    );
+                  })
+                )};
+
               </Select>
             </Grid>
 

@@ -1,6 +1,7 @@
 import logging
 import string
 import random
+import base64
 
 from dateutil.parser import parse
 from passlib.hash import pbkdf2_sha256
@@ -125,19 +126,21 @@ class RepositoryJobs:
                             values_where=(token.id_user,))
             return 'Your account was successfully activated!'
         return 'Something went wrong!'
-#### TO DO CLIENTU E HARDCODAT AICI
+
+    #### TO DO CLIENTU E HARDCODAT AICI
     def add_job(self, request_data):
         try:
 
-            pk_user = self.orm.select("ActiveLogins", columns=('hash', ), values=(request_data['token'],), first=True)
-            pk_client = self.orm.select("Client", columns=('id', ), values=(pk_user.id,), first=True)
+            pk_user = self.orm.select("ActiveLogins", columns=('hash',), values=(request_data['token'],), first=True)
+            pk_client = self.orm.select("Client", columns=('id',), values=(pk_user.id,), first=True)
             job_pk = self.orm.insert("Job", columns=('title', 'id_client', 'description', 'provider_description',
                                                      'client_description', 'reward', 'street', 'city', 'country',
                                                      'type', 'publish_date'),
-                                values=(request_data['job']['title'], pk_client.id, request_data['job']['jobDesc'],
-                                        request_data['job']['candidateDesc'], request_data['job']['employerDesc'],
-                                        request_data['job']['payment'], request_data['job']['street'], request_data['job']['city'],
-                                        request_data['job']['county'], request_data['job']['jobType'], None))
+                                     values=(request_data['job']['title'], pk_client.id, request_data['job']['jobDesc'],
+                                             request_data['job']['candidateDesc'], request_data['job']['employerDesc'],
+                                             request_data['job']['payment'], request_data['job']['street'],
+                                             request_data['job']['city'],
+                                             request_data['job']['county'], request_data['job']['jobType'], None))
 
             for tag in request_data['job']['tags']:
                 tag_pk = self.orm.insert("Tag", columns=('name',),
@@ -148,7 +151,6 @@ class RepositoryJobs:
             return 0, "Added sucessfully"
         except ValueError as e:
             return -1, str(e)
-
 
     def get_job(self, job_id):
         job = self.orm.select('Job', columns=('id',), values=(job_id,), first=True)
@@ -199,6 +201,71 @@ class RepositoryJobs:
 
         return False
 
+    def profile(self, token):
+        tkn = self.orm.select('ActiveLogins', columns=('hash',), values=(token,), first=True)
+        if tkn and tkn.active:
+            user = tkn.user
+            if user.clients:
+                # client profile
+                client = user.clients[0]
+
+                return {
+                    'company_name': client.company_name,
+                    'site_link': client.site_link,
+                    'email': client.user.email,
+                    'phone': client.phone,
+                    'details': client.details,
+                    'name': '%s %s' % (client.first_name, client.last_name),
+                    'avatar': base64.b64encode(client.user.avatar).decode('ascii') if client.user.avatar else None
+
+                }
+            elif user.providers:
+                # provider profile
+                provider = user.providers[0]
+
+                return {
+                    'username': provider.user.username,
+                    'email': provider.user.email,
+                    'phone': provider.phone,
+                    'name': '%s %s' % (provider.first_name, provider.last_name),
+                    'avatar': base64.b64encode(provider.user.avatar).decode('ascii') if provider.user.avatar else None,
+                    'cv': base64.b64encode(provider.cv).decode('ascii') if provider.cv else None
+                }
+
+        return "Invalid parameters!"
+
+    def edit_profile(self, data):
+        tkn = self.orm.select('ActiveLogins', columns=('hash',), values=(data.get('token'),), first=True)
+        if tkn and tkn.active:
+            user = tkn.user
+
+            if user.clients:
+                client_fields = ('site_link', 'company_name', 'phone', 'details', 'avatar')
+                for k, v in data.items():
+                    if k in client_fields:
+                        if k not in ('avatar',):
+                            self.orm.update('Client', columns=(k,), values=(v,), columns_where=('id',),
+                                            values_where=(user.id,))
+                        else:
+                            v = base64.b64decode(v)
+                            self.orm.update('User', columns=(k,), values=(v,), columns_where=('id',),
+                                            values_where=(user.id,))
+            elif user.providers:
+                provider_fields = ('phone', 'cv', 'avatar')
+                for k, v in data.items():
+                    if k in provider_fields:
+                        if k not in ('avatar', 'cv'):
+                            self.orm.update('Provider', columns=(k,), values=(v,), columns_where=('id',),
+                                            values_where=(user.id,))
+                        else:
+                            v = base64.b64decode(v)
+                            self.orm.update('User', columns=(k,), values=(v,), columns_where=('id',),
+                                            values_where=(user.id,))
+
+            return 'Success!'
+        else:
+            return 'Invalid parameters!'
+
     def provide_data(self):
         jobs = self.orm.select('Job')
         response = []
@@ -213,3 +280,96 @@ class RepositoryJobs:
                 'date': job.publish_date
             })
         return response
+
+    def view_applicants(self, token):
+        pk_user = self.orm.select("ActiveLogins", columns=('hash',), values=(token,), first=True)
+        if not pk_user:
+            return -1, 'Invalid token!'
+        id_client = self.orm.select("Client", columns=('id',), values=(pk_user.id,), first=True)
+        jobs = self.orm.select('Job', columns=('id_client',), values=(id_client.id,))
+        response = []
+
+        for job in jobs:
+            id_job = job.id
+            jobprovider = self.orm.select('JobRequest', columns=('id_job',), values=(id_job,))
+            for job_provider_entity in jobprovider:
+                id_provider = job_provider_entity.id_provider
+                provider = self.orm.select('Provider', columns=('id',), values=(id_provider,))
+                response.append({
+                    'assigned_date': str(job_provider_entity.request_date),
+                    'first_name': provider[0].first_name,
+                    'last_name': provider[0].last_name,
+                    'title': job.title,
+                    'description': job.description,
+                    'provider_id': provider[0].id,
+                    'job_id': job.id
+                })
+        return 0, response
+
+    def profile(self, token):
+        user = self.orm.select('ActiveLogins', columns=('hash',), values=(token,), first=True).user
+        if user.clients:
+            # client profile
+            client = user.clients[0]
+
+            return {
+                'company_name': client.company_name,
+                'site_link': client.site_link,
+                'email': client.user.email,
+                'phone': client.phone,
+                'details': client.details,
+                'name': '%s %s' % (client.first_name, client.last_name),
+                'avatar': base64.b64encode(client.user.avatar).decode('ascii') if client.user.avatar else None
+
+            }
+        elif user.providers:
+            # provider profile
+            provider = user.providers[0]
+
+            return {
+                'username': provider.user.username,
+                'email': provider.user.email,
+                'phone': provider.phone,
+                'name': '%s %s' % (provider.first_name, provider.last_name),
+                'avatar': base64.b64encode(provider.user.avatar).decode('ascii') if provider.user.avatar else None,
+                'cv': base64.b64encode(provider.cv).decode('ascii') if provider.cv else None
+            }
+
+        return "Invalid parameters!"
+
+    def edit_profile(self, data):
+        user = self.orm.select('ActiveLogins', columns=('hash',), values=(data.get('token'),), first=True).user
+        if user.clients:
+            client_fields = ('site_link', 'company_name', 'phone', 'details', 'avatar')
+            for k, v in data.items():
+                if k in client_fields:
+                    if k not in ('avatar',):
+                        self.orm.update('Client', columns=(k,), values=(v,), columns_where=('id',),
+                                        values_where=(user.id,))
+                    else:
+                        v = base64.b64decode(v)
+                        self.orm.update('User', columns=(k,), values=(v,), columns_where=('id',),
+                                        values_where=(user.id,))
+        elif user.providers:
+            provider_fields = ('phone', 'cv', 'avatar')
+            for k, v in data.items():
+                if k in provider_fields:
+                    if k not in ('avatar', 'cv'):
+                        self.orm.update('Provider', columns=(k,), values=(v,), columns_where=('id',),
+                                        values_where=(user.id,))
+                    else:
+                        v = base64.b64decode(v)
+                        self.orm.update('User', columns=(k,), values=(v,), columns_where=('id',),
+                                        values_where=(user.id,))
+
+        return 'Success!'
+
+    def token_validation(self, token):
+        tkn = self.orm.select('ActiveLogins', columns=('hash',), values=(token,), first=True)
+        if not tkn or not tkn.active:
+            return False
+        return True
+        return response
+
+    def get_job_types(self):
+        return [job.type for job in self.orm.select('Job')]

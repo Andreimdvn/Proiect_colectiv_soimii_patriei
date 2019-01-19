@@ -1,0 +1,31 @@
+.applicantCard {
+  margin: 10px 0;
+}
+
+.applicantCard div {
+  background-color: #eacfc0;
+}
+
+.leftCardApplicant {
+  float: left;
+  padding: 0 30px 10px;
+}
+
+.applicantCard div :hover {
+  cursor: pointer;
+}
+
+.rightCardApplicant {
+  float: right;
+  padding: 30px 0 10px 0;
+  width: 80vw;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  min-height: 100px;
+}
+
+.avatar {
+  margin-left: 35%;
+  margin-bottom: 10px;
+}

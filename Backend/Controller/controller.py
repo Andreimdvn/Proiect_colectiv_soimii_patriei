@@ -150,24 +150,38 @@ class Controller:
         :param data_request:
         :return:
         """
-
         status = -1
         response = None
 
         status, response = self.repo.add_job(request_data)
 
         return status, response
+      
+    def provide_data(self):
+        return self.repo.provide_data()
+
+    def view_applicants(self, request_data):
+        return self.repo.view_applicants(request_data.get('token'))
 
     def logout(self, data):
-        status = 0
-        response = False
-        if 'token' not in data:
-            status = -1
+        return 0, self.repo.logout(data.get('token'))
 
-        if status:
-            response = self.repo.logout(data.get('token'))
+    def profile(self, data):
+        return 0, self.repo.profile(data.get('token'))
 
-        return status, response
+    def edit_profile(self, data):
+        return 0, self.repo.edit_profile(data)
 
     def provide_data(self):
         return self.repo.provide_data()
+
+    def get_job_types(self):
+        status = 0
+        response = self.repo.get_job_types()
+        return status, response
+    def token_validation(self, token):
+        if not token:
+            return False
+
+        return self.repo.token_validation(token)
+

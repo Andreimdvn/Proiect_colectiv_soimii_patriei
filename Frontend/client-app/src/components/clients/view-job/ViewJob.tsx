@@ -117,8 +117,8 @@ export class ViewJob extends React.Component<any> {
                         <Card className = "card">
                         <ul className= "ul">
                             {    
-                                this.state.Tags.map(tagName => (
-                                    <li className = "li"><Chip color="secondary" label = {tagName} avatar={<Avatar>{tagName.slice(0,2).toUpperCase()}</Avatar>} variant="outlined"/></li>
+                                this.state.Tags.map((tagName, index) => (
+                                    <li key={index} className = "li"><Chip color="secondary" label = {tagName} avatar={<Avatar>{tagName.slice(0,2).toUpperCase()}</Avatar>} variant="outlined"/></li>
                                     )
                                 )
                             }
