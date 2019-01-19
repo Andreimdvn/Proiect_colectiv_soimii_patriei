@@ -16,13 +16,10 @@ class FlaskServer:
         self.host = config_data["flask_host"]
         self.port = config_data["flask_port"]
         self.request_data = {}
+        self.require_token = ('/api/logout', '/profile', '/api/edit_profile')
         self.logger = logging.getLogger()
 
         self.init_requests()
-
-    # not necessary yet
-    # def update_wrapper(self):
-    #     self.app.emit("update")
 
     def run(self):
         self.app.run(self.flask_app, self.host, self.port)
@@ -49,6 +46,7 @@ class FlaskServer:
         self.flask_app.add_url_rule('/api/edit_profile', 'edit_profile', self.edit_profile, methods=['POST'])
         self.flask_app.add_url_rule('/api/jobs', 'jobs', self.jobs, methods=['POST'])
         self.flask_app.add_url_rule('/api/applicants', 'applicants', self.applicants, methods=['POST'])
+        self.flask_app.before_request(self.verify_user_token)
 
     def test_request(self):
         self.request_data = request.get_json()
@@ -102,6 +100,19 @@ class FlaskServer:
         request_data = request.get_json() or {}
         status, response = self.controller.edit_profile(request_data)
 
+    def verify_user_token(self):
+        json_data = request.get_json()
+        req_path = request.path
+
+        if req_path in self.require_token:
+            if not json_data or 'token' not in json_data:
+                return json.dumps({'status': -1, 'response': 'Token required!'})
+            elif not self.controller.token_validation(json_data.get('token')):
+                return json.dumps({'status': -1, 'response': 'Valid token required!'})
+        else:
+            if request.content_type != 'application/json':
+                return json.dumps({'status': -1, 'response': 'Content-Type need to be application/json!'})
+
     def jobs(self):
         request_data = request.get_json() or {}
 
@@ -117,4 +128,4 @@ class FlaskServer:
     def applicants(self):
         request_data = request.get_json() or {}
         status, response = self.controller.view_applicants(request_data)
-        return json.dumps({'status': status, 'response': response})
+
