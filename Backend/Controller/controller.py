@@ -116,6 +116,9 @@ class Controller:
     def activate(self, key):
         return self.repo.activate_account(key)
 
+    def filter(self, description, type, tags):
+        return self.repo.searchForJobs(description, type, tags)
+
     def get_job(self, job_id):
         return self.repo.get_job(job_id)
 
@@ -171,6 +174,7 @@ class Controller:
         status = 0
         response = self.repo.get_job_types()
         return status, response
+
     def token_validation(self, token):
         if not token:
             return False
