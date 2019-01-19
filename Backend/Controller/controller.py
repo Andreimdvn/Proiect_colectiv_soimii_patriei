@@ -174,6 +174,7 @@ class Controller:
         status = 0
         response = self.repo.get_job_types()
         return status, response
+
     def token_validation(self, token):
         if not token:
             return False

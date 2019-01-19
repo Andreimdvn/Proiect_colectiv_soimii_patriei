@@ -43,7 +43,7 @@ class HomeProviderBase extends React.Component<Props, State> {
     const requestUrl = jsonCfg.baseUrl + "jobs";
     const token = this.getToken();
 
-    const body = {token: "asd"}; // fixme token
+    const body = {token}; // fixme token
 
     const promisedResponse = fetch(requestUrl, {
       method: 'POST',
@@ -56,6 +56,7 @@ class HomeProviderBase extends React.Component<Props, State> {
 
     promisedResponse.then(response => response.json()).then(json =>{
       if(json.status === 0) {
+        console.log(json);
         this.setState({jobs: json.response});
       }
       else {

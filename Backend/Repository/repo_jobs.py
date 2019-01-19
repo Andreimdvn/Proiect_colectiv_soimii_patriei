@@ -101,9 +101,11 @@ class RepositoryJobs:
                         "id": job.id,
                         "type": job.type,
                         "description": job.description,
-                        "publish_date": str(job.publish_date),
+                        "publishDate": str(job.publish_date),
                         "reward": job.reward,
                         "title": job.title,
+                        "publisher": '%s - %s %s' % (job.client.company_name, job.client.first_name,
+                                                     job.client.last_name)
                     })
 
         self.logger.info("Filtered jobs: {}".format(returned_jobs))
@@ -212,7 +214,7 @@ class RepositoryJobs:
                 'description': job.description,
                 'publisher': '%s %s' % (job.client.first_name, job.client.last_name),
                 'reward': job.reward,
-                'date': job.publish_date
+                'publishDate': job.publish_date
             })
         return response
 
@@ -306,4 +308,8 @@ class RepositoryJobs:
         return True
 
     def get_job_types(self):
-        return [job.type for job in self.orm.select('Job')]
+        job_type = []
+        for job in self.orm.select('Job'):
+            if job.type not in job_type:
+                job_type.append(job.type)
+        return job_type

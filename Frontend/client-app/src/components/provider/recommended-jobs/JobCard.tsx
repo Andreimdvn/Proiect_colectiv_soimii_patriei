@@ -61,7 +61,7 @@ export const JobCard = withStyles(jobCardStyle)(
                     variant="h5"
                     component="h2"
                   >
-                    {this.props.job.descriptionPreview}
+                    {this.props.job.title}
                   </Typography>
                   <Typography
                     className={classes.publisherText}
@@ -80,7 +80,7 @@ export const JobCard = withStyles(jobCardStyle)(
                         className={classes.publisherText}
                         component="p"
                       >
-                        {this.props.job.date}
+                        {this.props.job.publishDate}
                       </Typography>
                     </Grid>
                   </Grid>

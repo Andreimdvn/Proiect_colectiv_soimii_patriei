@@ -89,7 +89,10 @@ export const JobFilter = withStyles(jobFilterStyle)(
       const description = this.state.description;
 
       const jsonObj: {[k: string]: any} = {};
-      jsonObj.type = type;
+      if (type === "any")
+        jsonObj.type = "";
+      else
+        jsonObj.type = type;
       jsonObj.tags = tags;
       jsonObj.description = description;
 

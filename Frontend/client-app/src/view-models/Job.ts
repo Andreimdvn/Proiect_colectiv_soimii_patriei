@@ -1,18 +1,18 @@
 
 export class Job {
-  constructor(id:string, type:string, descriptionPreview:string, publisher:string, reward:string, date:string) {
+  constructor(id:string, type:string, title:string, publisher:string, reward:string, publishDate:string) {
     this.id = id;
     this.type = type;
-    this.descriptionPreview = descriptionPreview;
+    this.title = title;
     this.publisher = publisher;
     this.reward = reward;
-    this.date = date;
+    this.publishDate = publishDate;
   }
 
   id:string;
   type:string;
-  descriptionPreview:string;
+  title:string;
   publisher:string;
   reward:string;
-  date:string;
+  publishDate:string;
 }
