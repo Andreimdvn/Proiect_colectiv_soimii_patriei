@@ -16,7 +16,8 @@ class FlaskServer:
         self.host = config_data["flask_host"]
         self.port = config_data["flask_port"]
         self.request_data = {}
-        self.require_token = ('/api/logout', '/profile', '/api/edit_profile')
+        self.require_token = ('/api/logout', '/profile', '/api/edit_profile', '/job/', '/api/request_job',
+                              '/api/add_job', '/api/jobs', '/api/applicants')
         self.logger = logging.getLogger()
 
         self.init_requests()
@@ -77,7 +78,6 @@ class FlaskServer:
 
     def request_job(self):
         request_data = request.get_json() or {}
-        print(request_data)
         status = -1
         response = '[!] Give some parameters!'
         if request_data:
@@ -105,9 +105,14 @@ class FlaskServer:
         request_data = request.get_json() or {}
         status, response = self.controller.edit_profile(request_data)
 
+        return json.dumps({'status': status, 'response': response})
+
     def verify_user_token(self):
         json_data = request.get_json()
         req_path = request.path
+
+        if req_path.startswith('/job/'):
+            req_path = '/job/'
 
         if req_path in self.require_token:
             if not json_data or 'token' not in json_data:
@@ -134,3 +139,4 @@ class FlaskServer:
         request_data = request.get_json() or {}
         status, response = self.controller.view_applicants(request_data)
 
+        return json.dumps({'status': status, 'response': response})
