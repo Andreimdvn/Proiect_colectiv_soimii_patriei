@@ -49,6 +49,7 @@ class FlaskServer:
         self.flask_app.add_url_rule('/profile', 'profile', self.profile, methods=['POST'])
         self.flask_app.add_url_rule('/api/edit_profile', 'edit_profile', self.edit_profile, methods=['POST'])
         self.flask_app.add_url_rule('/api/jobs', 'jobs', self.jobs, methods=['POST'])
+        self.flask_app.add_url_rule('/api/jobs_for_provider', 'jobs_for_provider', self.jobs_for_provider, methods=['POST'])
         self.flask_app.add_url_rule('/api/applicants', 'applicants', self.applicants, methods=['POST'])
         self.flask_app.add_url_rule('/api/get_job_types', 'get_job_types', self.get_job_types, methods=['POST'])
         self.flask_app.before_request(self.verify_user_token)
@@ -145,6 +146,11 @@ class FlaskServer:
         status, response = self.controller.filter(request_data["description"], request_data["type"],
                                                   request_data["tags"])
         return json.dumps({'status': status, 'response': response})
+
+    def jobs_for_provider(self):
+        request_data = request.get_json() or {}
+        status, response = self.controller.jobs_for_provider(request_data)
+        return json.dumps({'status' : status, 'response' : response})
 
     def applicants(self):
         request_data = request.get_json() or {}

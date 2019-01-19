@@ -5,9 +5,11 @@ import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import { Redirect } from "react-router";
 import { ReactNode } from "react";
+import HomeIcon from "@material-ui/icons/Home";
 
 import "./user.css";
 import { Cookies } from "react-cookie";
+
 
 interface State {
   open: boolean;
@@ -37,6 +39,12 @@ class User extends React.Component<any, State> {
     this.setState({ open: true });
   };
 
+  goHome = () => {
+      this.setState({redirect: <Redirect to={"/home"}/>}, () => {
+          this.setState({redirect: undefined});
+      });
+  };
+
   handleChange = event => {
     if (event.target.value) {
       if (event.target.value === "logout") {
@@ -60,7 +68,7 @@ class User extends React.Component<any, State> {
       headers,
       body: JSON.stringify({ token: cookies.get("token") })
     };
-
+    console.log(options)
     const request = new Request("http://localhost:16000/api/logout", options);
 
     const response = await fetch(request).then(res => {
@@ -84,6 +92,7 @@ class User extends React.Component<any, State> {
     return this.state.redirect ? (
       this.state.redirect
     ) : (
+        <div className={"big-container"}>
       <div className="account-box">
         <IconButton className="account-box-button" onClick={this.handleOpen}>
           <AccountBox className="account-box-icon" fontSize="large" />
@@ -97,13 +106,21 @@ class User extends React.Component<any, State> {
           {this.props.cookies.get("userType") === "client" ? (
             <MenuItem value="applicants">View applicants</MenuItem>
           ) : (
-            <MenuItem value="offers">My job offers</MenuItem>
+              <MenuItem value="applications">My applications</MenuItem>
           )}
 
           <MenuItem value="edit">Edit profile</MenuItem>
           <MenuItem value="logout">Log out</MenuItem>
         </Select>
       </div>
+            {this.props.cookies.get("userType") === "provider" &&
+            <div>
+                <IconButton className="account-box-button" onClick={this.goHome} >
+                    <HomeIcon className="account-box-icon" fontSize="large" />
+                </IconButton>
+            </div>}
+            {this.state.redirect}
+     </div>
     );
   }
 }

@@ -35,8 +35,22 @@ export class AddJobForm extends React.Component<any> {
         tags: []
     };
 
+    initialState={
+    title: "",
+    jobDesc: "",
+    candiDesc: "",
+    emplDesc: "",
+    payment: "",
+    street: "",
+    city: "",
+    county: "",
+    jobType: "",
+    tags: []
+};
+
     constructor(props: any) {
         super(props);
+        this.state = this.initialState;
     }
 
     handleChange = event =>{
@@ -45,6 +59,7 @@ export class AddJobForm extends React.Component<any> {
         if(event.target.name === "tags"){
             const tagss = event.target.value.split("#");
             tagss.splice(0,1);
+            tagss.map((tag) => tag.trim());
             this.setState({tags: tagss} );
         }else {
             this.setState({
@@ -73,6 +88,7 @@ export class AddJobForm extends React.Component<any> {
 
         console.log(this.props.jobStore.message);
         console.log(this.props.jobStore.status);
+        this.setState(this.initialState);
     };
 
   render() {
@@ -101,6 +117,7 @@ export class AddJobForm extends React.Component<any> {
                             id="standard-multiline-flexible"
                             name="jobDesc"
                             label="Job description"
+                            value={this.state.jobDesc}
                             multiline={true}
                             rows="4"
                             fullWidth={true}
@@ -114,6 +131,7 @@ export class AddJobForm extends React.Component<any> {
                         id="standard-multiline-flexible"
                         label="Candidate description"
                         name="candiDesc"
+                        value={this.state.candiDesc}
                         placeholder={"How does the ideal candidate look like? This field is not required."}
                         multiline={true}
                         rows="3"
@@ -127,6 +145,7 @@ export class AddJobForm extends React.Component<any> {
                         id="standard-multiline-flexible"
                         label="Employer description"
                         name="emplDesc"
+                        value={this.state.emplDesc}
                         placeholder={"Write a bit about yourself. This field is not required."}
                         multiline={true}
                         rows="3"
@@ -142,6 +161,7 @@ export class AddJobForm extends React.Component<any> {
                         className={"textField"}
                         placeholder={"eg. 200 , 1000-1500 etc."}
                         name="payment"
+                        value={this.state.payment}
                         onChange={this.handleChange}
                         InputProps={{
                             endAdornment: <InputAdornment position="start">RON</InputAdornment>
@@ -163,6 +183,7 @@ export class AddJobForm extends React.Component<any> {
                             id="outlined-uncontrolled"
                             name="street"
                             label="Street"
+                            value={this.state.street}
                             placeholder="Street and number"
                             className={"textField"}
                             onChange={this.handleChange}
@@ -173,6 +194,7 @@ export class AddJobForm extends React.Component<any> {
                         <TextField
                             id="outlined-uncontrolled"
                             name="city"
+                            value={this.state.city}
                             label="City"
                             onChange={this.handleChange}
                             className={"textField"}
@@ -183,6 +205,7 @@ export class AddJobForm extends React.Component<any> {
                         <TextField
                             id="outlined-uncontrolled"
                             name="county"
+                            value={this.state.county}
                             label="County"
                             className={"textField"}
                             margin="normal"
@@ -220,7 +243,18 @@ export class AddJobForm extends React.Component<any> {
                     <Grid item={true} xs={12} sm={10}>
                         <FormControl component={"fieldset" as "div"} fullWidth={true}>
                             <FormLabel>Tags</FormLabel>
-                            <TextField
+                            {this.state.tags.length === 0 ? <TextField
+                                id="outlined-uncontrolled"
+                                name="tags"
+                                value=""
+                                label="Tags"
+                                placeholder="eg. #dogs #weekends etc."
+                                className={"textField"}
+                                margin="normal"
+                                onChange={this.handleChange}
+                                variant="outlined"
+                                fullWidth={true}
+                            /> : <TextField
                                 id="outlined-uncontrolled"
                                 name="tags"
                                 label="Tags"
@@ -230,7 +264,8 @@ export class AddJobForm extends React.Component<any> {
                                 onChange={this.handleChange}
                                 variant="outlined"
                                 fullWidth={true}
-                            />
+                            />}
+
                         </FormControl>
                     </Grid>
                 </Grid>

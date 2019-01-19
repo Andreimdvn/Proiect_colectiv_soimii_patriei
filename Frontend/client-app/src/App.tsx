@@ -4,15 +4,15 @@ import BrowseRoute from "./components/provider/browse-jobs";
 import HomeRoute from "./components/home";
 import AddJobRoute from "./components/jobs/add-job-form";
 import ClientListRoute from "./components/clients/client-list";
+import ApplicationsRoute from "./components/user/applications";
 import User from "./components/user/User";
 import EditProfileRoute from "./components/user/edit-profile";
-import UserOffersRoute from "./components/user/offers";
 import "./App.css";
 import JobDetails from "./components/clients/view-job";
 import { Provider } from "mobx-react";
 import * as React from "react";
-import { Router } from "react-router-dom";
-import { withCookies } from "react-cookie";
+import {Redirect, Router} from "react-router-dom";
+import { withCookies} from "react-cookie";
 import Cookies from "universal-cookie";
 import { Register } from "./components/register/Register";
 import { Login } from "./components/login/Login";
@@ -76,7 +76,7 @@ class App extends React.Component<Props> {
               {!logged ? ( // if not logged in, show the register screen
                 this.state.showLoginWindow ? (
                   <Login
-                    cookies={this.props.cookies}
+                    cookies = {this.props.cookies}
                     switchScreen={this.handler}
                   />
                 ) : (
@@ -92,7 +92,7 @@ class App extends React.Component<Props> {
                 <React.Fragment>
                   {/* <Router history={createBrowserHistory()}> */}
                   <React.Fragment>
-                    <User cookies={this.props.cookies} />
+                    <User cookies={this.props.cookies}/>
                     <header className="App-header">Student Jobs</header>
 
                     <TabMenu
@@ -100,18 +100,14 @@ class App extends React.Component<Props> {
                       menuOptions={[
                         new TabMenuProps(HeaderTabs.home, "/home", "Home"),
                         new TabMenuProps(HeaderTabs.add, "/add", "Add a job"),
-                        new TabMenuProps(
-                          HeaderTabs.clients,
-                          "/clients",
-                          "Other clients"
-                        )
                       ]}
                     />
-                    <HomeRoute.clientHome />
+                    <HomeRoute.providerHome />
                     <AddJobRoute />
                     <ClientListRoute />
                     <EditProfileRoute />
                     <ApplicantList />
+                    <JobDetails/>
                   </React.Fragment>
                   {/* </Router> */}
                 </React.Fragment>
@@ -121,21 +117,15 @@ class App extends React.Component<Props> {
                 <React.Fragment>
                   {/* <Router history={createBrowserHistory()}> */}
                   <React.Fragment>
-                    <User cookies={this.props.cookies} />
+                    <User cookies={this.props.cookies}/>
+
                     <header className="App-header">Provider screen</header>
 
-                    <TabMenu
-                      viewStore={rootStore.viewStore}
-                      menuOptions={[
-                        new TabMenuProps(HeaderTabs.home, "/home", "Home"),
-                        new TabMenuProps(HeaderTabs.browse, "/browse", "Browse")
-                      ]}
-                    />
                     <HomeRoute.providerHome />
                     <BrowseRoute />
                     <EditProfileRoute />
-                    <JobDetails/> 
-                    <UserOffersRoute />
+                    <JobDetails/>
+                    <ApplicationsRoute />
                   </React.Fragment>
                   {/* </Router> */}
                 </React.Fragment>

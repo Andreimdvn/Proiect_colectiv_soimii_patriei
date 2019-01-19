@@ -1,3 +1,4 @@
+import json
 import logging
 import string
 import random
@@ -39,7 +40,7 @@ class RepositoryJobs:
                 while self.orm.select('ActiveLogins', columns=('hash',), values=(hash,), first=True):
                     hash = self.random_hash_string()
                 if u.active_users:
-                    self.orm.update(table='ActiveLogins', columns=('hash',), values=(hash,), columns_where=('id_user',),
+                    self.orm.update(table='ActiveLogins', columns=('hash','active'), values=(hash, True), columns_where=('id_user',),
                                     values_where=(u.id,))
                 else:
                     self.orm.insert('ActiveLogins', columns=('id_user', 'hash'), values=(u.id, hash))
@@ -134,7 +135,7 @@ class RepositoryJobs:
             return 'Your account was successfully activated!'
         return 'Something went wrong!'
 
-    #### TO DO CLIENTU E HARDCODAT AICI
+
     def add_job(self, request_data):
         try:
 
@@ -172,7 +173,8 @@ class RepositoryJobs:
                 'payment': job.reward,
                 'address': '%s; %s - %s' % (job.street, job.city, job.country),
                 'jobType': job.type,
-                'tags': [t.tag.tag_job[0].tag.name for t in job.job_tag]
+                'tags': [t.tag.tag_job[0].tag.name for t in job.job_tag],
+                'email': job.client.user.email
             }
         return -1, "Required job doesn't exist!"
 
@@ -229,7 +231,7 @@ class RepositoryJobs:
         pk_user = self.orm.select("ActiveLogins", columns=('hash',), values=(token,), first=True)
         if not pk_user:
             return -1, 'Invalid token!'
-        id_client = self.orm.select("Client", columns=('id',), values=(pk_user.id,), first=True)
+        id_client = self.orm.select("Client", columns=('id',), values=(pk_user.id_user,), first=True)
         jobs = self.orm.select('Job', columns=('id_client',), values=(id_client.id,))
         response = []
 
@@ -246,9 +248,26 @@ class RepositoryJobs:
                     'title': job.title,
                     'description': job.description,
                     'provider_id': provider[0].id,
-                    'job_id': job.id
+                    'job_id': job.id,
+                    'email': provider[0].user.email
                 })
         return 0, response
+
+
+    def jobs_for_provider(self, request_data):
+        try:
+            jobs_for_provider = []
+            pk_user = self.orm.select("ActiveLogins", columns=('hash',), values=(request_data['token'],), first=True)
+            pk_provider = self.orm.select("Provider", columns=('id',), values=(pk_user.id_user,), first=True)
+
+            id_jobs = self.orm.select("JobRequest", columns=('id_provider',), values=(pk_provider.id,))
+            for current_job in id_jobs:
+                jobs = self.orm.select("Job", columns=('id',), values=(current_job.id_job,))
+                for job in jobs:
+                    jobs_for_provider.append({"id": job.id, "title": job.title, "date": str(current_job.request_date)})
+            return  0, jobs_for_provider
+        except ValueError as e:
+            return -1, str(e)
 
     def profile(self, token):
         user = self.orm.select('ActiveLogins', columns=('hash',), values=(token,), first=True).user
