@@ -92,8 +92,8 @@ class RepositoryJobs:
                 if type is '' or type == job.type:
                     all_tags_in_db = self.orm.select("Tag")
                     id_needed_tags = set([tag.id for tag in all_tags_in_db if tag.name in tags])
-                    all_jobtag = self.orm.select("JobTag")
-                    id_current_tags = set([all_jobtag.id_tag for tag in all_jobtag])
+                    all_jobtag = self.orm.select("JobTag", columns=('id_job',), values=(job.id,))
+                    id_current_tags = set([tag.id_tag for tag in all_jobtag])
                     if not id_needed_tags.issubset(id_current_tags):
                         continue
                     returned_jobs.append({
