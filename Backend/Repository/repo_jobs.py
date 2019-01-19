@@ -342,3 +342,12 @@ class RepositoryJobs:
         if not tkn or not tkn.active:
             return False
         return True
+
+    def current_user(self, request_data):
+        try:
+            pk_active_user = self.orm.select("ActiveLogins", columns=('hash', ), values=(request_data['token']), first=True)
+            pk_user = self.orm.select("User", columns=('id',), values=(pk_active_user.id_user,), first=True)
+            pk_client = self.orm.select("Client", columns=)
+
+        except ValueError as e:
+            return -1, str(e)

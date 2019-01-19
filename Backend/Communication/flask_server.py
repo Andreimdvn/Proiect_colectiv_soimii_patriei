@@ -46,6 +46,7 @@ class FlaskServer:
         self.flask_app.add_url_rule('/api/edit_profile', 'edit_profile', self.edit_profile, methods=['POST'])
         self.flask_app.add_url_rule('/api/jobs', 'jobs', self.jobs, methods=['POST'])
         self.flask_app.add_url_rule('/api/applicants', 'applicants', self.applicants, methods=['POST'])
+        self.flask_app.add_url_rule('/api/current_user', 'current_user', self.current_user, methods=['POST'])
         self.flask_app.before_request(self.verify_user_token)
 
     def test_request(self):
@@ -128,4 +129,9 @@ class FlaskServer:
     def applicants(self):
         request_data = request.get_json() or {}
         status, response = self.controller.view_applicants(request_data)
+
+    def current_user(self):
+        request_data = request.get_json() or {}
+        status, response = self.controller.current_user(request_data)
+        return status, response
 

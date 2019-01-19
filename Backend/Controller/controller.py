@@ -175,3 +175,11 @@ class Controller:
 
         return self.repo.token_validation(token)
 
+    def current_user(self, request_data):
+
+        status = -1
+        response = None
+
+        status, response = self.repo.current_user(request_data)
+
+        return status, response
