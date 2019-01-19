@@ -137,6 +137,7 @@ class FlaskServer:
             response = self.controller.provide_data()
 
         return json.dumps({'status': status, 'response': response}, indent=4, sort_keys=True, default=str)
+
     def filter(self):
         request_data = request.get_json() or {}
         status, response = self.controller.filter(request_data["description"], request_data["type"],

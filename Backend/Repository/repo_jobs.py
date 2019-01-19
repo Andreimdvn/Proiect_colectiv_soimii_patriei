@@ -91,12 +91,17 @@ class RepositoryJobs:
         for job in all_jobs:
             if description is '' or description in job.description:
                 if type is '' or type == job.type:
-                    all_tags_in_db = self.orm.select("Tag")
-                    id_needed_tags = set([tag.id for tag in all_tags_in_db if tag.name in tags])
-                    all_jobtag = self.orm.select("JobTag", columns=('id_job',), values=(job.id,))
-                    id_current_tags = set([tag.id_tag for tag in all_jobtag])
-                    if not id_needed_tags.issubset(id_current_tags):
+                    all_tags = self.orm.select('Tag')
+                    tags_needed = [t for t in all_tags if t.name in tags]
+                    if tags_needed:
+                        for tag in tags_needed:
+                            if tag.tag_job[0].id_job == job.id:
+                                break
+                        else:
+                            continue
+                    elif not description and not type:
                         continue
+
                     returned_jobs.append({
                         "id": job.id,
                         "type": job.type,
@@ -134,7 +139,7 @@ class RepositoryJobs:
         try:
 
             pk_user = self.orm.select("ActiveLogins", columns=('hash',), values=(request_data['token'],), first=True)
-            pk_client = self.orm.select("Client", columns=('id',), values=(pk_user.id,), first=True)
+            pk_client = self.orm.select("Client", columns=('id',), values=(pk_user.id_user,), first=True)
             job_pk = self.orm.insert("Job", columns=('title', 'id_client', 'description', 'provider_description',
                                                      'client_description', 'reward', 'street', 'city', 'country',
                                                      'type', 'publish_date'),
@@ -144,11 +149,13 @@ class RepositoryJobs:
                                              request_data['job']['city'],
                                              request_data['job']['county'], request_data['job']['jobType'], None))
 
-            for tag in request_data['job']['tags']:
-                tag_pk = self.orm.insert("Tag", columns=('name',),
-                                         values=(tag,))
-                self.orm.insert("JobTag", columns=('id_job', 'id_tag'),
-                                values=(job_pk, tag_pk))
+            for tag in [t.strip() for t in request_data['job']['tags']]:
+                exist_tag = self.orm.select("Tag", columns=('name',), values=(tag,), first=True)
+                if exist_tag:
+                    self.orm.insert("JobTag", columns=('id_job', 'id_tag'), values=(job_pk, exist_tag.id))
+                else:
+                    new_tag = self.orm.insert("Tag", columns=('name',), values=(tag,))
+                    self.orm.insert("JobTag", columns=('id_job', 'id_tag'), values=(job_pk, new_tag))
 
             return 0, "Added sucessfully"
         except ValueError as e:
