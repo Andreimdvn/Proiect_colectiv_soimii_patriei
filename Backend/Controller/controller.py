@@ -169,6 +169,13 @@ class Controller:
     def edit_profile(self, data):
         return 0, self.repo.edit_profile(data)
 
+    def provide_data(self):
+        return self.repo.provide_data()
+
+    def get_job_types(self):
+        status = 0
+        response = self.repo.get_job_types()
+        return status, response
     def token_validation(self, token):
         if not token:
             return False

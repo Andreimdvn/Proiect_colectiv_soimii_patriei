@@ -342,3 +342,7 @@ class RepositoryJobs:
         if not tkn or not tkn.active:
             return False
         return True
+        return response
+
+    def get_job_types(self):
+        return [job.type for job in self.orm.select('Job')]
