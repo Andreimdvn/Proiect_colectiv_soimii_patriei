@@ -151,8 +151,6 @@ def populate_jobrequest(orm):
     orm.insert('JobRequest', columns=('id_job', 'id_provider', 'request_date', 'response'),
                values=(2, 7, datetime.now(), 0))
     orm.insert('JobRequest', columns=('id_job', 'id_provider', 'request_date', 'response'),
-               values=(2, 7, datetime.now(), 0))
-    orm.insert('JobRequest', columns=('id_job', 'id_provider', 'request_date', 'response'),
                values=(3, 7, datetime.now(), 0))
     orm.insert('JobRequest', columns=('id_job', 'id_provider', 'request_date', 'response'),
                values=(3, 8, datetime.now(), 0))

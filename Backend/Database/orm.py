@@ -218,7 +218,7 @@ class ORM:
         self.session = scoped_session(sessionmaker(bind=self.engine))
         self.ses = None
         logging.basicConfig()
-        logging.getLogger('sqlalchemy.engine').setLevel(logging.DEBUG)
+        logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
         self.create_database()
 
     def create_database(self):

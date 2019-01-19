@@ -68,7 +68,7 @@ class User extends React.Component<any, State> {
       headers,
       body: JSON.stringify({ token: cookies.get("token") })
     };
-
+    console.log(options)
     const request = new Request("http://localhost:16000/api/logout", options);
 
     const response = await fetch(request).then(res => {

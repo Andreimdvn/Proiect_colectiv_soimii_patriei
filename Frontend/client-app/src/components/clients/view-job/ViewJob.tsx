@@ -18,7 +18,8 @@ export class ViewJob extends React.Component<any> {
         payment: '',
         address: '',
         jobType: '',
-        Tags: ['tag1']
+        Tags: ['tag1'],
+        Email: ''
     }
 
     async getJob() {
@@ -56,6 +57,7 @@ export class ViewJob extends React.Component<any> {
                         address: fields.address,
                         jobType: fields.jobType,
                         Tags: fields.tags,
+                        Email: fields.email
                     });
                 } else if (r.status === -1) {
                     alert(r.response)
@@ -152,6 +154,11 @@ export class ViewJob extends React.Component<any> {
                                 <li>
                                 Address: {this.state.address}
                                 </li>
+                                <br/>
+                                <li>
+                                    Email : {this.state.Email}
+                                </li>
+                                <br/>
                             </ul>
                             
                             <Button onClick={this.handleApplyJob} className="button"

@@ -51,12 +51,12 @@ export class MyApplications extends React.Component<Props, any>{
 
     render() {
         return (
-            <div className={"container"}>
+            <div className={"container"} >
                 <Grid container={true} spacing={24}>
                     <Grid item={true} xs={2}/>
-                    <Grid item={true} xs={8}>
+                    <Grid item={true} xs={8} >
                         {this.state.applications.map((d,idx)=> {
-                            return (<ApplicationView key={d.id} title={d.title} date={d.date}/>)
+                            return (<ApplicationView key={d.id} title={d.title} date={d.date} id={d.id}/>)
                         }
                         )}
                     </Grid>

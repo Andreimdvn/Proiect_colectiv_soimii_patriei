@@ -10,6 +10,7 @@ import "./applicants.css";
 import { Cookies } from "react-cookie";
 import Application from "./ApplicantViewModel";
 import applicants from ".";
+import {Redirect} from "react-router";
 
 interface Props {
   viewStore: ViewStore;
@@ -17,6 +18,7 @@ interface Props {
 
 interface State {
   applicantsList: Application[];
+  redirect: any;
 }
 
 @inject("viewStore")
@@ -48,7 +50,7 @@ export class ApplicantList extends React.Component<Props, State> {
 
   constructor(props: Props) {
     super(props);
-    this.state = { applicantsList: [] };
+    this.state = { applicantsList: [], redirect: undefined };
     this.getApplicants();
   }
 
@@ -81,7 +83,8 @@ export class ApplicantList extends React.Component<Props, State> {
                 a.title,
                 a.description,
                 a.provider_id,
-                a.job_id
+                a.job_id,
+                  a.email
               )
             );
           });
@@ -93,8 +96,15 @@ export class ApplicantList extends React.Component<Props, State> {
     });
   };
 
+  goToJob = (idJob) => (event) => {
+    this.setState({redirect: <Redirect to={/job/ + idJob}/>}, () => {
+      this.setState({redirect: undefined})
+    })
+  }
+
   render() {
-    return this.state.applicantsList.map((a, index) => (
+    return this.state.redirect ? this.state.redirect :
+        this.state.applicantsList.map((a, index) => (
       <div key={index} className="applicantCard">
         <Card>
           <div className="leftCardApplicant">
@@ -107,8 +117,9 @@ export class ApplicantList extends React.Component<Props, State> {
               {a.firstname} {a.lastname}
             </Typography>
             <Typography variant="subtitle2">Applied: {a.date}</Typography>
+              <Typography variant="subtitle2">Applied: {a.email}</Typography>
           </div>
-          <div className="rightCardApplicant">
+          <div className="rightCardApplicant" onClick={this.goToJob(a.idJob)}>
             <Typography variant="title">{a.jobTitle}</Typography>
             <Typography variant="subtitle2">{a.jobDescription}</Typography>
           </div>

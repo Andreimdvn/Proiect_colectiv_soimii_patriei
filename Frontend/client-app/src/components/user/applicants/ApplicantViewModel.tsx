@@ -6,6 +6,7 @@ class Application {
   jobDescription: string;
   idProvider: number;
   idJob: number;
+  email: string;
 
   constructor(
     firstname: string,
@@ -14,7 +15,8 @@ class Application {
     jobTitle: string,
     jobDescription: string,
     idProvider: number,
-    idJob: number
+    idJob: number,
+    email: string
   ) {
     this.firstname = firstname;
     this.lastname = lastname;
@@ -23,6 +25,7 @@ class Application {
     this.jobDescription = jobDescription;
     this.idJob = idJob;
     this.idProvider = idProvider;
+    this.email = email;
   }
 }
 

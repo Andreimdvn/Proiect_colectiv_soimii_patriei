@@ -5,20 +5,29 @@ import Typography from "@material-ui/core/Typography/Typography";
 import Divider from "@material-ui/core/Divider/Divider";
 import Avatar from "@material-ui/core/Avatar/Avatar";
 import WorkIcon from "@material-ui/icons/Work";
+import {Redirect} from "react-router";
 
 interface Props {
     title: string,
-    date: string
+    date: string,
+    id: number
 }
 
-export class ApplicationView extends React.Component<Props> {
+export class ApplicationView extends React.Component<Props, any> {
     constructor(props){
         super(props);
+        this.state = {redirect: undefined}
+    }
+
+    goToJob =(id) => (event) => {
+        this.setState({redirect: <Redirect to={"/job/"+id}/>}, () => {
+            this.setState({redirect: undefined})
+        })
     }
 
     render(){
-        return (
-            <div className={'root'}>
+        return this.state.redirect ? this.state.redirect : (
+            <div className={'root'} onClick={this.goToJob(this.props.id)}>
                     <Grid container={true} spacing={0}>
                         <Grid item={true} xs={2}>
                             <Avatar style={{marginTop: 1, marginLeft: 5}}>

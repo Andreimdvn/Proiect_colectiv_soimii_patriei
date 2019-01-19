@@ -102,11 +102,12 @@ class App extends React.Component<Props> {
                         new TabMenuProps(HeaderTabs.add, "/add", "Add a job"),
                       ]}
                     />
-                    <HomeRoute.clientHome />
+                    <HomeRoute.providerHome />
                     <AddJobRoute />
                     <ClientListRoute />
                     <EditProfileRoute />
                     <ApplicantList />
+                    <JobDetails/>
                   </React.Fragment>
                   {/* </Router> */}
                 </React.Fragment>

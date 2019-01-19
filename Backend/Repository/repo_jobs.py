@@ -40,7 +40,7 @@ class RepositoryJobs:
                 while self.orm.select('ActiveLogins', columns=('hash',), values=(hash,), first=True):
                     hash = self.random_hash_string()
                 if u.active_users:
-                    self.orm.update(table='ActiveLogins', columns=('hash',), values=(hash,), columns_where=('id_user',),
+                    self.orm.update(table='ActiveLogins', columns=('hash','active'), values=(hash, True), columns_where=('id_user',),
                                     values_where=(u.id,))
                 else:
                     self.orm.insert('ActiveLogins', columns=('id_user', 'hash'), values=(u.id, hash))
@@ -166,7 +166,8 @@ class RepositoryJobs:
                 'payment': job.reward,
                 'address': '%s; %s - %s' % (job.street, job.city, job.country),
                 'jobType': job.type,
-                'tags': [t.tag.tag_job[0].tag.name for t in job.job_tag]
+                'tags': [t.tag.tag_job[0].tag.name for t in job.job_tag],
+                'email': job.client.user.email
             }
         return -1, "Required job doesn't exist!"
 
@@ -223,7 +224,7 @@ class RepositoryJobs:
         pk_user = self.orm.select("ActiveLogins", columns=('hash',), values=(token,), first=True)
         if not pk_user:
             return -1, 'Invalid token!'
-        id_client = self.orm.select("Client", columns=('id',), values=(pk_user.id,), first=True)
+        id_client = self.orm.select("Client", columns=('id',), values=(pk_user.id_user,), first=True)
         jobs = self.orm.select('Job', columns=('id_client',), values=(id_client.id,))
         response = []
 
@@ -240,7 +241,8 @@ class RepositoryJobs:
                     'title': job.title,
                     'description': job.description,
                     'provider_id': provider[0].id,
-                    'job_id': job.id
+                    'job_id': job.id,
+                    'email': provider[0].user.email
                 })
         return 0, response
 
