@@ -8,7 +8,7 @@ export const theme = createMuiTheme({ // material ui color palette: https://mate
       paper: grey[800],
     },
     primary: {
-      main: "#65566d"
+      main: "rgba(45, 8, 181, 0.2)"
     },
     secondary: {
       main: indigo[500]

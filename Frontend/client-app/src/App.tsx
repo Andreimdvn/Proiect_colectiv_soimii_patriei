@@ -11,7 +11,7 @@ import "./App.css";
 import JobDetails from "./components/clients/view-job";
 import { Provider } from "mobx-react";
 import * as React from "react";
-import { Router } from "react-router-dom";
+import {Redirect, Router} from "react-router-dom";
 import { withCookies} from "react-cookie";
 import Cookies from "universal-cookie";
 import { Register } from "./components/register/Register";
@@ -22,6 +22,9 @@ import { HeaderTabs } from "./view-models/header-tabs";
 import { UserTypes } from "./view-models/user-types";
 import history from "./history";
 import ApplicantList from "./components/user/applicants";
+import IconButton from "@material-ui/core/IconButton/IconButton";
+import HomeIcon from "@material-ui/icons/Home";
+
 
 interface Props {
   cookies: Cookies;
@@ -100,11 +103,6 @@ class App extends React.Component<Props> {
                       menuOptions={[
                         new TabMenuProps(HeaderTabs.home, "/home", "Home"),
                         new TabMenuProps(HeaderTabs.add, "/add", "Add a job"),
-                        new TabMenuProps(
-                          HeaderTabs.clients,
-                          "/clients",
-                          "Other clients"
-                        )
                       ]}
                     />
                     <HomeRoute.clientHome />
@@ -122,15 +120,9 @@ class App extends React.Component<Props> {
                   {/* <Router history={createBrowserHistory()}> */}
                   <React.Fragment>
                     <User cookies={this.props.cookies}/>
+
                     <header className="App-header">Provider screen</header>
 
-                    <TabMenu
-                      viewStore={rootStore.viewStore}
-                      menuOptions={[
-                        new TabMenuProps(HeaderTabs.home, "/home", "Home"),
-                        new TabMenuProps(HeaderTabs.browse, "/browse", "Browse")
-                      ]}
-                    />
                     <HomeRoute.providerHome />
                     <BrowseRoute />
                     <EditProfileRoute />

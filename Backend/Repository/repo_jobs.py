@@ -220,13 +220,13 @@ class RepositoryJobs:
         try:
             jobs_for_provider = []
             pk_user = self.orm.select("ActiveLogins", columns=('hash',), values=(request_data['token'],), first=True)
-            pk_provider = self.orm.select("Provider", columns=('id',), values=(pk_user.id,), first=True)
+            pk_provider = self.orm.select("Provider", columns=('id',), values=(pk_user.id_user,), first=True)
 
-            id_jobs = self.orm.select("JobProvider", columns=('id_provider',), values=(pk_provider.id,))
+            id_jobs = self.orm.select("JobRequest", columns=('id_provider',), values=(pk_provider.id,))
             for current_job in id_jobs:
-                jobs = self.orm.select("Job", columns=('id',), values=(current_job.id,))
+                jobs = self.orm.select("Job", columns=('id',), values=(current_job.id_job,))
                 for job in jobs:
-                    jobs_for_provider.append({"id": job.id, "title": job.title, "date": str(current_job.assigned_date)})
+                    jobs_for_provider.append({"id": job.id, "title": job.title, "date": str(current_job.request_date)})
             return  0, jobs_for_provider
         except ValueError as e:
             return -1, str(e)

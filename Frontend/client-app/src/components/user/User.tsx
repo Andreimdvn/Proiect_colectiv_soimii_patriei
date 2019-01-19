@@ -5,9 +5,11 @@ import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import { Redirect } from "react-router";
 import { ReactNode } from "react";
+import HomeIcon from "@material-ui/icons/Home";
 
 import "./user.css";
 import { Cookies } from "react-cookie";
+
 
 interface State {
   open: boolean;
@@ -35,6 +37,12 @@ class User extends React.Component<any, State> {
 
   handleOpen = () => {
     this.setState({ open: true });
+  };
+
+  goHome = () => {
+      this.setState({redirect: <Redirect to={"/home"}/>}, () => {
+          this.setState({redirect: undefined});
+      });
   };
 
   handleChange = event => {
@@ -84,6 +92,7 @@ class User extends React.Component<any, State> {
     return this.state.redirect ? (
       this.state.redirect
     ) : (
+        <div className={"big-container"}>
       <div className="account-box">
         <IconButton className="account-box-button" onClick={this.handleOpen}>
           <AccountBox className="account-box-icon" fontSize="large" />
@@ -104,6 +113,14 @@ class User extends React.Component<any, State> {
           <MenuItem value="logout">Log out</MenuItem>
         </Select>
       </div>
+            {this.props.cookies.get("userType") === "provider" &&
+            <div>
+                <IconButton className="account-box-button" onClick={this.goHome} >
+                    <HomeIcon className="account-box-icon" fontSize="large" />
+                </IconButton>
+            </div>}
+            {this.state.redirect}
+     </div>
     );
   }
 }
