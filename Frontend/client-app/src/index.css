@@ -1,8 +1,8 @@
 :root {
   margin: 0;
   padding: 0;
-  background-image: url(components/register/backgroundRegister.jpg);
-  background-repeat: no-repeat;
+  background-image: linear-gradient(to right,#D76D77,#FFAF7B);;
+  background-repeat: repeat;
   background-size: 100%;
   font-family: sans-serif;
 }

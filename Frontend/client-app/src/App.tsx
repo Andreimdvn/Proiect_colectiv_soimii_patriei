@@ -22,9 +22,6 @@ import { HeaderTabs } from "./view-models/header-tabs";
 import { UserTypes } from "./view-models/user-types";
 import history from "./history";
 import ApplicantList from "./components/user/applicants";
-import IconButton from "@material-ui/core/IconButton/IconButton";
-import HomeIcon from "@material-ui/icons/Home";
-
 
 interface Props {
   cookies: Cookies;
