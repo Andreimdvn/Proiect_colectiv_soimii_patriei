@@ -115,17 +115,19 @@ class FlaskServer:
         json_data = request.get_json()
         req_path = request.path
 
-        if req_path.startswith('/job/'):
-            req_path = '/job/'
+        if not req_path.startswith('/activation/'):
 
-        if req_path in self.require_token:
-            if not json_data or 'token' not in json_data:
-                return json.dumps({'status': -1, 'response': 'Token required!'})
-            elif not self.controller.token_validation(json_data.get('token')):
-                return json.dumps({'status': -1, 'response': 'Valid token required!'})
-        else:
-            if request.content_type != 'application/json':
-                return json.dumps({'status': -1, 'response': 'Content-Type need to be application/json!'})
+            if req_path.startswith('/job/'):
+                req_path = '/job/'
+
+            if req_path in self.require_token:
+                if not json_data or 'token' not in json_data:
+                    return json.dumps({'status': -1, 'response': 'Token required!'})
+                elif not self.controller.token_validation(json_data.get('token')):
+                    return json.dumps({'status': -1, 'response': 'Valid token required!'})
+            else:
+                if request.content_type != 'application/json':
+                    return json.dumps({'status': -1, 'response': 'Content-Type need to be application/json!'})
 
     def jobs(self):
         request_data = request.get_json() or {}
@@ -138,6 +140,7 @@ class FlaskServer:
             response = self.controller.provide_data()
 
         return json.dumps({'status': status, 'response': response}, indent=4, sort_keys=True, default=str)
+
     def filter(self):
         request_data = request.get_json() or {}
         status, response = self.controller.filter(request_data["description"], request_data["type"],
