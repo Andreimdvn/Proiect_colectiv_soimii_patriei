@@ -33,9 +33,10 @@ export class MyApplications extends React.Component<Props, any>{
 
         await fetch(request).then(res => {
             res.json().then(r => {
+                console.log("response:",r);
                 this.setState({applications: r.response});
             });
-        })
+        }).catch(error=>console.log("Eroare de sistem"))
     }
 
     constructor(props){

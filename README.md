@@ -1,2 +1,3 @@
-# Proiect_colectiv_soimii_patriei
-University project for a web application with students jobs
+# Eazy-Jobs
+University project for a web application with jobs.
+

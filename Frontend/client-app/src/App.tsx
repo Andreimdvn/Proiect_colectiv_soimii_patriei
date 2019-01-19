@@ -8,7 +8,7 @@ import ApplicationsRoute from "./components/user/applications";
 import User from "./components/user/User";
 import EditProfileRoute from "./components/user/edit-profile";
 import "./App.css";
-
+import JobDetails from "./components/clients/view-job";
 import { Provider } from "mobx-react";
 import * as React from "react";
 import { Router } from "react-router-dom";
@@ -21,6 +21,7 @@ import { TabMenuProps } from "./components/tab-menu/TabMenuProps";
 import { HeaderTabs } from "./view-models/header-tabs";
 import { UserTypes } from "./view-models/user-types";
 import history from "./history";
+import ApplicantList from "./components/user/applicants";
 
 interface Props {
   cookies: Cookies;
@@ -110,7 +111,7 @@ class App extends React.Component<Props> {
                     <AddJobRoute />
                     <ClientListRoute />
                     <EditProfileRoute />
-                    <ApplicationsRoute />
+                    <ApplicantList />
                   </React.Fragment>
                   {/* </Router> */}
                 </React.Fragment>
@@ -133,6 +134,7 @@ class App extends React.Component<Props> {
                     <HomeRoute.providerHome />
                     <BrowseRoute />
                     <EditProfileRoute />
+                    <JobDetails/>
                     <ApplicationsRoute />
                   </React.Fragment>
                   {/* </Router> */}
